@@ -54,52 +54,73 @@ export default function Homepage() {
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-4 py-20 relative overflow-hidden">
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-yellow-light via-dark-bg to-yellow-dark opacity-30" />
-        <div className="max-w-6xl mx-auto w-full relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="mb-8"
-          >
-            <span className="text-sm text-black/60 uppercase tracking-[0.2em] font-medium">Sotabosc</span>
-          </motion.div>
+        <div className="max-w-7xl mx-auto w-full relative z-10">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            {/* Hero Image */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="order-2 md:order-1"
+            >
+              <CustomImage
+                src="/images/hero/hero-image.jpg"
+                alt="Sotabosc speculative futures"
+                className="w-full h-full"
+                aspectRatio="4/3"
+                placeholder={true}
+              />
+            </motion.div>
 
-          <motion.h1
-            className="text-7xl md:text-9xl lg:text-[10rem] font-black mb-8 leading-[0.9] gradient-text"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-          >
-            Speculative
-            <br />
-            <span className="text-black/90">Futures</span>
-            <br />
-            <span className="text-black/70">Lab</span>
-          </motion.h1>
-          
-          <motion.p
-            className="text-2xl md:text-3xl text-black/80 mb-10 max-w-3xl leading-relaxed font-light"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-          >
-            A multidisciplinary lab exploring speculative futures, embodied interaction, and emergent systems through prototyping and narrative world-building.
-            <span className="block mt-2 text-xl text-black/60">Based in Barcelona</span>
-          </motion.p>
+            {/* Hero Content */}
+            <div className="order-1 md:order-2">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="mb-8"
+              >
+                <span className="text-sm text-black/60 uppercase tracking-[0.2em] font-medium">Sotabosc</span>
+              </motion.div>
 
-          <motion.div
-            className="flex flex-wrap gap-4"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            <CustomButton href="/collections/all" variant="primary" className="px-8 py-4 text-lg">
-              Shop Now
-            </CustomButton>
-            <CustomButton href="/pages/about" variant="secondary" className="px-8 py-4 text-lg">
-              Learn More
-            </CustomButton>
-          </motion.div>
+              <motion.h1
+                className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight"
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+              >
+                What if artifacts
+                <br />
+                <span className="text-black/90">were speculative</span>
+                <br />
+                <span className="text-black/70">worlds?</span>
+              </motion.h1>
+              
+              <motion.p
+                className="text-xl md:text-2xl text-black/80 mb-10 max-w-2xl leading-relaxed font-light"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                Sotabosc explores world building, speculative fiction, philosophy, and spirituality through artifacts that serve as conversation starters and portals to alternative realities.
+                <span className="block mt-2 text-lg text-black/60">Based in Barcelona</span>
+              </motion.p>
+
+              <motion.div
+                className="flex flex-wrap gap-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5 }}
+              >
+                <CustomButton href="/collections/all" variant="primary" className="px-8 py-4 text-lg">
+                  Shop Now
+                </CustomButton>
+                <CustomButton href="/labs" variant="secondary" className="px-8 py-4 text-lg">
+                  Learn More
+                </CustomButton>
+              </motion.div>
+            </div>
+          </div>
         </div>
       </section>
 

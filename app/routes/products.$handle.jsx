@@ -47,27 +47,46 @@ async function loadCriticalData({context, params, request}) {
   const {handle} = params;
   const {storefront} = context;
 
+  console.log('[Product Loader] Route matched! Params:', params);
+  console.log('[Product Loader] Request URL:', request.url);
+  console.log('[Product Loader] Fetching product with handle:', handle);
+
   if (!handle) {
+    console.error('[Product Loader] No handle in params:', params);
     throw new Error('Expected product handle to be defined');
   }
 
-  const [{product}] = await Promise.all([
-    storefront.query(PRODUCT_QUERY, {
-      variables: {handle, selectedOptions: getSelectedProductOptions(request)},
-    }),
-    // Add other queries here, so that they are loaded in parallel
-  ]);
+  try {
+    const [{product}] = await Promise.all([
+      storefront.query(PRODUCT_QUERY, {
+        variables: {handle, selectedOptions: getSelectedProductOptions(request)},
+      }),
+      // Add other queries here, so that they are loaded in parallel
+    ]);
 
-  if (!product?.id) {
-    throw new Response(null, {status: 404});
+    console.log('[Product Loader] Query result:', {
+      hasProduct: !!product,
+      productId: product?.id,
+      productTitle: product?.title,
+    });
+
+    if (!product?.id) {
+      console.error('[Product Loader] Product not found for handle:', handle);
+      throw new Response(null, {status: 404});
+    }
+
+    // The API handle might be localized, so redirect to the localized handle
+    redirectIfHandleIsLocalized(request, {handle, data: product});
+
+    console.log('[Product Loader] Returning product:', product.title);
+
+    return {
+      product,
+    };
+  } catch (error) {
+    console.error('[Product Loader] Error fetching product:', error);
+    throw error;
   }
-
-  // The API handle might be localized, so redirect to the localized handle
-  redirectIfHandleIsLocalized(request, {handle, data: product});
-
-  return {
-    product,
-  };
 }
 
 /**
@@ -84,8 +103,22 @@ function loadDeferredData({context, params}) {
 }
 
 export default function Product() {
+  console.log('[ProductDetail] Component rendering...');
+  
   /** @type {LoaderReturnData} */
   const {product} = useLoaderData();
+
+  console.log('[ProductDetail] Loader data:', {product: product?.title, productId: product?.id});
+
+  if (!product) {
+    console.error('[ProductDetail] No product in loader data');
+    return (
+      <div className="product">
+        <h1>Product Not Found</h1>
+        <p>The product you're looking for doesn't exist.</p>
+      </div>
+    );
+  }
 
   // Optimistically selects a variant with given available variant information
   const selectedVariant = useOptimisticVariant(
@@ -104,6 +137,8 @@ export default function Product() {
   });
 
   const {title, descriptionHtml} = product;
+  
+  console.log('[ProductDetail] Rendering product:', title);
 
   return (
     <div className="product">
