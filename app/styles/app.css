@@ -1,16 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-dark-bg: #FFE500;
+  --color-yellow-dark: #FFD700;
+  --color-yellow-light: #FFFACD;
+  --color-warm-gray: #FFED4A;
+  --color-cool-gray: #FFF9C4;
+  --font-family-sans: 'Inter', system-ui, sans-serif;
+}
 
 @layer base {
   body {
-    @apply bg-dark-bg text-black antialiased;
+    background-color: var(--color-dark-bg);
+    color: black;
+    -webkit-font-smoothing: antialiased;
   }
   
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold;
+    font-weight: bold;
     letter-spacing: -0.02em;
   }
 }
@@ -24,7 +32,19 @@
   }
   
   .section-divider {
-    @apply border-t border-black/10;
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  
+  .bg-dark-bg {
+    background-color: var(--color-dark-bg);
+  }
+  
+  .bg-yellow-light {
+    background-color: var(--color-yellow-light);
+  }
+  
+  .bg-yellow-dark {
+    background-color: var(--color-yellow-dark);
   }
 }
 
