@@ -480,6 +480,31 @@ button.reset:hover:not(:has(> *)) {
   margin-bottom: 2rem;
 }
 
+.product-item-wrapper {
+  position: relative;
+}
+
+.product-item {
+  display: block;
+}
+
+.product-collection-tag {
+  display: inline-block;
+  margin-top: 0.5rem;
+  padding: 0.25rem 0.75rem;
+  background-color: rgba(0, 0, 0, 0.05);
+  color: rgba(0, 0, 0, 0.7);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  text-transform: lowercase;
+  transition: all 0.2s;
+}
+
+.product-collection-tag:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+  color: rgba(0, 0, 0, 0.9);
+}
+
 .product-item img {
   height: auto;
   width: 100%;

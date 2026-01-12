@@ -58,20 +58,22 @@ export default function Collection() {
   const {products} = useLoaderData();
 
   return (
-    <div className="collection">
-      <h1>Products</h1>
-      <PaginatedResourceSection
-        connection={products}
-        resourcesClassName="products-grid"
-      >
-        {({node: product, index}) => (
-          <ProductItem
-            key={product.id}
-            product={product}
-            loading={index < 8 ? 'eager' : undefined}
-          />
-        )}
-      </PaginatedResourceSection>
+    <div className="min-h-screen pt-24">
+      <div className="max-w-7xl mx-auto px-4 py-12">
+        <h1 className="text-5xl md:text-6xl font-bold mb-12 lowercase tracking-wide">All Products</h1>
+        <PaginatedResourceSection
+          connection={products}
+          resourcesClassName="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+        >
+          {({node: product, index}) => (
+            <ProductItem
+              key={product.id}
+              product={product}
+              loading={index < 8 ? 'eager' : undefined}
+            />
+          )}
+        </PaginatedResourceSection>
+      </div>
     </div>
   );
 }
@@ -98,6 +100,13 @@ const COLLECTION_ITEM_FRAGMENT = `#graphql
       }
       maxVariantPrice {
         ...MoneyCollectionItem
+      }
+    }
+    collections(first: 1) {
+      nodes {
+        id
+        title
+        handle
       }
     }
   }

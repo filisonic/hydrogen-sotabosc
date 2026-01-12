@@ -16,6 +16,16 @@ export default function Labs() {
       <section className="min-h-[80vh] flex items-center justify-center px-4 py-20 relative overflow-hidden">
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-yellow-light via-dark-bg to-yellow-dark opacity-30" />
         <div className="max-w-7xl mx-auto w-full relative z-10">
+          {/* Labs Image */}
+          <div className="mb-12">
+            <CustomImage
+              src="/images/labs/labs-image.jpg"
+              alt="Speculative Futures Lab"
+              className="w-full max-w-4xl mx-auto"
+              aspectRatio="16/9"
+              placeholder={false}
+            />
+          </div>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

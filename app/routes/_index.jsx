@@ -1,8 +1,6 @@
-import {Await, useLoaderData, Link} from 'react-router';
-import {Suspense} from 'react';
+import {useLoaderData, Link} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 import {motion} from 'framer-motion';
-import {ProductItem} from '~/components/ProductItem';
 import AnimateOnScroll from '~/components/AnimateOnScroll';
 import CustomButton from '~/components/CustomButton';
 import CustomImage from '~/components/CustomImage';
@@ -25,25 +23,24 @@ export async function loader(args) {
 
 async function loadCriticalData({context}) {
   const [{collections}] = await Promise.all([
-    context.storefront.query(FEATURED_COLLECTION_QUERY),
+    context.storefront.query(COLLECTIONS_WITH_PRODUCTS_QUERY),
   ]);
 
+  // Filter out automatic/system collections that Shopify creates
+  const filteredCollections = (collections.nodes || []).filter((collection) => {
+    const handle = collection.handle?.toLowerCase();
+    // Exclude automatic collections like "home-page", "frontpage", etc.
+    const excludedHandles = ['home-page', 'frontpage', 'homepage'];
+    return !excludedHandles.includes(handle);
+  });
+
   return {
-    featuredCollection: collections.nodes[0],
+    collections: filteredCollections,
   };
 }
 
 function loadDeferredData({context}) {
-  const recommendedProducts = context.storefront
-    .query(RECOMMENDED_PRODUCTS_QUERY)
-    .catch((error) => {
-      console.error(error);
-      return null;
-    });
-
-  return {
-    recommendedProducts,
-  };
+  return {};
 }
 
 export default function Homepage() {
@@ -68,7 +65,7 @@ export default function Homepage() {
                 alt="Sotabosc speculative futures"
                 className="w-full h-full"
                 aspectRatio="4/3"
-                placeholder={true}
+                placeholder={false}
               />
             </motion.div>
 
@@ -89,11 +86,11 @@ export default function Homepage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.1 }}
               >
-                What if artifacts
+                What if art
                 <br />
-                <span className="text-black/90">were speculative</span>
+                <span className="text-black/90">was speculative</span>
                 <br />
-                <span className="text-black/70">worlds?</span>
+                <span className="text-black/70">world-building?</span>
               </motion.h1>
               
               <motion.p
@@ -102,7 +99,8 @@ export default function Homepage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
-                Sotabosc explores world building, speculative fiction, philosophy, and spirituality through artifacts that serve as conversation starters and portals to alternative realities.
+                Sotabosc explores speculative world-building through drawings and experiments shaped by noise, error, and disruption.
+                Each work acts as a point of entry — a trace from a world in formation.
                 <span className="block mt-2 text-lg text-black/60">Based in Barcelona</span>
               </motion.p>
 
@@ -124,30 +122,68 @@ export default function Homepage() {
         </div>
       </section>
 
-      {/* Featured Products Section */}
+      {/* Collections Section */}
       <section className="py-24 md:py-36 px-4 section-divider">
         <div className="max-w-7xl mx-auto">
           <AnimateOnScroll direction="fade" delay={0.1}>
-            <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">Featured Products</h2>
+            <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight lowercase tracking-wide">Collections</h2>
             <p className="text-xl md:text-2xl text-black/70 max-w-3xl leading-relaxed font-light">
-              Original drawings and 3D printed items from the lab
+              Browse our collections of original drawings and 3D printed artifacts
             </p>
           </AnimateOnScroll>
 
           <div className="mt-16">
-            <Suspense fallback={<ProductsLoadingState />}>
-              <Await resolve={data.recommendedProducts}>
-                {(response) => (
-                  <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {response?.products?.nodes?.map((product, index) => (
-                      <AnimateOnScroll key={product.id} direction="up" delay={index * 0.1}>
-                        <ProductItem product={product} />
-                      </AnimateOnScroll>
-                    ))}
-                  </div>
-                )}
-              </Await>
-            </Suspense>
+            {data.collections && data.collections.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {data.collections.map((collection, index) => {
+                  const firstProduct = collection.products?.nodes?.[0];
+                  return (
+                    <AnimateOnScroll key={collection.id} direction="up" delay={index * 0.1}>
+                      <Link
+                        to={`/collections/${collection.handle}`}
+                        className="group block"
+                      >
+                        <div className="bg-white/50 rounded-xl overflow-hidden border border-black/10 hover:border-black/20 transition-all hover:shadow-lg">
+                          {firstProduct?.featuredImage && (
+                            <div className="aspect-square overflow-hidden">
+                              <Image
+                                alt={firstProduct.featuredImage.altText || firstProduct.title}
+                                aspectRatio="1/1"
+                                data={firstProduct.featuredImage}
+                                loading={index < 3 ? 'eager' : 'lazy'}
+                                sizes="(min-width: 45em) 400px, 100vw"
+                                className="group-hover:scale-105 transition-transform duration-500"
+                              />
+                            </div>
+                          )}
+                          <div className="p-6">
+                            <h3 className="text-2xl font-bold mb-2 lowercase tracking-wide group-hover:opacity-70 transition-opacity">
+                              {collection.title}
+                            </h3>
+                            {firstProduct && (
+                              <p className="text-black/60 text-sm mb-2">{firstProduct.title}</p>
+                            )}
+                            {collection.products?.nodes?.length > 0 && (
+                              <p className="text-black/40 text-xs">
+                                {collection.products.nodes.length} {collection.products.nodes.length === 1 ? 'item' : 'items'}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                      </Link>
+                    </AnimateOnScroll>
+                  );
+                })}
+              </div>
+            ) : (
+              <AnimateOnScroll direction="fade" delay={0.2}>
+                <div className="text-center py-12">
+                  <p className="text-lg text-black/60">
+                    No collections available yet. Check back soon!
+                  </p>
+                </div>
+              </AnimateOnScroll>
+            )}
           </div>
 
           <AnimateOnScroll direction="fade" delay={0.3}>
@@ -188,9 +224,11 @@ export default function Homepage() {
               <div className="absolute -inset-4 bg-gradient-to-br from-black/10 via-black/5 to-transparent rounded-2xl blur-2xl" />
               <div className="relative">
                 <CustomImage
+                  src="/images/contact/collaborate-image.jpg"
                   alt="Collaboration and partnership"
                   className="h-64 w-full"
                   aspectRatio="16/9"
+                  placeholder={false}
                 />
               </div>
             </motion.div>
@@ -201,50 +239,12 @@ export default function Homepage() {
   );
 }
 
-function ProductsLoadingState() {
-  return (
-    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {[1, 2, 3, 4].map((i) => (
-        <div key={i} className="bg-black/5 rounded-xl h-64 animate-pulse" />
-      ))}
-    </div>
-  );
-}
 
-const FEATURED_COLLECTION_QUERY = `#graphql
-  fragment FeaturedCollection on Collection {
-    id
-    title
-    image {
-      id
-      url
-      altText
-      width
-      height
-    }
-    handle
-  }
-  query FeaturedCollection($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collections(first: 1, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...FeaturedCollection
-      }
-    }
-  }
-`;
-
-const RECOMMENDED_PRODUCTS_QUERY = `#graphql
-  fragment RecommendedProduct on Product {
+const COLLECTIONS_WITH_PRODUCTS_QUERY = `#graphql
+  fragment CollectionProduct on Product {
     id
     title
     handle
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
     featuredImage {
       id
       url
@@ -252,12 +252,30 @@ const RECOMMENDED_PRODUCTS_QUERY = `#graphql
       width
       height
     }
+    priceRange {
+      minVariantPrice {
+        amount
+        currencyCode
+      }
+    }
   }
-  query RecommendedProducts ($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    products(first: 4, sortKey: UPDATED_AT, reverse: true) {
+
+  fragment CollectionWithProduct on Collection {
+    id
+    title
+    handle
+    products(first: 1) {
       nodes {
-        ...RecommendedProduct
+        ...CollectionProduct
+      }
+    }
+  }
+
+  query CollectionsWithProducts($country: CountryCode, $language: LanguageCode)
+    @inContext(country: $country, language: $language) {
+    collections(first: 10, sortKey: UPDATED_AT, reverse: true) {
+      nodes {
+        ...CollectionWithProduct
       }
     }
   }
