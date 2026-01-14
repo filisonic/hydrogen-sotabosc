@@ -4,6 +4,7 @@ import {motion} from 'framer-motion';
 import AnimateOnScroll from '~/components/AnimateOnScroll';
 import CustomButton from '~/components/CustomButton';
 import CustomImage from '~/components/CustomImage';
+import GradientFlowBackground from '~/components/GradientFlowBackground';
 
 /**
  * @type {Route.MetaFunction}
@@ -49,75 +50,70 @@ export default function Homepage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center px-4 py-20 relative overflow-hidden">
+      <section className="min-h-screen flex items-center px-4 py-20 relative overflow-hidden">
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-yellow-light via-dark-bg to-yellow-dark opacity-30" />
+        <GradientFlowBackground intensity="medium" color="rgba(0, 0, 0, 0.05)" />
         <div className="max-w-7xl mx-auto w-full relative z-10">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            {/* Hero Image */}
+          <div className="max-w-6xl mx-auto">
+            {/* Hero Content - Spread across full width */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="order-2 md:order-1"
             >
-              <CustomImage
-                src="/images/hero/hero-image.jpg"
-                alt="Sotabosc speculative futures"
-                className="w-full h-full"
-                aspectRatio="4/3"
-                placeholder={false}
-              />
-            </motion.div>
-
-            {/* Hero Content */}
-            <div className="order-1 md:order-2">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 className="mb-8"
               >
-                <span className="text-sm text-black/60 uppercase tracking-[0.2em] font-medium">Sotabosc</span>
+                <span className="text-sm text-black/50 lowercase tracking-wide font-normal">sotabosc</span>
               </motion.div>
 
               <motion.h1
-                className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight"
+                className="text-6xl md:text-8xl lg:text-9xl font-bold mb-8 leading-tight lowercase tracking-wide"
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.1 }}
               >
-                What if art
+                Emergence, noise,
                 <br />
-                <span className="text-black/90">was speculative</span>
-                <br />
-                <span className="text-black/70">world-building?</span>
+                <span className="text-black/80">and form.</span>
               </motion.h1>
+
+              <motion.h2
+                className="text-3xl md:text-4xl lg:text-5xl text-black/80 mb-10 leading-snug lowercase tracking-wide font-medium"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+              >
+                what if nature was the artist?
+              </motion.h2>
               
               <motion.p
-                className="text-xl md:text-2xl text-black/80 mb-10 max-w-2xl leading-relaxed font-light"
+                className="text-2xl md:text-3xl lg:text-4xl text-black/60 mb-16 md:mb-20 max-w-5xl leading-relaxed font-light"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               >
                 Sotabosc explores speculative world-building through drawings and experiments shaped by noise, error, and disruption.
                 Each work acts as a point of entry — a trace from a world in formation.
-                <span className="block mt-2 text-lg text-black/60">Based in Barcelona</span>
               </motion.p>
 
               <motion.div
-                className="flex flex-wrap gap-4"
+                className="flex flex-wrap gap-3 mt-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.5 }}
               >
-                <CustomButton href="/collections/all" variant="primary" className="px-8 py-4 text-lg">
+                <CustomButton href="/collections/all" variant="primary" className="px-3 py-1.5 text-xs">
                   Shop Now
                 </CustomButton>
-                <CustomButton href="/labs" variant="secondary" className="px-8 py-4 text-lg">
+                <CustomButton href="/labs" variant="secondary" className="px-3 py-1.5 text-xs">
                   Learn More
                 </CustomButton>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -128,7 +124,7 @@ export default function Homepage() {
           <AnimateOnScroll direction="fade" delay={0.1}>
             <h2 className="text-5xl md:text-6xl font-bold mb-6 leading-tight lowercase tracking-wide">Collections</h2>
             <p className="text-xl md:text-2xl text-black/70 max-w-3xl leading-relaxed font-light">
-              Browse our collections of original drawings and 3D printed artifacts
+              Browse our collections of original drawings, 3D printed works, natural pigment dyed clothes, paintings, sculptures, and artworks
             </p>
           </AnimateOnScroll>
 
