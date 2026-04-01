@@ -12,3 +12,6 @@ node_modules
 error.log
 server.log
 ssr-test.js
+
+# Nested clone — track via submodule if needed
+/stitch-skills/
