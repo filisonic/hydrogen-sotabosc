@@ -1,0 +1,55 @@
+{
+    "name": "projects/11961911842321135691",
+    "projectId": "11961911842321135691",
+    "title": "Sotabosc World UX",
+    "visibility": "PRIVATE",
+    "createTime": "2026-03-14T14:48:42.067332Z",
+    "updateTime": "2026-03-14T14:48:42.067332Z",
+    "projectType": "PROJECT_DESIGN",
+    "origin": "STITCH",
+    "deviceType": "DESKTOP",
+    "designTheme": {
+        "colorMode": "DARK",
+        "font": "INTER",
+        "roundness": "ROUND_TWELVE",
+        "customColor": "#11d452",
+        "saturation": 3
+    },
+    "screens": {
+        "linear_v1": {
+            "id": "c93026bf82da4735a6884f2163a5e1e5",
+            "sourceScreen": "projects/11961911842321135691/screens/c93026bf82da4735a6884f2163a5e1e5",
+            "x": 0,
+            "y": 0,
+            "width": 2560,
+            "height": 4096
+        },
+        "linear_v2": {
+            "id": "adc3c681c80447988456a07fc2996167",
+            "sourceScreen": "projects/11961911842321135691/screens/adc3c681c80447988456a07fc2996167",
+            "x": 2600,
+            "y": 0,
+            "width": 2560,
+            "height": 6074
+        },
+        "symbiosis_gallery": {
+            "id": "98b7f557b90d487797834041775d0f51",
+            "sourceScreen": "projects/11961911842321135691/screens/98b7f557b90d487797834041775d0f51",
+            "x": 5200,
+            "y": 0,
+            "width": 2560,
+            "height": 2048
+        },
+        "specimen_archive": {
+            "id": "d51375c580d4475ab3fbd35cf66f2d46",
+            "sourceScreen": "projects/11961911842321135691/screens/d51375c580d4475ab3fbd35cf66f2d46",
+            "x": 5200,
+            "y": 0,
+            "width": 2560,
+            "height": 2132
+        }
+    },
+    "metadata": {
+        "userRole": "OWNER"
+    }
+}

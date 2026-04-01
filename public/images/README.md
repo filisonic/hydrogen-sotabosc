@@ -1,26 +1,47 @@
-# Images Directory
+# Images Directory Structure
 
-This directory contains all static images for the Time Machine Labs website.
+This directory contains all static images for the Sotabosc storefront.
 
-## Folder Structure
+## Naming Convention
 
-- `hero/` - Hero section images for homepage
-- `about/` - Images for the About page
-- `labs/` - Images for the Labs page
-- `products/` - Product images (if not using Shopify images)
+Each section uses a consistent naming pattern for easy management:
 
-## Usage
+- **Hero Section**: `/images/hero/hero-image.jpg`
+  - Rename your hero image to `hero-image.jpg` and place it in this folder
+  - Used in: Homepage hero section
 
-Images in this folder are served from the `/images/` path. For example:
-- `public/images/hero/main.jpg` → `/images/hero/main.jpg`
-- `public/images/about/philosophy.jpg` → `/images/about/philosophy.jpg`
+- **About Section**: `/images/about/about-image.jpg` (if needed)
+  - Rename your about page image to `about-image.jpg` and place it in this folder
+  - Used in: About page (when implemented)
 
-## Image Recommendations
+- **Labs Section**: `/images/labs/labs-image.jpg` (if needed)
+  - Rename your labs page image to `labs-image.jpg` and place it in this folder
+  - Used in: Labs page hero section (when implemented)
 
-- **Format**: JPG for photos, PNG for graphics with transparency, WebP for optimized images
-- **Size**: Optimize images before adding (use tools like ImageOptim, TinyPNG, or Squoosh)
-- **Naming**: Use descriptive, lowercase names with hyphens (e.g., `speculative-futures-lab.jpg`)
+- **Products Section**: `/images/products/` (for product-specific images)
+  - Product images are typically handled by Shopify, but you can add custom product images here if needed
 
+## How to Update Images
 
+1. **Hero Image**: 
+   - Take your desired image
+   - Rename it to `hero-image.jpg` (or `.jpeg` if that's your format)
+   - Replace the file in `/public/images/hero/`
+   - The homepage will automatically use the new image
 
+2. **Other Sections**: 
+   - Follow the same pattern: rename to `{section}-image.jpg`
+   - Place in the appropriate folder
+   - Update the code to reference the new filename if needed
 
+## Image Formats
+
+- Supported formats: `.jpg`, `.jpeg`, `.png`, `.webp`
+- Recommended: `.jpg` or `.webp` for best performance
+- Max file size: Keep under 500KB for optimal loading
+
+## Notes
+
+- All images in `/public/` are served statically
+- Images are referenced with paths starting with `/images/`
+- The `CustomImage` component handles placeholder display if an image is missing

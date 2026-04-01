@@ -1,4 +1,5 @@
 import {useLoaderData} from 'react-router';
+import {useState} from 'react';
 import {
   getSelectedProductOptions,
   Analytics,
@@ -136,13 +137,62 @@ export default function Product() {
     selectedOrFirstAvailableVariant: selectedVariant,
   });
 
-  const {title, descriptionHtml} = product;
+  const {title, descriptionHtml, images} = product;
+  
+  // State for selected image
+  const allImages = images?.edges || [];
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const selectedImage = allImages[selectedImageIndex]?.node || selectedVariant?.image;
   
   console.log('[ProductDetail] Rendering product:', title);
+  console.log('[ProductDetail] All images:', allImages.length);
+  console.log('[ProductDetail] Selected image index:', selectedImageIndex);
 
   return (
     <div className="product">
-      <ProductImage image={selectedVariant?.image} />
+      <div className="product-image-container">
+        {/* Main Image */}
+        {allImages.length > 0 ? (
+          <>
+            <div className="product-image-main">
+              <img
+                src={selectedImage?.url || selectedVariant?.image?.url}
+                alt={selectedImage?.altText || selectedVariant?.image?.altText || title}
+                className="w-full h-full object-cover"
+                style={{aspectRatio: '1/1'}}
+              />
+              {allImages.length > 1 && (
+                <div className="product-image-counter">
+                  {selectedImageIndex + 1} / {allImages.length}
+                </div>
+              )}
+            </div>
+            
+            {/* Thumbnail Grid */}
+            {allImages.length > 1 && (
+              <div className="product-image-thumbnails">
+                {allImages.map(({node: image}, index) => (
+                  <button
+                    key={image.id}
+                    onClick={() => setSelectedImageIndex(index)}
+                    className={`product-image-thumbnail ${
+                      selectedImageIndex === index ? 'selected' : ''
+                    }`}
+                  >
+                    <img
+                      src={image.url}
+                      alt={image.altText || title}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <ProductImage image={selectedVariant?.image} />
+        )}
+      </div>
       <div className="product-main">
         <h1>{title}</h1>
         <ProductPrice
@@ -229,6 +279,17 @@ const PRODUCT_FRAGMENT = `#graphql
     description
     encodedVariantExistence
     encodedVariantAvailability
+    images(first: 10) {
+      edges {
+        node {
+          id
+          url
+          altText
+          width
+          height
+        }
+      }
+    }
     options {
       name
       optionValues {

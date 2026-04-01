@@ -54,6 +54,33 @@ export function HeaderMenu({
           Home
         </NavLink>
       )}
+      <NavLink
+        className="header-menu-item"
+        onClick={close}
+        prefetch="intent"
+        style={activeLinkStyle}
+        to="/city"
+      >
+        City
+      </NavLink>
+      <NavLink
+        className="header-menu-item"
+        onClick={close}
+        prefetch="intent"
+        style={activeLinkStyle}
+        to="/city/events"
+      >
+        Events
+      </NavLink>
+      <NavLink
+        className="header-menu-item"
+        onClick={close}
+        prefetch="intent"
+        style={activeLinkStyle}
+        to="/city/creators"
+      >
+        Creators
+      </NavLink>
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
