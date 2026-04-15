@@ -40,6 +40,36 @@ export const MOCK_SPECIMENS = {
         affinity: 48,
         image: '/assets/world/specimens/neon-fungi-spore.png',
         description: 'Concentrated ecological data stored in a vibrant fungal vessel.',
-        productUrl: '/products/neon-fungi-spore'
-    }
+        productUrl: '/products/neon-fungi-spore',
+    },
+    'tide-lantern': {
+        id: 'tide-lantern',
+        name: 'Tide Lantern',
+        layer: 'water',
+        color: '#22d3ee',
+        affinity: 52,
+        image: '/assets/world/specimens/tide-lantern.png',
+        description: 'Bioluminescent drift that marks safe channels through the city’s cultural currents.',
+        productUrl: '/collections/all',
+    },
+    'root-archive': {
+        id: 'root-archive',
+        name: 'Root Archive',
+        layer: 'soil',
+        color: '#ea580c',
+        affinity: 58,
+        image: '/assets/world/specimens/root-archive.png',
+        description: 'Compressed memory of meals, soil, and makers — a collectible node for your trail.',
+        productUrl: '/collections/all',
+    },
+    'bedrock-sigil': {
+        id: 'bedrock-sigil',
+        name: 'Bedrock Sigil',
+        layer: 'bedrock',
+        color: '#a78bfa',
+        affinity: 72,
+        image: '/assets/world/specimens/bedrock-sigil.png',
+        description: 'Mineral glyph said to unlock deeper routes in the directory — link it to shop archives.',
+        productUrl: '/collections/all',
+    },
 };

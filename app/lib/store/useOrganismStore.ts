@@ -23,7 +23,8 @@ export const useOrganismStore = create<OrganismState>()(
             activities: [],
             totalXP: 0,
             setOrganism: (organism) => set({ organism }),
-            clearOrganism: () => set({ organism: null, activities: [], totalXP: 0 }),
+            clearOrganism: () =>
+                set({ organism: null, activities: [], totalXP: 0, discoveredSpecimens: [] }),
             addDiscovery: (specimenId) => set((state) => ({
                 discoveredSpecimens: state.discoveredSpecimens.includes(specimenId)
                     ? state.discoveredSpecimens
