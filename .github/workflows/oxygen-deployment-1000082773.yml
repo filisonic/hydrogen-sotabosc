@@ -5,6 +5,9 @@ permissions:
   contents: read
   deployments: write
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   deploy:
     name: Deploy to Oxygen
@@ -16,7 +19,7 @@ jobs:
       - name: Setup node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
+          node-version: "22"
           check-latest: true
 
       - name: Cache node modules
