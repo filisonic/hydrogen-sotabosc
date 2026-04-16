@@ -1,17 +1,30 @@
-import { Link, useLocation } from 'react-router';
+import { Link } from 'react-router';
 import { LISTING_CATEGORIES, LISTING_CATEGORY_KEYS, DOMAINS, DOMAIN_KEYS } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
+
+const inactivePill =
+  'text-xs font-semibold px-3 py-1.5 rounded-full border transition-all hover:opacity-90';
+const inactiveStyle = {
+  backgroundColor: 'var(--sotabosc-surface)',
+  borderColor: 'var(--sotabosc-border)',
+  color: 'var(--sotabosc-muted)',
+};
 
 export function CategoryPills({ activeCategory }) {
   return (
     <div className="flex flex-wrap gap-2">
       <Link
         to={directoryRoutes.city()}
-        className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all ${
+        className={inactivePill}
+        style={
           !activeCategory
-            ? 'bg-black text-white border-black'
-            : 'bg-white text-black/60 border-black/10 hover:border-black/30'
-        }`}
+            ? {
+                backgroundColor: 'var(--sotabosc-accent)',
+                color: 'var(--sotabosc-surface)',
+                borderColor: 'transparent',
+              }
+            : inactiveStyle
+        }
       >
         All
       </Link>
@@ -19,11 +32,16 @@ export function CategoryPills({ activeCategory }) {
         <Link
           key={key}
           to={directoryRoutes.category(key)}
-          className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all ${
+          className={inactivePill}
+          style={
             activeCategory === key
-              ? 'bg-black text-white border-black'
-              : 'bg-white text-black/60 border-black/10 hover:border-black/30'
-          }`}
+              ? {
+                  backgroundColor: 'var(--sotabosc-accent)',
+                  color: 'var(--sotabosc-surface)',
+                  borderColor: 'transparent',
+                }
+              : inactiveStyle
+          }
         >
           {LISTING_CATEGORIES[key].label}
         </Link>
@@ -43,11 +61,17 @@ export function DomainPills({ activeDomain }) {
             key={key}
             to={`${directoryRoutes.city()}?domain=${key}`}
             className={`text-xs font-semibold px-3 py-1.5 rounded-full border transition-all ${
-              isActive
-                ? 'text-white border-transparent'
-                : 'bg-white border-black/10 hover:border-black/30'
+              isActive ? 'border-transparent' : ''
             }`}
-            style={isActive ? { backgroundColor: d.color, color: '#fff' } : { color: d.color }}
+            style={
+              isActive
+                ? { backgroundColor: d.color, color: '#fff' }
+                : {
+                    backgroundColor: 'var(--sotabosc-surface)',
+                    borderColor: 'var(--sotabosc-border)',
+                    color: d.color,
+                  }
+            }
           >
             {d.emoji} {d.label}
           </Link>

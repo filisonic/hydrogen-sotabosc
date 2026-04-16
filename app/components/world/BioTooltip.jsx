@@ -6,8 +6,10 @@ import { motion } from 'framer-motion';
  * @param {string} props.name - Display name (Newsreader Serif)
  * @param {string} props.meta - Metadata like rarity or type (Space Grotesk)
  * @param {boolean} props.isVisible - Visibility state
+ * @param {'dark' | 'ink'} [props.tone]
  */
-export function BioTooltip({ name, meta, isVisible }) {
+export function BioTooltip({ name, meta, isVisible, tone = 'dark' }) {
+    const ink = tone === 'ink';
     return (
         <motion.div
             className="absolute left-10 top-1/2 -translate-y-1/2 z-50 pointer-events-none"
@@ -23,20 +25,30 @@ export function BioTooltip({ name, meta, isVisible }) {
                 stiffness: 200
             }}
         >
-            <div className="flex flex-col items-start bg-black/40 backdrop-blur-3xl px-5 py-3 rounded-2xl border border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+            <div
+              className={
+                ink
+                  ? 'flex flex-col items-start bg-white/92 backdrop-blur-3xl px-5 py-3 rounded-2xl border border-stone-200/90 shadow-[0_12px_40px_rgba(0,0,0,0.12)]'
+                  : 'flex flex-col items-start bg-black/40 backdrop-blur-3xl px-5 py-3 rounded-2xl border border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.5)]'
+              }
+            >
                 {/* Meta Header */}
-                <span className="text-[10px] font-bold tracking-[0.2em] text-white/50 uppercase mb-1 font-sans">
+                <span
+                  className={`text-[10px] font-bold tracking-[0.2em] uppercase mb-1 font-sans ${
+                    ink ? 'text-stone-500' : 'text-white/50'
+                  }`}
+                >
                     {meta || "Specimen Record"}
                 </span>
 
                 {/* Primary Name */}
-                <h3 className="text-xl font-serif text-white leading-tight">
+                <h3 className={`text-xl font-serif leading-tight ${ink ? 'text-stone-900' : 'text-white'}`}>
                     {name}
                 </h3>
 
                 {/* Biological Filament (Decoration) */}
                 <motion.div
-                    className="absolute -left-4 top-1/2 -translate-y-1/2 w-4 h-[1px] bg-white/30"
+                    className={`absolute -left-4 top-1/2 -translate-y-1/2 w-4 h-[1px] ${ink ? 'bg-stone-300' : 'bg-white/30'}`}
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: isVisible ? 1 : 0 }}
                 />

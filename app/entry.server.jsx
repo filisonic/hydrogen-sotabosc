@@ -22,6 +22,14 @@ export default async function handleRequest(
       checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
+    // default-src does not cover hotlinked directory heroes; without img-src browsers still
+    // evaluate images against default-src, which blocks images.unsplash.com.
+    imgSrc: [
+      "'self'",
+      'https://cdn.shopify.com',
+      'https://shopify.com',
+      'https://images.unsplash.com',
+    ],
   });
 
   const body = await renderToReadableStream(

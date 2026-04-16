@@ -1,5 +1,12 @@
 import type { DomainCategory, ListingCategory } from './types';
 
+export type ListingCategoryMeta = {
+  label: string;
+  defaultDomain: DomainCategory;
+  /** Short line under the category title on directory pages */
+  blurb?: string;
+};
+
 export const DOMAINS: Record<
   DomainCategory,
   { label: string; emoji: string; color: string; description: string }
@@ -44,18 +51,22 @@ export const DOMAINS: Record<
 
 export const DOMAIN_KEYS = Object.keys(DOMAINS) as DomainCategory[];
 
-export const LISTING_CATEGORIES: Record<
-  ListingCategory,
-  { label: string; defaultDomain: DomainCategory }
-> = {
+export const LISTING_CATEGORIES: Record<ListingCategory, ListingCategoryMeta> = {
   coworking: { label: 'Coworking Spaces', defaultDomain: 'fungi' },
   'art-gallery': { label: 'Art Galleries', defaultDomain: 'plants' },
   'music-venue': { label: 'Music & Events', defaultDomain: 'animals' },
   conference: { label: 'Conferences', defaultDomain: 'microbes' },
-  workshop: { label: 'Workshops', defaultDomain: 'fungi' },
+  workshop: {
+    label: 'Workshops & classes',
+    defaultDomain: 'fungi',
+    blurb: 'Yoga, art, dance, music, cooking, languages — hands-on sessions and courses.',
+  },
+  retreat: {
+    label: 'Retreats',
+    defaultDomain: 'algae',
+    blurb: 'Multi-day stays, meditation, and immersive wellness away from the everyday.',
+  },
   'specialty-coffee': { label: 'Specialty Coffee', defaultDomain: 'earth' },
-  'spirituality-retreat': { label: 'Spirituality & Retreats', defaultDomain: 'algae' },
-  'yoga-centre': { label: 'Yoga & Wellness', defaultDomain: 'algae' },
   restaurant: { label: 'Restaurants & Food', defaultDomain: 'earth' },
   shop: { label: 'Shops & Markets', defaultDomain: 'plants' },
   other: { label: 'Other', defaultDomain: 'earth' },
@@ -67,6 +78,9 @@ export function getDomain(key: DomainCategory) {
   return DOMAINS[key];
 }
 
-export function getListingCategory(key: ListingCategory) {
+export function getListingCategory(key: ListingCategory): ListingCategoryMeta {
   return LISTING_CATEGORIES[key];
 }
+
+/** Re-export for route modules that already import domain helpers (avoids duplicate `directoryRoutes` imports). */
+export { directoryRoutes } from './routes';

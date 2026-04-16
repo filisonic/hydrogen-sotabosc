@@ -141,3 +141,8 @@
 .scroll-world-container[data-scroll-domain='neutral'] .scroll-world-domain-tint {
     background: linear-gradient(180deg, rgba(27, 67, 50, 0.08) 0%, transparent 55%, rgba(27, 67, 50, 0.05) 100%);
 }
+
+/* Light ink journey: keep domain hint as faint neutral gray (colour washes live on layer backgrounds). */
+.scroll-world-container[data-visual-tone='ink'] .scroll-world-domain-tint {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.04) 0%, transparent 50%, rgba(0, 0, 0, 0.03) 100%);
+}

@@ -1,0 +1,14 @@
+{
+  "title": "Sotabosc Hydrogen HOME",
+  "screenId": "f6ce16926a1845c2b6ef73811fad606f",
+  "projectId": "18438465356645526031",
+  "deviceType": "DESKTOP",
+  "designSystemAsset": "assets/758f625f31e84614bdb20a6a289193a5",
+  "designSystemName": "Sotabosc Reserve",
+  "handoffNote": "Mapped to Hydrogen app/routes/_index.jsx + HomeSotaboscJourney. data-stitch-id: home-hero, domain-strip, forest-stage, shop-section, feedback-band. HTML/screenshot URLs from Stitch expire — re-fetch via get_screen if needed.",
+  "nanoBananaTargets": [
+    "public/images/og/sotabosc-share.png (21:9 or 1200×630 for OG)",
+    "public/assets/world/backgrounds/*.png per CinematicBackgrounds.jsx",
+    "public/assets/world/specimens/*.png per specimens.ts"
+  ]
+}

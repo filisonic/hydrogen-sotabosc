@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sotabosc | Barcelona City Directory</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-primary-fixed-variant": "#274e3d",
+              "surface-tint": "#3f6653",
+              "tertiary": "#401b1b",
+              "secondary-fixed-dim": "#b9cbbf",
+              "secondary-container": "#d5e7db",
+              "primary-fixed-dim": "#a5d0b9",
+              "on-secondary": "#ffffff",
+              "inverse-primary": "#a5d0b9",
+              "surface-container-lowest": "#ffffff",
+              "on-surface": "#1c1c18",
+              "tertiary-fixed": "#ffdad8",
+              "surface-dim": "#dcdad3",
+              "surface-container": "#f1eee7",
+              "tertiary-fixed-dim": "#f5b7b4",
+              "error": "#ba1a1a",
+              "on-surface-variant": "#414844",
+              "secondary-fixed": "#d5e7db",
+              "inverse-surface": "#31312c",
+              "on-tertiary-fixed-variant": "#673a39",
+              "outline": "#717973",
+              "on-tertiary-fixed": "#331111",
+              "surface-container-low": "#f6f3ec",
+              "primary-fixed": "#c1ecd4",
+              "on-primary-container": "#86af99",
+              "on-background": "#1c1c18",
+              "on-secondary-container": "#58685f",
+              "on-secondary-fixed-variant": "#3b4a42",
+              "surface": "#fcf9f2",
+              "on-error-container": "#93000a",
+              "on-secondary-fixed": "#101e17",
+              "on-tertiary-container": "#d29895",
+              "outline-variant": "#c1c8c2",
+              "on-tertiary": "#ffffff",
+              "primary-container": "#1b4332",
+              "inverse-on-surface": "#f3f0e9",
+              "on-primary": "#ffffff",
+              "surface-bright": "#fcf9f2",
+              "tertiary-container": "#5a302f",
+              "surface-variant": "#e5e2db",
+              "surface-container-high": "#ebe8e1",
+              "background": "#fcf9f2",
+              "secondary": "#526259",
+              "primary": "#012d1d",
+              "on-primary-fixed": "#002114",
+              "surface-container-highest": "#e5e2db",
+              "error-container": "#ffdad6",
+              "on-error": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Manrope"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body {
+        background-color: #fcf9f2;
+        color: #1c1c18;
+      }
+      .nature-gradient {
+        background: linear-gradient(145deg, #012d1d 0%, #1b4332 100%);
+      }
+      .ghost-border {
+        border: 1px solid rgba(113, 121, 115, 0.15);
+      }
+    </style>
+</head>
+<body class="font-body selection:bg-primary-fixed selection:text-on-primary-fixed">
+<!-- TopAppBar -->
+<nav class="fixed top-0 w-full z-50 bg-[#fcf9f2]/80 dark:bg-stone-950/80 backdrop-blur-xl">
+<div class="flex justify-between items-center max-w-[1152px] mx-auto px-6 h-20">
+<div class="text-2xl font-black text-[#1b4332] dark:text-stone-100 tracking-tighter font-['Manrope']">Sotabosc</div>
+<div class="hidden md:flex items-center gap-8 font-['Manrope'] font-bold tracking-tight">
+<a class="text-[#1b4332] dark:text-white border-b-2 border-[#1b4332] dark:border-white pb-1 transition-all duration-300" href="#">Explore</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-[#1b4332] hover:opacity-80 transition-all duration-300" href="#">Map</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-[#1b4332] hover:opacity-80 transition-all duration-300" href="#">Journal</a>
+<a class="text-stone-500 dark:text-stone-400 hover:text-[#1b4332] hover:opacity-80 transition-all duration-300" href="#">About</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-[#1b4332] dark:text-[#4ade80] hover:opacity-80 transition-all duration-300 active:scale-95 duration-200">bookmark</button>
+<button class="material-symbols-outlined text-[#1b4332] dark:text-[#4ade80] hover:opacity-80 transition-all duration-300 active:scale-95 duration-200">account_circle</button>
+</div>
+</div>
+</nav>
+<main class="pt-32 pb-20">
+<!-- Hero Section -->
+<section class="max-w-[1152px] mx-auto px-6 mb-16" data-stitch-id="hero">
+<div class="flex flex-col md:flex-row items-end gap-12">
+<div class="md:w-3/5">
+<h1 class="font-headline text-7xl md:text-8xl font-black tracking-tighter text-primary leading-none mb-6">
+                        Discover Barcelona
+                    </h1>
+<p class="text-xl md:text-2xl text-on-surface-variant max-w-xl font-medium leading-relaxed">
+                        A curated guide to the hidden ecosystems, wild urban gardens, and botanical wonders rooted in the heart of the city.
+                    </p>
+</div>
+<div class="hidden md:block md:w-2/5 aspect-[4/3] bg-surface-container-low rounded-lg overflow-hidden">
+<img alt="Barcelona Rooftop Garden" class="w-full h-full object-cover grayscale-[20%] hover:scale-105 transition-transform duration-700" data-alt="lush mediterranean rooftop garden overlooking Barcelona city skyline with sagrada familia in the distance at golden hour" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSZYXNFM4OPyEx7SV9Q_eaMqArndMtatZPwHdqMuxNjWJZGZsRAE4Dy7dI3X-9jw-n8airPjZdsIPiNta0MS1iLyH_WSgiLaoCsB5OghCdvRFUrJfBMzg6Bgnb6KtL-D-wxKxoip6NTx7rJZhEfwpjYZefmCc1UKkOmLyPqy7ywp31qpV-6mh6l1JNNGVEsZdsaxZ4RBuvwmz4mz2-Nc-SeA8isXKEV70s8D_8QKgWL-3qVxMzH8KIqgNV96ld4eaF29YWEbg_3BaC"/>
+</div>
+</div>
+</section>
+<!-- Search Section -->
+<section class="max-w-[1152px] mx-auto px-6 mb-12" data-stitch-id="search">
+<div class="relative group">
+<div class="absolute -inset-1 bg-primary/5 rounded-full blur transition duration-1000 group-hover:duration-200"></div>
+<div class="relative flex items-center bg-surface-container-lowest p-2 rounded-full shadow-sm ghost-border">
+<span class="material-symbols-outlined ml-6 text-on-surface-variant">search</span>
+<input class="flex-1 bg-transparent border-none focus:ring-0 text-lg px-4 placeholder:text-on-surface-variant/50" placeholder="Search species, parks, or secret gardens..." type="text"/>
+<button class="nature-gradient text-on-primary px-8 py-4 rounded-full font-headline font-bold text-sm tracking-widest uppercase active:scale-95 transition-transform">
+                        Explore
+                    </button>
+</div>
+</div>
+</section>
+<!-- Filter Row -->
+<section class="max-w-[1152px] mx-auto px-6 mb-16" data-stitch-id="pill-row">
+<div class="flex flex-wrap items-center gap-3 overflow-x-auto pb-4 no-scrollbar">
+<button class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label text-sm font-semibold transition-all">All Domains</button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface px-6 py-2.5 rounded-full font-label text-sm font-semibold transition-all">Plants</button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface px-6 py-2.5 rounded-full font-label text-sm font-semibold transition-all">Fungi</button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface px-6 py-2.5 rounded-full font-label text-sm font-semibold transition-all">Algae</button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface px-6 py-2.5 rounded-full font-label text-sm font-semibold transition-all">Water</button>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-on-surface px-6 py-2.5 rounded-full font-label text-sm font-semibold transition-all">Insects</button>
+</div>
+</section>
+<!-- Grid of Cards -->
+<section class="max-w-[1152px] mx-auto px-6" data-stitch-id="card-grid">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+<!-- Card 1 -->
+<article class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-[0_20px_40px_rgba(27,67,50,0.06)]">
+<div class="aspect-[16/10] overflow-hidden bg-surface-container-low">
+<img alt="Moss on Stone" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Close up of vibrant green moss growing on a rustic limestone wall in an old Barcelona courtyard with soft morning light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAG851LE8ltmvNhl7RR57SJPs1a86r6lhB017KXmwNIDPVxytCQxgJZy4IISJEj6KaJosIkLBr9tb5IWvrxjxes1kpreoxQshmnSE-ReucPdFPWL3BC-DEJBMsXQu0Bq8rXdlSGcMOplqfXwu3tJis5AJX0Yqf54OIbcYeGqqnEYrPH5RfSLgd9vl0SjNBRPMIA80TrP-_wXUrZi1a0mhucimVh1rmc7sf4TnprEMzP-8T8sd-Qr1w3GQWUWBKnz-NHaTKFmibTWnVq"/>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded text-xs font-bold tracking-wider uppercase">Plants</span>
+<span class="text-on-surface-variant text-xs font-medium">• Eixample</span>
+</div>
+<h3 class="font-headline text-2xl font-extrabold text-primary mb-3 leading-tight">Jardins de la Torre de les Aigües</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-2">
+                            A hidden oasis inside a block courtyard featuring century-old trees and a seasonal wading pool.
+                        </p>
+<div class="mt-auto pt-4 flex justify-between items-center">
+<span class="text-xs font-bold tracking-widest uppercase text-primary/40 group-hover:text-primary transition-colors">Details</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-[0_20px_40px_rgba(27,67,50,0.06)]">
+<div class="aspect-[16/10] overflow-hidden bg-surface-container-low">
+<img alt="Fungi in the park" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Macro photography of small wild mushrooms growing in damp forest floor soil at the base of a pine tree in Collserola park" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBMkj3_6am2Kjjb-7FzFYpub6qdif5iQWS8q3J5fIHyev0Vagd6bLwD5cJ6F1_7GTUhrYPXwE1QHQwCpMErlqBwlQziafk9QyT5OYdMqOPxhp2JBVbj4Dhao-3MOjhSLSTachJ9FEoAbIjbbbe58CKe-O0xbmW_3YlWWhE6--UHmW0Kmi7QWWPKb9-ljr_UONGbfpqH0uupmlREq6LPvJ0wO7_CjQ1QWgz8DhcpslhsXXu4JR3ia4qZcA8vsOEIxfydaNOI2KqPowdb"/>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded text-xs font-bold tracking-wider uppercase">Fungi</span>
+<span class="text-on-surface-variant text-xs font-medium">• Collserola</span>
+</div>
+<h3 class="font-headline text-2xl font-extrabold text-primary mb-3 leading-tight">Mycelium Trails</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-2">
+                            Discover the underground networks connecting the pine forests above Vallvidrera. Best explored after rain.
+                        </p>
+<div class="mt-auto pt-4 flex justify-between items-center">
+<span class="text-xs font-bold tracking-widest uppercase text-primary/40 group-hover:text-primary transition-colors">Details</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-[0_20px_40px_rgba(27,67,50,0.06)]">
+<div class="aspect-[16/10] overflow-hidden bg-surface-container-low">
+<img alt="Cactus Garden" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Stunning aerial view of the Mossèn Costa i Llobera cactus gardens on Montjuïc hill with the Mediterranean sea background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDCT20Pogh8RD2AbZIudyIoVQ5__H2ANIDmjHPO04XfkDo4PqnWAef2pvR1I4tDc7PE77w_a-8gA4azfoDt8aMiWJUgcqHE1zABkbnVjw_eXXvdHR09aH9F-BhWiFYf5ODvTaOXw9OUPiTcLYoRCEZA-8ChEe1JjB8mIMVvbzMu6_EgQ1Jk_oA_bw8HpUZoHb_Le2Wwu-f9HA0LBvu4nGiub6ydmeYQ-9N1EdgmATzIL2K4-y1tY7XzNl3Px8aGuG074Z-hQ2pK-sIn"/>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded text-xs font-bold tracking-wider uppercase">Plants</span>
+<span class="text-on-surface-variant text-xs font-medium">• Montjuïc</span>
+</div>
+<h3 class="font-headline text-2xl font-extrabold text-primary mb-3 leading-tight">Mossèn Costa i Llobera</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-2">
+                            One of Europe's most significant succulent and cacti gardens, overlooking the bustling city port.
+                        </p>
+<div class="mt-auto pt-4 flex justify-between items-center">
+<span class="text-xs font-bold tracking-widest uppercase text-primary/40 group-hover:text-primary transition-colors">Details</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-[0_20px_40px_rgba(27,67,50,0.06)]">
+<div class="aspect-[16/10] overflow-hidden bg-surface-container-low">
+<img alt="Urban Pond" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Reflective water lily pond in an urban park with dragonflies hovering above green pads in soft evening light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBLnA7Jw0aXxFgEM_8YFfL483zX5Eao-XWPEoLTolbC_10saMyJv7S0VPYZZdpfxOcUR8adk4Mtp9xd0Tq1oHx6yCwCr_qH9HAPAS_tiSCGqRbguPRmgNpDNpuVmILYcKL_oCbx-L8ZH4anTC6_KBvwnx7gEl-GUFED7o6lOV6TOCFYtNGgH2e5NABJkvAVq3exRkhW2lGX7jYYk1hkPxcXCTUuQU07G_382MwP0bCs9ULUs7j04o7S3P2rS0mHlnY_Rfu1XyBR93bY"/>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded text-xs font-bold tracking-wider uppercase">Water</span>
+<span class="text-on-surface-variant text-xs font-medium">• Poblenou</span>
+</div>
+<h3 class="font-headline text-2xl font-extrabold text-primary mb-3 leading-tight">Parc del Centre Wetland</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-2">
+                            Jean Nouvel's urban masterpiece featuring sustainable water systems and native Mediterranean aquatic life.
+                        </p>
+<div class="mt-auto pt-4 flex justify-between items-center">
+<span class="text-xs font-bold tracking-widest uppercase text-primary/40 group-hover:text-primary transition-colors">Details</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Card 5 -->
+<article class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-[0_20px_40px_rgba(27,67,50,0.06)]">
+<div class="aspect-[16/10] overflow-hidden bg-surface-container-low">
+<img alt="Bee on lavender" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Honey bee collecting nectar from wild lavender flowers in a community urban garden in Gracia neighborhood" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCFfQCJppanntZM2cqGeD01ptdpgzH-JUdSHnQYkd515VUMSMmjehDGgwkT_69YmN8y_0yOSkKvzIBN5WU_hnfpJG51UucXQCc3eQWdbh_2Fep6UWu5vKutDFU108a3iRx9t6lPID9_ibM_vxUv5ZKac-jtFsg1bl-uDEnTPraBmYmghpqkvzQ8Vq_z4xhHk9aGsSSocdLlZm1xhE-ZxDqfopzUKlCMSaijHtomOsm8ZkZ8cefA9FLpOsc6a7hM1KgoP3vfNANvJH7z"/>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded text-xs font-bold tracking-wider uppercase">Insects</span>
+<span class="text-on-surface-variant text-xs font-medium">• Gràcia</span>
+</div>
+<h3 class="font-headline text-2xl font-extrabold text-primary mb-3 leading-tight">Bee Corridors</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-2">
+                            A community-led project creating floral bridges for pollinators across the dense urban fabric.
+                        </p>
+<div class="mt-auto pt-4 flex justify-between items-center">
+<span class="text-xs font-bold tracking-widest uppercase text-primary/40 group-hover:text-primary transition-colors">Details</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</article>
+<!-- Card 6 -->
+<article class="group bg-surface-container-lowest rounded-lg overflow-hidden flex flex-col transition-all hover:shadow-[0_20px_40px_rgba(27,67,50,0.06)]">
+<div class="aspect-[16/10] overflow-hidden bg-surface-container-low">
+<img alt="Sunset through trees" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" data-alt="Distant sunset through a canopy of olive trees in an ancient terraced garden with warm orange glow" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmgra4n1UfOxbSQCPEqrkyg3nbJm-mCJbIXn5JwM4D23pVkARGHEbgxAubMqlQ_xy_dR7mDSiQWTjiB1CMbD9SrU7B55Q7C2YHHe-n0ECIEBUwgbN9hTZbwzXn1PtgaMfj-R3b14ivIjoNUuOOBBMKI2ZOtxai-DBdKV932qyfH3SYffOOZ5NDfnoK9WGo4fg09PHisA9x26hQU-1iIjh4nmLlQLe3YQtH0bh-xQt8y405QzeNoeOLdKxFJ1mrJx_oZdu96eCLGcq5"/>
+</div>
+<div class="p-8 flex flex-col flex-1">
+<div class="flex items-center gap-2 mb-4">
+<span class="bg-primary-fixed text-on-primary-fixed-variant px-3 py-1 rounded text-xs font-bold tracking-wider uppercase">Plants</span>
+<span class="text-on-surface-variant text-xs font-medium">• Horta</span>
+</div>
+<h3 class="font-headline text-2xl font-extrabold text-primary mb-3 leading-tight">Laberint d'Horta</h3>
+<p class="text-on-surface-variant text-sm leading-relaxed mb-6 line-clamp-2">
+                            The city's oldest garden, home to rare cypress specimens and Neoclassical water features.
+                        </p>
+<div class="mt-auto pt-4 flex justify-between items-center">
+<span class="text-xs font-bold tracking-widest uppercase text-primary/40 group-hover:text-primary transition-colors">Details</span>
+<span class="material-symbols-outlined text-primary/40 group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full py-16 mt-20 bg-[#f6f3ec] dark:bg-stone-900">
+<div class="max-w-[1152px] mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-8 font-['Inter'] text-sm tracking-wide text-[#1b4332] dark:text-stone-300">
+<div class="flex flex-col gap-2 text-center md:text-left">
+<span class="font-['Manrope'] font-bold text-lg">Sotabosc</span>
+<span class="opacity-70">© 2024 Sotabosc Barcelona. Rooted in Collserola.</span>
+</div>
+<div class="flex gap-8">
+<a class="opacity-70 hover:opacity-100 transition-opacity" href="#">Privacy</a>
+<a class="opacity-70 hover:opacity-100 transition-opacity" href="#">Terms</a>
+<a class="opacity-70 hover:opacity-100 transition-opacity underline font-semibold" href="#">Submit a Place</a>
+<a class="opacity-70 hover:opacity-100 transition-opacity" href="#">Instagram</a>
+</div>
+</div>
+</footer>
+</body></html>

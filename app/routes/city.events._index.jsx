@@ -1,13 +1,21 @@
 import { useLoaderData, Link } from 'react-router';
 import { EventCard } from '~/components/directory/EventCard';
 import { DomainPills } from '~/components/directory/CategoryPills';
+import { DirectorySurface } from '~/components/directory/DirectorySurface';
 import { ContributionActions } from '~/components/directory/ContributionActions';
 import { DOMAINS } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
+import { openGraphImageMeta } from '~/lib/seo/siteImagery';
+import { canonicalLinkMeta } from '~/lib/seo/metaHelpers';
 
-export const meta = () => [
+export const meta = ({ data }) => [
   { title: 'Events — Sotabosc City' },
-  { name: 'description', content: 'Upcoming events in Barcelona: music, workshops, exhibitions, retreats, and more.' },
+  {
+    name: 'description',
+    content: 'Upcoming events in Barcelona: music, workshops, exhibitions, retreats, and more.',
+  },
+  ...canonicalLinkMeta(data?.origin, directoryRoutes.events()),
+  ...openGraphImageMeta(data?.origin),
 ];
 
 export async function loader({ request }) {
@@ -26,26 +34,27 @@ export async function loader({ request }) {
     if (events.length === 0) events = [...SEED_EVENTS];
   }
 
-  return { events, domain };
+  return { events, domain, origin: new URL(request.url).origin };
 }
 
 export default function EventsFeed() {
   const { events, domain } = useLoaderData();
 
   return (
-    <div className="min-h-screen bg-[var(--color-primary)]">
+    <DirectorySurface>
       <section className="pt-12 pb-6 px-4">
         <div className="max-w-4xl mx-auto">
           <Link
             to={directoryRoutes.city()}
-            className="text-xs text-black/40 hover:text-black/60 transition-colors mb-4 inline-block"
+            className="text-xs mb-4 inline-block transition-opacity hover:opacity-80"
+            style={{ color: 'var(--sotabosc-muted)' }}
           >
             ← Back to directory
           </Link>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2">
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2 font-[family-name:var(--font-display)]">
             Events in Barcelona
           </h1>
-          <p className="text-sm text-black/40 mb-6">
+          <p className="text-sm mb-6" style={{ color: 'var(--sotabosc-muted)' }}>
             {events.length} event{events.length !== 1 ? 's' : ''} coming up
           </p>
           <DomainPills activeDomain={domain} />
@@ -55,14 +64,20 @@ export default function EventsFeed() {
       <section className="px-4 pb-12">
         <div className="max-w-4xl mx-auto">
           {domain && (
-            <p className="text-sm text-black/40 mb-4">
+            <p className="text-sm mb-4" style={{ color: 'var(--sotabosc-muted)' }}>
               Showing {DOMAINS[domain]?.emoji} {DOMAINS[domain]?.label} events
             </p>
           )}
           {events.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-lg text-black/30">No events found.</p>
-              <Link to={directoryRoutes.events()} className="text-sm underline text-black/50 mt-2 inline-block">
+              <p className="text-lg" style={{ color: 'var(--sotabosc-muted)', opacity: 0.85 }}>
+                No events found.
+              </p>
+              <Link
+                to={directoryRoutes.events()}
+                className="text-sm underline mt-2 inline-block"
+                style={{ color: 'var(--sotabosc-accent-soft)' }}
+              >
                 View all events
               </Link>
             </div>
@@ -81,6 +96,6 @@ export default function EventsFeed() {
           <ContributionActions />
         </div>
       </section>
-    </div>
+    </DirectorySurface>
   );
 }

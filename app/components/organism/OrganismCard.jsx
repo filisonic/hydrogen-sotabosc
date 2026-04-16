@@ -2,6 +2,8 @@ import { motion } from 'framer-motion';
 import { useOrganismStore } from '~/lib/store/useOrganismStore';
 import { Link } from 'react-router';
 import { getStageForXP, getNextStage, getProgressToNext } from '~/lib/organism/progression';
+import { getDomainTheme } from '~/lib/theme/domainTheme';
+import { OrganismPortrait } from '~/components/organism/OrganismPortrait';
 
 /**
  * OrganismCard Component
@@ -17,6 +19,7 @@ export function OrganismCard() {
     const stage = getStageForXP(totalXP);
     const nextStage = getNextStage(totalXP);
     const progress = getProgressToNext(totalXP);
+    const domainTheme = getDomainTheme(organism.domain);
 
     return (
         <motion.div
@@ -45,11 +48,16 @@ export function OrganismCard() {
 
             <header className="relative z-10 mb-8 flex justify-between items-start pt-6">
                 <div className="flex gap-6 items-center">
-                    {organism.image && (
-                        <div className="w-20 h-20 rounded-2xl overflow-hidden border border-white/10 shadow-inner bg-black/40">
-                            <img src={organism.image} alt={organism.displayName} className="w-full h-full object-cover mix-blend-screen" />
-                        </div>
-                    )}
+                    <OrganismPortrait
+                        src={organism.image}
+                        emoji={domainTheme.emoji}
+                        alt={organism.displayName}
+                        size="lg"
+                        accent={domainTheme.accentSoft}
+                        borderColor="rgba(255,255,255,0.12)"
+                        fallbackSurface="rgba(0,0,0,0.45)"
+                        className="shadow-inner bg-black/40"
+                    />
                     <div>
                         <span className="text-[10px] uppercase tracking-[0.3em] font-bold text-white/40 block mb-1">ECOLOGICAL IDENTITY</span>
                         <h1 className="text-3xl font-heading text-white/90 leading-none">{organism.displayName}</h1>

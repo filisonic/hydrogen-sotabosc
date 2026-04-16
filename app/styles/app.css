@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;500;600;700&display=swap');
 @import "tailwindcss";
+@import "./aurelia-imagery.css";
 
 @theme {
   --color-dark-bg: #FFE500;
@@ -8,6 +11,9 @@
   --color-warm-gray: #FFED4A;
   --color-cool-gray: #FFF9C4;
   --font-family-sans: 'Inter', system-ui, sans-serif;
+  --font-display: 'Manrope', 'Inter', system-ui, sans-serif;
+  /* Editorial display for Stitch “Sotabosc Reserve” / home hero (paired with Inter body) */
+  --font-editorial: 'Newsreader', Georgia, 'Times New Roman', serif;
 }
 
 @layer base {
@@ -237,6 +243,47 @@ button.reset:hover:not(:has(> *)) {
   top: 0;
   z-index: 1;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.header-logo-link {
+  display: flex;
+  align-items: center;
+  line-height: 0;
+}
+
+.header-logo-link img {
+  height: 48px;
+  width: auto;
+  max-width: min(140px, 38vw);
+  object-fit: contain;
+  border-radius: 0;
+}
+
+/* City directory + feedback — match DirectorySurface / NEUTRAL_THEME (not shop yellow) */
+.layout-directory {
+  background-color: #f4f1ea;
+  min-height: 100vh;
+}
+
+.header.header--directory {
+  background: #ffffff;
+  border-bottom: 1px solid rgba(27, 67, 50, 0.12);
+  color: #1a1a1a;
+}
+
+.header.header--directory a,
+.header.header--directory button.reset {
+  color: #1a1a1a;
+}
+
+.footer.footer--directory {
+  background: #1b4332;
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  margin-top: auto;
+}
+
+.footer.footer--directory .footer-menu a {
+  color: rgba(255, 255, 255, 0.9);
 }
 
 .header-menu-mobile-toggle {

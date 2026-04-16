@@ -2,21 +2,14 @@ import { motion } from 'framer-motion';
 import { generateOrganism } from '~/lib/organism/generator';
 import { useOrganismStore } from '~/lib/store/useOrganismStore';
 import { DOMAIN_KEYS, DOMAINS, getDomain } from '~/lib/directory/domains';
-import { audioManager } from '~/lib/sound/audioManager';
-import { useAudioStore } from '~/lib/store/useAudioStore';
-
 /**
  * @param {{ variant?: 'full' | 'strip' }} props
  */
 export function DomainSelector({ variant = 'full' }) {
     const setOrganism = useOrganismStore((s) => s.setOrganism);
     const current = useOrganismStore((s) => s.organism?.domain);
-    const { setMuted } = useAudioStore();
 
-    const handleSelect = async (domainId) => {
-        await audioManager.init();
-        setMuted(false);
-        audioManager.playAll();
+    const handleSelect = (domainId) => {
         const organism = generateOrganism(domainId);
         setOrganism(organism);
     };

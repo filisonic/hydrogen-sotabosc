@@ -10,6 +10,11 @@ export const directoryRoutes = {
   event: (slug: string) => `${CITY_ROOT}/events/${slug}`,
   creators: () => `${CITY_ROOT}/creators`,
   creator: (slug: string) => `${CITY_ROOT}/creators/${slug}`,
+  hikes: () => `${CITY_ROOT}/hikes`,
+  hike: (slug: string) => `${CITY_ROOT}/hikes/${slug}`,
+  neighborhood: (slug: string) => `${CITY_ROOT}/neighbourhoods/${slug}`,
+  guides: () => `${CITY_ROOT}/guides`,
+  guide: (slug: string) => `${CITY_ROOT}/guides/${slug}`,
   domain: (d: DomainCategory) => `${CITY_ROOT}?domain=${d}`,
   feedback: () => '/feedback',
 } as const;

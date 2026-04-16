@@ -147,7 +147,13 @@ function loadDeferredData({ context }) {
  * @param {{children?: React.ReactNode}}
  */
 export function Layout({ children }) {
-  const nonce = useNonce();
+  let nonce;
+  try {
+    nonce = useNonce();
+  } catch (error) {
+    console.warn('useNonce hook failed, using undefined nonce:', error.message);
+    nonce = undefined;
+  }
 
   return (
     <html lang="en">

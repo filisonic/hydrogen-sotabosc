@@ -23,18 +23,43 @@ export const meta = () => {
  * @param {Route.LoaderArgs} args
  */
 export async function loader(args) {
-  const criticalData = await loadCriticalData(args);
-  const { SEED_PLACES, SEED_EVENTS, SEED_CREATORS, getUpcomingEvents } =
-    await import('~/lib/directory/seed.server');
-  const upcoming = getUpcomingEvents();
-  return {
-    ...criticalData,
-    directory: {
-      places: SEED_PLACES,
-      events: upcoming.slice(0, 14),
-      creators: SEED_CREATORS,
-    },
-  };
+  try {
+    console.log('Loading homepage data...');
+    const criticalData = await loadCriticalData(args);
+    console.log('Critical data loaded:', Object.keys(criticalData));
+    
+    const { SEED_PLACES, SEED_EVENTS, SEED_CREATORS, getUpcomingEvents } =
+      await import('~/lib/directory/seed.server');
+    console.log('Seed data imported successfully');
+    
+    const upcoming = getUpcomingEvents();
+    console.log('Upcoming events:', upcoming?.length);
+    
+    const result = {
+      ...criticalData,
+      directory: {
+        places: SEED_PLACES,
+        events: upcoming.slice(0, 14),
+        creators: SEED_CREATORS,
+      },
+    };
+    
+    console.log('Final result keys:', Object.keys(result));
+    console.log('Directory keys:', Object.keys(result.directory));
+    
+    return result;
+  } catch (error) {
+    console.error('Homepage loader error:', error);
+    // Return minimal data to prevent 500 error
+    return {
+      collections: [],
+      directory: {
+        places: [],
+        events: [],
+        creators: [],
+      },
+    };
+  }
 }
 
 async function loadCriticalData({ context }) {
@@ -55,6 +80,9 @@ async function loadCriticalData({ context }) {
 
 export default function Homepage() {
   const data = useLoaderData();
+  
+  console.log('Homepage component - data:', data);
+  console.log('Homepage component - data.directory:', data?.directory);
 
   return (
     <WorldShell>
@@ -80,9 +108,9 @@ export default function Homepage() {
         <DomainSelector variant="strip" />
       </header>
 
-      <ScrollWorld />
+      <ScrollWorld directory={data?.directory || { places: [], events: [], creators: [] }} />
 
-      <HomeExploreFeed directory={data.directory} />
+      <HomeExploreFeed directory={data?.directory || { places: [], events: [], creators: [] }} />
 
       {data.collections?.length > 0 && (
         <section className="py-14 px-4 relative z-[100]" style={{ backgroundColor: 'var(--sotabosc-bg)' }}>

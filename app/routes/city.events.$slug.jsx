@@ -1,25 +1,37 @@
 import { useLoaderData, Link } from 'react-router';
 import { useEffect } from 'react';
 import { ContributionActions } from '~/components/directory/ContributionActions';
+import { DirectorySurface } from '~/components/directory/DirectorySurface';
 import { getDomain } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
 import { trackEventView } from '~/lib/analytics';
 import { useOrganismStore } from '~/lib/store/useOrganismStore';
+import { openGraphImageMeta } from '~/lib/seo/siteImagery';
+import { canonicalLinkMeta } from '~/lib/seo/metaHelpers';
+import { JsonLd } from '~/components/seo/JsonLd';
+import { buildBreadcrumbListJsonLd, buildEventJsonLd } from '~/lib/seo/jsonLd';
 
 export const meta = ({ data }) => {
   if (!data?.event) return [{ title: 'Event Not Found — Sotabosc City' }];
+  const path = directoryRoutes.event(data.event.slug);
+  const ended = data?.eventEnded === true;
   return [
     { title: `${data.event.title} — Sotabosc City` },
     { name: 'description', content: data.event.summary },
+    ...(ended ? [{ name: 'robots', content: 'noindex, follow' }] : []),
+    ...canonicalLinkMeta(data?.origin, path),
+    ...openGraphImageMeta(data?.origin),
   ];
 };
 
-export async function loader({ params }) {
+export async function loader({ params, request }) {
   const { getEventBySlug, getPlaceById } = await import('~/lib/directory/seed.server');
   const event = getEventBySlug(params.slug);
   if (!event) throw new Response('Event not found', { status: 404 });
   const place = getPlaceById(event.placeId);
-  return { event, place: place || null };
+  const endMs = new Date(event.endsAt ?? event.startsAt).getTime();
+  const eventEnded = endMs < Date.now();
+  return { event, place: place || null, origin: new URL(request.url).origin, eventEnded };
 }
 
 function formatFullDate(isoStr) {
@@ -36,7 +48,15 @@ function formatTime(isoStr) {
 }
 
 export default function EventDetail() {
-  const { event, place } = useLoaderData();
+  const { event, place, origin } = useLoaderData();
+  const eventPageUrl = `${origin}${directoryRoutes.event(event.slug)}`;
+  const eventLd = buildEventJsonLd(event, eventPageUrl, place);
+  const breadcrumbLd = buildBreadcrumbListJsonLd([
+    { name: 'Home', url: `${origin}/` },
+    { name: 'Barcelona', url: `${origin}${directoryRoutes.city()}` },
+    { name: 'Events', url: `${origin}${directoryRoutes.events()}` },
+    { name: event.title, url: eventPageUrl },
+  ]);
   const domain = getDomain(event.primaryDomain);
   const { recordActivity } = useOrganismStore();
 
@@ -45,13 +65,21 @@ export default function EventDetail() {
     recordActivity('event_view', event.id);
   }, [event.id]);
 
+  const cardStyle = {
+    backgroundColor: 'var(--sotabosc-surface)',
+    borderColor: 'var(--sotabosc-border)',
+  };
+
   return (
-    <div className="min-h-screen bg-[var(--color-primary)]">
+    <DirectorySurface>
+      <JsonLd data={eventLd} />
+      <JsonLd data={breadcrumbLd} />
       <section className="pt-8 pb-6 px-4">
         <div className="max-w-4xl mx-auto">
           <Link
             to={directoryRoutes.events()}
-            className="text-xs text-black/40 hover:text-black/60 transition-colors mb-4 inline-block"
+            className="text-xs mb-4 inline-block transition-opacity hover:opacity-80"
+            style={{ color: 'var(--sotabosc-muted)' }}
           >
             ← Back to events
           </Link>
@@ -70,24 +98,33 @@ export default function EventDetail() {
             {domain.emoji} {domain.label}
           </span>
 
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2">{event.title}</h1>
-          <p className="text-base text-black/60 mb-6 max-w-2xl">{event.summary}</p>
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2 font-[family-name:var(--font-display)]">
+            {event.title}
+          </h1>
+          <p className="text-base mb-6 max-w-2xl" style={{ color: 'var(--sotabosc-muted)' }}>
+            {event.summary}
+          </p>
 
           <div className="grid sm:grid-cols-2 gap-4 text-sm mb-6">
-            <div className="bg-white rounded-xl p-4 border border-black/5">
-              <p className="text-black/30 text-xs font-bold uppercase mb-1">When</p>
+            <div className="rounded-xl p-4 border" style={cardStyle}>
+              <p className="text-xs font-bold uppercase mb-1" style={{ color: 'var(--sotabosc-muted)', opacity: 0.8 }}>
+                When
+              </p>
               <p className="font-medium">{formatFullDate(event.startsAt)}</p>
-              <p className="text-black/50">
+              <p style={{ color: 'var(--sotabosc-muted)' }}>
                 {formatTime(event.startsAt)}
                 {event.endsAt && ` — ${formatFullDate(event.endsAt)} ${formatTime(event.endsAt)}`}
               </p>
             </div>
-            <div className="bg-white rounded-xl p-4 border border-black/5">
-              <p className="text-black/30 text-xs font-bold uppercase mb-1">Where</p>
+            <div className="rounded-xl p-4 border" style={cardStyle}>
+              <p className="text-xs font-bold uppercase mb-1" style={{ color: 'var(--sotabosc-muted)', opacity: 0.8 }}>
+                Where
+              </p>
               {place ? (
                 <Link
                   to={directoryRoutes.place(place.slug)}
-                  className="font-medium underline hover:text-black/80 transition-colors"
+                  className="font-medium underline transition-opacity hover:opacity-80"
+                  style={{ color: 'var(--sotabosc-accent-soft)' }}
                 >
                   {place.name}
                 </Link>
@@ -95,7 +132,9 @@ export default function EventDetail() {
                 <p className="font-medium">{event.placeName || 'TBA'}</p>
               )}
               {place && (
-                <p className="text-black/40">{place.neighborhood}, {place.city}</p>
+                <p style={{ color: 'var(--sotabosc-muted)' }}>
+                  {place.neighborhood}, {place.city}
+                </p>
               )}
             </div>
           </div>
@@ -103,7 +142,14 @@ export default function EventDetail() {
           {event.tags && event.tags.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-8">
               {event.tags.map((tag) => (
-                <span key={tag} className="text-xs bg-black/5 text-black/50 px-2.5 py-1 rounded-full">
+                <span
+                  key={tag}
+                  className="text-xs px-2.5 py-1 rounded-full"
+                  style={{
+                    backgroundColor: 'var(--sotabosc-surface-muted)',
+                    color: 'var(--sotabosc-muted)',
+                  }}
+                >
                   #{tag}
                 </span>
               ))}
@@ -117,6 +163,6 @@ export default function EventDetail() {
           <ContributionActions compact />
         </div>
       </section>
-    </div>
+    </DirectorySurface>
   );
 }

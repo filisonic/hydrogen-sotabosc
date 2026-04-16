@@ -6,12 +6,26 @@ import {useAside} from '~/components/Aside';
 /**
  * @param {HeaderProps}
  */
-export function Header({header, isLoggedIn, cart, publicStoreDomain}) {
+export function Header({header, isLoggedIn, cart, publicStoreDomain, directoryChrome = false}) {
   const {shop, menu} = header;
   return (
-    <header className="header bg-dark-bg border-b border-black/10">
-      <NavLink prefetch="intent" to="/" style={activeLinkStyle} end>
-        <strong className="text-xl font-black tracking-tight uppercase">SOTABOSC</strong>
+    <header
+      className={`header border-b ${directoryChrome ? 'header--directory' : 'bg-dark-bg border-black/10'}`}
+    >
+      <NavLink
+        prefetch="intent"
+        to="/"
+        style={activeLinkStyle}
+        end
+        className="header-logo-link shrink-0"
+      >
+        <img
+          src="/images/brand/sotabosc-logo.png"
+          alt="Sotabosc"
+          width={140}
+          height={48}
+          decoding="async"
+        />
       </NavLink>
       <HeaderMenu
         menu={menu}
@@ -80,6 +94,15 @@ export function HeaderMenu({
         to="/city/creators"
       >
         Creators
+      </NavLink>
+      <NavLink
+        className="header-menu-item"
+        onClick={close}
+        prefetch="intent"
+        style={activeLinkStyle}
+        to="/city/hikes"
+      >
+        Hikes
       </NavLink>
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
@@ -257,6 +280,7 @@ function activeLinkStyle({isActive, isPending}) {
  * @property {Promise<CartApiQueryFragment|null>} cart
  * @property {Promise<boolean>} isLoggedIn
  * @property {string} publicStoreDomain
+ * @property {boolean} [directoryChrome]
  */
 
 /** @typedef {import('@shopify/hydrogen').CartViewPayload} CartViewPayload */

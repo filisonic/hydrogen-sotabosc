@@ -1,14 +1,23 @@
 import { useLoaderData, Link } from 'react-router';
 import { getDomain } from '~/lib/directory/domains';
+import { DirectorySurface } from '~/components/directory/DirectorySurface';
+import { openGraphImageMeta } from '~/lib/seo/siteImagery';
+import { directoryRoutes } from '~/lib/directory/routes';
+import { canonicalLinkMeta } from '~/lib/seo/metaHelpers';
 
-export const meta = () => [
+export const meta = ({ data }) => [
   { title: 'Creators — Sotabosc City' },
-  { name: 'description', content: "Independent creators, artists, and makers in Barcelona's Sotabosc ecosystem." },
+  {
+    name: 'description',
+    content: "Independent creators, artists, and makers in Barcelona's Sotabosc ecosystem.",
+  },
+  ...canonicalLinkMeta(data?.origin, directoryRoutes.creators()),
+  ...openGraphImageMeta(data?.origin),
 ];
 
-export async function loader() {
+export async function loader({ request }) {
   const { SEED_CREATORS } = await import('~/lib/directory/seed.server');
-  return { creators: SEED_CREATORS };
+  return { creators: SEED_CREATORS, origin: new URL(request.url).origin };
 }
 
 function CreatorCard({ creator }) {
@@ -16,7 +25,12 @@ function CreatorCard({ creator }) {
   return (
     <Link
       to={`/city/creators/${creator.slug}`}
-      className="group block bg-white rounded-2xl border border-black/5 hover:border-black/15 p-5 transition-all hover:shadow-md"
+      className="group block rounded-2xl border p-5 transition-all hover:shadow-[0_20px_40px_rgba(27,67,50,0.06)]"
+      style={{
+        backgroundColor: 'var(--sotabosc-surface)',
+        borderColor: 'var(--sotabosc-border)',
+        color: 'var(--sotabosc-text)',
+      }}
     >
       <div className="flex items-start gap-4">
         {creator.imageUrl ? (
@@ -42,13 +56,21 @@ function CreatorCard({ creator }) {
               {domain.label}
             </span>
             {creator.productCollectionHandle && (
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-black/5 text-black/40">
+              <span
+                className="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                style={{
+                  backgroundColor: 'var(--sotabosc-surface-muted)',
+                  color: 'var(--sotabosc-muted)',
+                }}
+              >
                 Store
               </span>
             )}
           </div>
           <h3 className="font-bold text-base group-hover:underline">{creator.displayName}</h3>
-          <p className="text-sm text-black/50 leading-snug mt-0.5 line-clamp-2">{creator.bio}</p>
+          <p className="text-sm leading-snug mt-0.5 line-clamp-2" style={{ color: 'var(--sotabosc-muted)' }}>
+            {creator.bio}
+          </p>
         </div>
       </div>
     </Link>
@@ -59,18 +81,21 @@ export default function CreatorsIndex() {
   const { creators } = useLoaderData();
 
   return (
-    <div className="min-h-screen bg-[var(--color-primary)]">
+    <DirectorySurface>
       <section className="pt-10 pb-6 px-4">
         <div className="max-w-4xl mx-auto">
           <Link
             to="/city"
-            className="text-xs text-black/40 hover:text-black/60 transition-colors mb-5 inline-block"
+            className="text-xs mb-5 inline-block transition-opacity hover:opacity-80"
+            style={{ color: 'var(--sotabosc-muted)' }}
           >
             ← Back to directory
           </Link>
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2">Creators</h1>
-          <p className="text-sm text-black/50 max-w-xl mb-8">
-            Independent artists, makers, and designers rooted in Barcelona's nature-led creative scene.
+          <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2 font-[family-name:var(--font-display)]">
+            Creators
+          </h1>
+          <p className="text-sm max-w-xl mb-8" style={{ color: 'var(--sotabosc-muted)' }}>
+            Independent artists, makers, and designers rooted in Barcelona&apos;s nature-led creative scene.
           </p>
 
           <div className="grid sm:grid-cols-2 gap-4">
@@ -80,6 +105,6 @@ export default function CreatorsIndex() {
           </div>
         </div>
       </section>
-    </div>
+    </DirectorySurface>
   );
 }

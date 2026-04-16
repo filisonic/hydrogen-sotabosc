@@ -8,9 +8,15 @@ node_modules
 .shopify
 .react-router
 
+# Nano Banana MCP companion thumbnails (not used by the app)
+public/**/*_thumb.jpeg
+
 # Local logs / scratch
 error.log
 server.log
 ssr-test.js
 
-# Nested clone — track via submodule if needed
+# Venue image fetch audit (optional: commit for team visibility)
+reports/*.json
+
+# Nested clone ï¿½ track via submodule if needed

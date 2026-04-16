@@ -1,25 +1,41 @@
 import { useLoaderData, Link } from 'react-router';
 import { useEffect } from 'react';
+import { DirectorySurface } from '~/components/directory/DirectorySurface';
 import { getDomain } from '~/lib/directory/domains';
 import { trackCreatorView } from '~/lib/analytics';
+import { openGraphImageMeta } from '~/lib/seo/siteImagery';
+import { directoryRoutes } from '~/lib/directory/routes';
+import { JsonLd } from '~/components/seo/JsonLd';
+import { buildBreadcrumbListJsonLd } from '~/lib/seo/jsonLd';
+import { canonicalLinkMeta } from '~/lib/seo/metaHelpers';
 
 export const meta = ({ data }) => {
   if (!data?.creator) return [{ title: 'Creator Not Found — Sotabosc City' }];
+  const path = directoryRoutes.creator(data.creator.slug);
   return [
     { title: `${data.creator.displayName} — Sotabosc Creators` },
     { name: 'description', content: data.creator.bio },
+    ...canonicalLinkMeta(data?.origin, path),
+    ...openGraphImageMeta(data?.origin),
   ];
 };
 
-export async function loader({ params }) {
+export async function loader({ params, request }) {
   const { getCreatorBySlug } = await import('~/lib/directory/seed.server');
   const creator = getCreatorBySlug(params.slug);
   if (!creator) throw new Response('Creator not found', { status: 404 });
-  return { creator };
+  return { creator, origin: new URL(request.url).origin };
 }
 
 export default function CreatorDetail() {
-  const { creator } = useLoaderData();
+  const { creator, origin } = useLoaderData();
+  const pageUrl = `${origin}${directoryRoutes.creator(creator.slug)}`;
+  const breadcrumbLd = buildBreadcrumbListJsonLd([
+    { name: 'Home', url: `${origin}/` },
+    { name: 'Barcelona', url: `${origin}${directoryRoutes.city()}` },
+    { name: 'Creators', url: `${origin}${directoryRoutes.creators()}` },
+    { name: creator.displayName, url: pageUrl },
+  ]);
   const domain = getDomain(creator.primaryDomain);
 
   useEffect(() => {
@@ -31,17 +47,18 @@ export default function CreatorDetail() {
     : null;
 
   return (
-    <div className="min-h-screen bg-[var(--color-primary)]">
+    <DirectorySurface>
+      <JsonLd data={breadcrumbLd} />
       <section className="pt-8 pb-6 px-4">
         <div className="max-w-3xl mx-auto">
           <Link
             to="/city/creators"
-            className="text-xs text-black/40 hover:text-black/60 transition-colors mb-5 inline-block"
+            className="text-xs mb-5 inline-block transition-opacity hover:opacity-80"
+            style={{ color: 'var(--sotabosc-muted)' }}
           >
             ← All creators
           </Link>
 
-          {/* Hero */}
           <div className="flex items-start gap-6 mb-8">
             {creator.imageUrl ? (
               <img
@@ -64,52 +81,71 @@ export default function CreatorDetail() {
               >
                 {domain.emoji} {domain.label}
               </span>
-              <h1 className="text-2xl md:text-3xl font-black tracking-tight mb-1">{creator.displayName}</h1>
-              <p className="text-sm text-black/50">{creator.city}</p>
+              <h1 className="text-2xl md:text-3xl font-black tracking-tight mb-1 font-[family-name:var(--font-display)]">
+                {creator.displayName}
+              </h1>
+              <p className="text-sm" style={{ color: 'var(--sotabosc-muted)' }}>
+                {creator.city}
+              </p>
             </div>
           </div>
 
-          {/* Bio */}
-          <div className="bg-white rounded-2xl border border-black/5 p-6 mb-6">
-            <p className="text-base text-black/70 leading-relaxed">{creator.bio}</p>
+          <div
+            className="rounded-2xl border p-6 mb-6"
+            style={{
+              backgroundColor: 'var(--sotabosc-surface)',
+              borderColor: 'var(--sotabosc-border)',
+            }}
+          >
+            <p className="text-base leading-relaxed" style={{ color: 'var(--sotabosc-text)', opacity: 0.9 }}>
+              {creator.bio}
+            </p>
           </div>
 
-          {/* Links */}
           <div className="flex flex-wrap gap-3 mb-12">
             {storeUrl && (
-              <a
-                href={storeUrl}
-                className="inline-flex items-center gap-2 bg-black text-white font-bold text-sm px-6 py-3 rounded-full hover:bg-black/80 transition-colors shadow"
+              <Link
+                to={storeUrl}
+                className="inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full transition-opacity hover:opacity-90 shadow-sm"
+                style={{
+                  backgroundColor: 'var(--sotabosc-accent)',
+                  color: 'var(--sotabosc-surface)',
+                }}
               >
                 Visit Store
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
+                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden>
                   <path d="M6 3L11 8L6 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-              </a>
+              </Link>
             )}
             {creator.websiteUrl && (
               <a
                 href={creator.websiteUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-black/5 hover:bg-black/10 text-black font-bold text-sm px-6 py-3 rounded-full transition-colors"
+                className="inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full border transition-opacity hover:opacity-90"
+                style={{
+                  backgroundColor: 'var(--sotabosc-surface-muted)',
+                  borderColor: 'var(--sotabosc-border)',
+                  color: 'var(--sotabosc-text)',
+                }}
               >
                 Website ↗
               </a>
             )}
           </div>
 
-          {/* Other creators */}
-          <div className="pt-8 border-t border-black/5">
+          <div className="pt-8 border-t" style={{ borderColor: 'var(--sotabosc-border)' }}>
             <Link
               to="/city/creators"
-              className="text-sm font-semibold text-black/40 hover:text-black/60 transition-colors"
+              className="text-sm font-semibold transition-opacity hover:opacity-80"
+              style={{ color: 'var(--sotabosc-muted)' }}
             >
               View all creators →
             </Link>
           </div>
         </div>
       </section>
-    </div>
+    </DirectorySurface>
   );
 }

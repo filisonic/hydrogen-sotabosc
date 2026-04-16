@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useOrganismStore } from '~/lib/store/useOrganismStore';
 import { getDomainTheme } from '~/lib/theme/domainTheme';
+import { OrganismPortrait } from '~/components/organism/OrganismPortrait';
 import { getStageForXP, getNextStage, getProgressToNext } from '~/lib/organism/progression';
 
 const ACTION_LABELS = {
@@ -22,9 +23,25 @@ export function ArtifactDock() {
   const discoveredSpecimens = useOrganismStore((s) => s.discoveredSpecimens);
   const clearOrganism = useOrganismStore((s) => s.clearOrganism);
 
-  if (!organism) return null;
+  const theme = organism ? getDomainTheme(organism.domain) : null;
 
-  const theme = getDomainTheme(organism.domain);
+  if (!organism || !theme) {
+    return (
+      <div className="fixed bottom-4 right-4 z-[400] max-w-[min(100vw-2rem,18rem)] pointer-events-none">
+        <Link
+          to="/#domain-strip"
+          className="pointer-events-auto block rounded-2xl border px-4 py-3 text-xs font-bold shadow-xl backdrop-blur-md"
+          style={{
+            backgroundColor: 'var(--sotabosc-surface)',
+            borderColor: 'var(--sotabosc-border)',
+            color: 'var(--sotabosc-text)',
+          }}
+        >
+          Tap a domain above to spawn your artifact — then collect specimens on the trail.
+        </Link>
+      </div>
+    );
+  }
   const stage = getStageForXP(totalXP);
   const next = getNextStage(totalXP);
   const progress = getProgressToNext(totalXP);
@@ -33,7 +50,7 @@ export function ArtifactDock() {
   const reviewCount = activities.filter((a) => a.actionType === 'review_create').length;
 
   return (
-    <div className="fixed bottom-4 right-4 z-[280] flex flex-col items-end gap-2 pointer-events-none">
+    <div className="fixed bottom-4 right-4 z-[400] flex flex-col items-end gap-2 pointer-events-none">
       <AnimatePresence>
         {open && (
           <motion.aside
@@ -53,21 +70,15 @@ export function ArtifactDock() {
               className="px-4 py-3 flex items-center gap-3 border-b"
               style={{ borderColor: theme.border, backgroundColor: theme.surfaceMuted }}
             >
-              {organism.image ? (
-                <img
-                  src={organism.image}
-                  alt=""
-                  className="w-12 h-12 rounded-xl object-cover border"
-                  style={{ borderColor: theme.border }}
-                />
-              ) : (
-                <div
-                  className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl"
-                  style={{ backgroundColor: theme.surface }}
-                >
-                  {theme.emoji}
-                </div>
-              )}
+              <OrganismPortrait
+                src={organism.image}
+                emoji={theme.emoji}
+                alt={organism.displayName}
+                size="md"
+                accent={theme.accentSoft}
+                borderColor={theme.border}
+                fallbackSurface={theme.surfaceMuted}
+              />
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-bold uppercase tracking-wider opacity-50">Your artifact</p>
                 <p className="font-bold text-sm truncate">{organism.displayName}</p>
@@ -163,14 +174,21 @@ export function ArtifactDock() {
           color: theme.text,
         }}
       >
-        {organism.image ? (
-          <img src={organism.image} alt="" className="w-10 h-10 rounded-xl object-cover" />
-        ) : (
-          <span className="text-2xl">{theme.emoji}</span>
-        )}
-        <div className="text-left">
+        <OrganismPortrait
+          src={organism.image}
+          emoji={theme.emoji}
+          alt={organism.displayName}
+          size="sm"
+          accent={theme.accentSoft}
+          borderColor={theme.border}
+          fallbackSurface={theme.surface}
+        />
+        <div className="text-left min-w-0 max-w-[10rem]">
           <p className="text-[10px] font-bold uppercase tracking-wider opacity-50">Artifact</p>
-          <p className="text-sm font-bold leading-tight">{totalXP} resonance</p>
+          <p className="text-sm font-bold leading-tight truncate">{organism.displayName}</p>
+          <p className="text-[11px] opacity-70 leading-tight truncate">
+            {stage.emoji} {stage.label} · {totalXP} XP
+          </p>
         </div>
         <span className="text-lg opacity-50">{open ? '↓' : '↑'}</span>
       </motion.button>

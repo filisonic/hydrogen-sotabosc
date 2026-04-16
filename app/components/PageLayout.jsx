@@ -23,28 +23,40 @@ export function PageLayout({
 }) {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isDirectoryChrome =
+    location.pathname === '/city' ||
+    location.pathname.startsWith('/city/') ||
+    location.pathname.startsWith('/feedback');
 
   return (
     <Aside.Provider>
       <CartAside cart={cart} />
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
-      {header && !isHomePage && (
-        <Header
-          header={header}
-          cart={cart}
-          isLoggedIn={isLoggedIn}
-          publicStoreDomain={publicStoreDomain}
-        />
-      )}
-      <main className={isHomePage ? '' : 'page-content'}>{children}</main>
-      {!isHomePage && (
-        <Footer
-          footer={footer}
-          header={header}
-          publicStoreDomain={publicStoreDomain}
-        />
-      )}
+      <div className={isDirectoryChrome ? 'layout-directory flex flex-col' : 'min-h-screen flex flex-col'}>
+        {header && !isHomePage && (
+          <Header
+            header={header}
+            cart={cart}
+            isLoggedIn={isLoggedIn}
+            publicStoreDomain={publicStoreDomain}
+            directoryChrome={isDirectoryChrome}
+          />
+        )}
+        <main
+          className={`${isHomePage ? '' : 'page-content'} ${isDirectoryChrome ? 'flex-1 w-full' : ''}`}
+        >
+          {children}
+        </main>
+        {!isHomePage && (
+          <Footer
+            footer={footer}
+            header={header}
+            publicStoreDomain={publicStoreDomain}
+            directoryChrome={isDirectoryChrome}
+          />
+        )}
+      </div>
     </Aside.Provider>
   );
 }

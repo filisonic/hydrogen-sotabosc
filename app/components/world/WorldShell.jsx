@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useOrganismStore } from '~/lib/store/useOrganismStore';
-import { audioManager } from '~/lib/sound/audioManager';
-import { SoundToggle } from '~/components/world/SoundToggle';
 import { getDomainTheme } from '~/lib/theme/domainTheme';
+import { AtmosphericLayer } from './AtmosphericLayer';
 
 /**
  * WorldShell — themed page wrapper. No welcome gate: content starts immediately.
@@ -15,7 +14,6 @@ export function WorldShell({ children }) {
 
   useEffect(() => {
     setIsHydrated(true);
-    audioManager.init();
   }, []);
 
   if (!isHydrated) {
@@ -29,7 +27,7 @@ export function WorldShell({ children }) {
 
   return (
     <div
-      className="sotabosc-shell min-h-screen transition-[background-color,color] duration-700 ease-out"
+      className="sotabosc-shell min-h-screen transition-[background-color,color] duration-700 ease-out relative"
       data-domain={organism?.domain ?? 'neutral'}
       style={{
         '--sotabosc-bg': theme.bg,
@@ -44,8 +42,12 @@ export function WorldShell({ children }) {
         color: 'var(--sotabosc-text)',
       }}
     >
+      <AtmosphericLayer 
+        domain={organism?.domain} 
+        enableAudio={false} 
+        enableParticles={true}
+      />
       {children}
-      {organism && <SoundToggle />}
     </div>
   );
 }

@@ -1,0 +1,11 @@
+{
+  "projectId": "18438465356645526031",
+  "screenId": "6a01bf98440e469c95117c7bcd0f54b5",
+  "screenResourceName": "projects/18438465356645526031/screens/6a01bf98440e469c95117c7bcd0f54b5",
+  "title": "Sotabosc City Hub",
+  "designSystemAsset": "assets/5d6ce9003f424d8eb1b4449b4a10a79c",
+  "notes": "Reference for Hydrogen: card hover shadow rgba(27,67,50,0.06), tonal backgrounds, accent #1b4332.",
+  "screenshotLocal": ".stitch/designs/sotabosc-city-hub-screenshot.png",
+  "htmlLocal": ".stitch/designs/sotabosc-city-hub.html",
+  "htmlHandoff": "Screenshot uses lh3 URL (PNG). HTML uses contribution.usercontent.google.com from get_screen — URLs expire; re-fetch via Stitch MCP if download fails."
+}

@@ -1,10 +1,21 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
+import { DirectorySurface } from '~/components/directory/DirectorySurface';
+import { openGraphImageMeta } from '~/lib/seo/siteImagery';
 
-export const meta = () => [
+export const meta = ({ data }) => [
   { title: 'Share Feedback — Sotabosc' },
-  { name: 'description', content: "Help us shape the Sotabosc city directory. Share what's working, what's missing, and what places we should add." },
+  {
+    name: 'description',
+    content:
+      "Help us shape the Sotabosc city directory. Share what's working, what's missing, and what places we should add.",
+  },
+  ...openGraphImageMeta(data?.origin),
 ];
+
+export async function loader({ request }) {
+  return { origin: new URL(request.url).origin };
+}
 
 const TOPICS = [
   { id: 'missing-place', label: 'Missing a place' },
@@ -23,33 +34,50 @@ export default function FeedbackPage() {
 
   function handleSubmit(e) {
     e.preventDefault();
-    if (!topic) { setError('Please choose a topic.'); return; }
-    if (message.trim().length < 10) { setError('Message must be at least 10 characters.'); return; }
+    if (!topic) {
+      setError('Please choose a topic.');
+      return;
+    }
+    if (message.trim().length < 10) {
+      setError('Message must be at least 10 characters.');
+      return;
+    }
 
-    // Store locally for now (no backend yet)
     try {
       const key = 'sotabosc-feedback';
       const existing = JSON.parse(localStorage.getItem(key) || '[]');
-      localStorage.setItem(key, JSON.stringify([
-        { topic, message: message.trim(), name: name.trim(), submittedAt: new Date().toISOString() },
-        ...existing,
-      ]));
+      localStorage.setItem(
+        key,
+        JSON.stringify([
+          { topic, message: message.trim(), name: name.trim(), submittedAt: new Date().toISOString() },
+          ...existing,
+        ]),
+      );
     } catch {}
 
     setSubmitted(true);
   }
 
+  const inputClass =
+    'w-full text-sm rounded-xl px-4 py-3 focus:outline-none focus:ring-2 border resize-none transition-shadow';
+
   return (
-    <div className="min-h-screen bg-[var(--color-primary)]">
+    <DirectorySurface>
       <div className="max-w-xl mx-auto px-4 py-12">
-        <Link to="/city" className="text-xs text-black/40 hover:text-black/60 transition-colors mb-8 inline-block">
+        <Link
+          to="/city"
+          className="text-xs mb-8 inline-block transition-opacity hover:opacity-80"
+          style={{ color: 'var(--sotabosc-muted)' }}
+        >
           ← Back to directory
         </Link>
 
-        <h1 className="text-3xl font-black tracking-tight mb-2">Share feedback</h1>
-        <p className="text-sm text-black/50 mb-8 max-w-md">
-          Sotabosc is built with and for Barcelona's creative community.
-          Tell us what's missing, broken, or brilliant.
+        <h1 className="text-3xl font-black tracking-tight mb-2 font-[family-name:var(--font-display)]">
+          Share feedback
+        </h1>
+        <p className="text-sm mb-8 max-w-md" style={{ color: 'var(--sotabosc-muted)' }}>
+          Sotabosc is built with and for Barcelona&apos;s creative community. Tell us what&apos;s missing, broken,
+          or brilliant.
         </p>
 
         {submitted ? (
@@ -61,29 +89,47 @@ export default function FeedbackPage() {
             </p>
             <Link
               to="/city"
-              className="inline-flex items-center gap-2 bg-black text-white font-bold text-sm px-6 py-3 rounded-full hover:bg-black/80 transition-colors"
+              className="inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full transition-opacity hover:opacity-90"
+              style={{
+                backgroundColor: 'var(--sotabosc-accent)',
+                color: 'var(--sotabosc-surface)',
+              }}
             >
               Back to the directory
             </Link>
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Topic */}
             <div>
-              <label className="block text-xs font-bold text-black/40 mb-2 uppercase tracking-wide">
-                What's this about?
+              <label
+                className="block text-xs font-bold mb-2 uppercase tracking-wide"
+                style={{ color: 'var(--sotabosc-muted)' }}
+              >
+                What&apos;s this about?
               </label>
               <div className="flex flex-wrap gap-2">
                 {TOPICS.map((t) => (
                   <button
                     key={t.id}
                     type="button"
-                    onClick={() => { setTopic(t.id); setError(''); }}
-                    className={`text-sm font-medium px-4 py-2 rounded-full border transition-colors ${
+                    onClick={() => {
+                      setTopic(t.id);
+                      setError('');
+                    }}
+                    className="text-sm font-medium px-4 py-2 rounded-full border transition-opacity hover:opacity-90"
+                    style={
                       topic === t.id
-                        ? 'bg-black text-white border-black'
-                        : 'bg-white text-black/60 border-black/10 hover:border-black/30'
-                    }`}
+                        ? {
+                            backgroundColor: 'var(--sotabosc-accent)',
+                            color: 'var(--sotabosc-surface)',
+                            borderColor: 'transparent',
+                          }
+                        : {
+                            backgroundColor: 'var(--sotabosc-surface)',
+                            borderColor: 'var(--sotabosc-border)',
+                            color: 'var(--sotabosc-muted)',
+                          }
+                    }
                   >
                     {t.label}
                   </button>
@@ -91,9 +137,11 @@ export default function FeedbackPage() {
               </div>
             </div>
 
-            {/* Name (optional) */}
             <div>
-              <label className="block text-xs font-bold text-black/40 mb-1.5 uppercase tracking-wide">
+              <label
+                className="block text-xs font-bold mb-1.5 uppercase tracking-wide"
+                style={{ color: 'var(--sotabosc-muted)' }}
+              >
                 Your name <span className="font-normal normal-case">(optional)</span>
               </label>
               <input
@@ -101,38 +149,59 @@ export default function FeedbackPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Laia"
-                className="w-full text-sm border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 bg-white"
+                className={`${inputClass} focus:ring-[var(--sotabosc-accent-soft)]`}
+                style={{
+                  borderColor: 'var(--sotabosc-border)',
+                  backgroundColor: 'var(--sotabosc-surface)',
+                  color: 'var(--sotabosc-text)',
+                }}
                 maxLength={60}
               />
             </div>
 
-            {/* Message */}
             <div>
-              <label className="block text-xs font-bold text-black/40 mb-1.5 uppercase tracking-wide">
+              <label
+                className="block text-xs font-bold mb-1.5 uppercase tracking-wide"
+                style={{ color: 'var(--sotabosc-muted)' }}
+              >
                 Message
               </label>
               <textarea
                 value={message}
-                onChange={(e) => { setMessage(e.target.value); setError(''); }}
-                placeholder="Tell us what's on your mind..."
+                onChange={(e) => {
+                  setMessage(e.target.value);
+                  setError('');
+                }}
+                placeholder={"Tell us what's on your mind..."}
                 rows={5}
-                className="w-full text-sm border border-black/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-black/20 bg-white resize-none"
+                className={`${inputClass} focus:ring-[var(--sotabosc-accent-soft)]`}
+                style={{
+                  borderColor: 'var(--sotabosc-border)',
+                  backgroundColor: 'var(--sotabosc-surface)',
+                  color: 'var(--sotabosc-text)',
+                }}
                 maxLength={1000}
               />
-              <p className="text-right text-[10px] text-black/25 mt-0.5">{message.length}/1000</p>
+              <p className="text-right text-[10px] mt-0.5" style={{ color: 'var(--sotabosc-muted)', opacity: 0.7 }}>
+                {message.length}/1000
+              </p>
             </div>
 
-            {error && <p className="text-xs text-red-500">{error}</p>}
+            {error && <p className="text-xs text-red-600">{error}</p>}
 
             <button
               type="submit"
-              className="w-full bg-black text-white font-bold text-sm py-3.5 rounded-xl hover:bg-black/80 transition-colors"
+              className="w-full font-bold text-sm py-3.5 rounded-xl transition-opacity hover:opacity-90"
+              style={{
+                backgroundColor: 'var(--sotabosc-accent)',
+                color: 'var(--sotabosc-surface)',
+              }}
             >
               Send feedback
             </button>
           </form>
         )}
       </div>
-    </div>
+    </DirectorySurface>
   );
 }

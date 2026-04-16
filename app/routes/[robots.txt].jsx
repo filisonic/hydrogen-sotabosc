@@ -26,6 +26,9 @@ export async function loader({request, context}) {
  */
 function robotsTxtData({url, shopId}) {
   const sitemapUrl = url ? `${url}/sitemap.xml` : undefined;
+  const directorySitemapLine = url
+    ? `Sitemap: ${url}/directory-sitemap.xml`
+    : '';
 
   return `
 User-agent: *
@@ -59,6 +62,7 @@ Crawl-Delay: 10
 
 User-agent: Pinterest
 Crawl-delay: 1
+${directorySitemapLine ? `\n${directorySitemapLine}` : ''}
 `.trim();
 }
 

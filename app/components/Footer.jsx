@@ -4,17 +4,18 @@ import {Await, NavLink} from 'react-router';
 /**
  * @param {FooterProps}
  */
-export function Footer({footer: footerPromise, header, publicStoreDomain}) {
+export function Footer({footer: footerPromise, header, publicStoreDomain, directoryChrome = false}) {
   return (
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className="footer">
+          <footer className={`footer${directoryChrome ? ' footer--directory' : ''}`}>
             {footer?.menu && header.shop.primaryDomain?.url && (
               <FooterMenu
                 menu={footer.menu}
                 primaryDomainUrl={header.shop.primaryDomain.url}
                 publicStoreDomain={publicStoreDomain}
+                directoryChrome={directoryChrome}
               />
             )}
           </footer>
@@ -31,7 +32,8 @@ export function Footer({footer: footerPromise, header, publicStoreDomain}) {
  *   publicStoreDomain: string;
  * }}
  */
-function FooterMenu({menu, primaryDomainUrl, publicStoreDomain}) {
+function FooterMenu({menu, primaryDomainUrl, publicStoreDomain, directoryChrome = false}) {
+  const linkStyle = directoryChrome ? directoryFooterLinkStyle : shopFooterLinkStyle;
   return (
     <nav className="footer-menu" role="navigation">
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
@@ -53,7 +55,7 @@ function FooterMenu({menu, primaryDomainUrl, publicStoreDomain}) {
             end
             key={item.id}
             prefetch="intent"
-            style={activeLinkStyle}
+            style={linkStyle}
             to={url}
           >
             {item.title}
@@ -112,10 +114,23 @@ const FALLBACK_FOOTER_MENU = {
  *   isPending: boolean;
  * }}
  */
-function activeLinkStyle({isActive, isPending}) {
+function shopFooterLinkStyle({isActive, isPending}) {
   return {
     fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'white',
+    color: isPending ? 'grey' : 'var(--color-dark)',
+  };
+}
+
+/**
+ * @param {{
+ *   isActive: boolean;
+ *   isPending: boolean;
+ * }}
+ */
+function directoryFooterLinkStyle({isActive, isPending}) {
+  return {
+    fontWeight: isActive ? 'bold' : undefined,
+    color: isPending ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.92)',
   };
 }
 
@@ -124,6 +139,7 @@ function activeLinkStyle({isActive, isPending}) {
  * @property {Promise<FooterQuery|null>} footer
  * @property {HeaderQuery} header
  * @property {string} publicStoreDomain
+ * @property {boolean} [directoryChrome]
  */
 
 /** @typedef {import('storefrontapi.generated').FooterQuery} FooterQuery */

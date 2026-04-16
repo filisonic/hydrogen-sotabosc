@@ -12,14 +12,20 @@ export type ListingCategory =
   | 'music-venue'
   | 'conference'
   | 'workshop'
+  | 'retreat'
   | 'specialty-coffee'
-  | 'spirituality-retreat'
-  | 'yoga-centre'
   | 'restaurant'
   | 'shop'
   | 'other';
 
 export type ReviewSource = 'user' | 'moderator' | 'imported';
+
+/** Matches OpeningHoursSpecification for JSON-LD (weekday names). */
+export type PlaceOpeningHours = {
+  dayOfWeek: string | string[];
+  opens: string;
+  closes: string;
+};
 
 export interface Place {
   id: string;
@@ -36,6 +42,11 @@ export interface Place {
   website?: string;
   imageUrl?: string;
   isClaimed?: boolean;
+  /** E.164 or international format recommended for LocalBusiness. */
+  telephone?: string;
+  latitude?: number;
+  longitude?: number;
+  openingHours?: PlaceOpeningHours[];
 }
 
 export interface CityEvent {
