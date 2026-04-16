@@ -40,6 +40,12 @@ npm run build
 npm run dev
 ```
 
+## City directory — venue images (pre-push)
+
+When you change listings in the Barcelona directory seed, follow the checklist in **[docs/venue-directory-images.md](docs/venue-directory-images.md)** (Firecrawl → Google Places gap-fill, reports, what to commit).
+
+*Deployment test - token updated*
+
 ## Setup for using Customer Account API (`/account` section)
 
 Follow step 1 and 2 of <https://shopify.dev/docs/custom-storefronts/building-with-the-customer-account-api/hydrogen#step-1-set-up-a-public-domain-for-local-development>
