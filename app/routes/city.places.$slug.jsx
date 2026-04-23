@@ -223,6 +223,44 @@ export default function PlaceDetail() {
         </div>
       </section>
 
+      {/* Embed Badge */}
+      <section className="px-4 pb-10">
+        <div className="max-w-4xl mx-auto">
+          <div className="p-6 rounded-2xl border" style={{ backgroundColor: 'var(--sotabosc-surface)', borderColor: 'var(--sotabosc-border)' }}>
+            <h2 className="text-xl font-bold mb-2 font-[family-name:var(--font-display)]">Are you the owner?</h2>
+            <p className="text-sm mb-4" style={{ color: 'var(--sotabosc-muted)' }}>Embed this badge on your website to show you are part of Barcelona's Living Ecosystem and build your local authority.</p>
+            <div className="flex flex-col sm:flex-row gap-4 items-start">
+               <div className="flex-shrink-0 p-4 border rounded-xl" style={{ borderColor: 'var(--sotabosc-border)', background: 'var(--sotabosc-surface-muted)' }}>
+                  {/* Visual preview of the badge */}
+                  <a href={placePageUrl} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', padding: '8px 16px', background: 'var(--sotabosc-accent)', color: 'var(--sotabosc-surface)', borderRadius: '99px', textDecoration: 'none', fontFamily: 'system-ui, sans-serif', fontSize: '14px', fontWeight: 'bold' }}>
+                    <span style={{ fontSize: '18px' }}>{domain.emoji}</span> Featured on Sotabosc
+                  </a>
+               </div>
+               <div className="flex-grow w-full">
+                  <textarea 
+                    readOnly 
+                    className="w-full text-xs font-mono p-3 rounded-xl border focus:outline-none"
+                    style={{ backgroundColor: 'var(--sotabosc-surface-muted)', borderColor: 'var(--sotabosc-border)', color: 'var(--sotabosc-text)' }}
+                    rows="3"
+                    value={`<a href="${placePageUrl}" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:#1a1a1a;color:#fdfdfc;border-radius:99px;text-decoration:none;font-family:system-ui,sans-serif;font-size:14px;font-weight:bold;"><span style="font-size:18px;">${domain.emoji}</span> Featured on Sotabosc</a>`}
+                  />
+                  <button 
+                    onClick={(e) => {
+                      navigator.clipboard.writeText(e.target.previousElementSibling.value);
+                      e.target.textContent = 'Copied!';
+                      setTimeout(() => e.target.textContent = 'Copy Code', 2000);
+                    }}
+                    className="mt-2 text-xs font-bold px-4 py-2 rounded-full transition-opacity hover:opacity-90"
+                    style={{ backgroundColor: 'var(--sotabosc-accent-soft)', color: 'var(--sotabosc-surface)' }}
+                  >
+                    Copy Code
+                  </button>
+               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section className="px-4 pb-16">
         <div className="max-w-4xl mx-auto">
           <ContributionActions compact />

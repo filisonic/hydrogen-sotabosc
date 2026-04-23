@@ -4,6 +4,7 @@ import { Link } from 'react-router';
 import { getStageForXP, getNextStage, getProgressToNext } from '~/lib/organism/progression';
 import { getDomainTheme } from '~/lib/theme/domainTheme';
 import { OrganismPortrait } from '~/components/organism/OrganismPortrait';
+import { MembershipForm } from '~/components/organism/MembershipForm';
 
 /**
  * OrganismCard Component
@@ -115,6 +116,8 @@ export function OrganismCard() {
                         {nextStage ? `${totalXP} XP · next: ${nextStage.label} at ${nextStage.minXP}` : `${totalXP} XP · Elder achieved`}
                     </p>
                 </section>
+
+                <MembershipForm domain={organism.domain} organismName={organism.displayName} />
             </div>
 
             <footer className="mt-12 flex items-center justify-between gap-4 relative z-10">

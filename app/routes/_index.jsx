@@ -1,206 +1,463 @@
-import { useLoaderData, Link } from 'react-router';
-import { WorldShell } from '~/components/world/WorldShell';
-import { ScrollWorld } from '~/components/world/ScrollWorld';
-import { DomainSelector } from '~/components/organism/DomainSelector';
-import { ArtifactDock } from '~/components/artifact/ArtifactDock';
-import { HomeExploreFeed } from '~/components/home/HomeExploreFeed';
+import {useLoaderData, Link} from 'react-router';
+import {motion} from 'framer-motion';
+import { JsonLd } from '~/components/seo/JsonLd';
+import {DOMAIN_KEYS, DOMAINS} from '~/lib/directory/domains';
+import {MagDomainGlyph, MagLayerGlyph} from '~/components/mag/MagEcosphereGlyphs';
 
-/**
- * @type {Route.MetaFunction}
- */
-export const meta = () => {
-  return [
-    { title: "Sotabosc — Barcelona's Nature-Led City Directory" },
-    {
-      name: 'description',
-      content:
-        "Discover coworking spaces, art galleries, music venues, specialty coffee, yoga studios, and independent creators in Barcelona — all mapped to the natural world.",
-    },
-  ];
-};
+export const meta = () => [
+  {title: "Sotabosc — Barcelona's Living Creative Ecosystem"},
+  {name: 'description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more."},
+  {property: 'og:title', content: "Sotabosc — Barcelona's Living Creative Ecosystem"},
+  {property: 'og:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more."},
+  {property: 'og:type', content: 'website'},
+  {property: 'og:url', content: 'https://sotabosc.org/'},
+  {property: 'og:site_name', content: 'Sotabosc'},
+  {name: 'twitter:card', content: 'summary_large_image'},
+  {name: 'twitter:title', content: "Sotabosc — Barcelona's Living Creative Ecosystem"},
+  {name: 'twitter:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more."},
+];
 
-/**
- * @param {Route.LoaderArgs} args
- */
-export async function loader(args) {
+export async function loader() {
   try {
-    console.log('Loading homepage data...');
-    const criticalData = await loadCriticalData(args);
-    console.log('Critical data loaded:', Object.keys(criticalData));
-    
-    const { SEED_PLACES, SEED_EVENTS, SEED_CREATORS, getUpcomingEvents } =
-      await import('~/lib/directory/seed.server');
-    console.log('Seed data imported successfully');
-    
+    const {SEED_PLACES, SEED_EVENTS, SEED_CREATORS, SEED_REVIEWS, getUpcomingEvents} = await import('~/lib/directory/seed.server');
+    const {VENUE_LOCAL_IMAGE_BY_SLUG} = await import('~/lib/directory/venueImages.generated');
     const upcoming = getUpcomingEvents();
-    console.log('Upcoming events:', upcoming?.length);
-    
-    const result = {
-      ...criticalData,
-      directory: {
-        places: SEED_PLACES,
-        events: upcoming.slice(0, 14),
-        creators: SEED_CREATORS,
-      },
-    };
-    
-    console.log('Final result keys:', Object.keys(result));
-    console.log('Directory keys:', Object.keys(result.directory));
-    
-    return result;
-  } catch (error) {
-    console.error('Homepage loader error:', error);
-    // Return minimal data to prevent 500 error
+    const addImg = (p) => ({...p, imageUrl: VENUE_LOCAL_IMAGE_BY_SLUG[p.slug] || null});
+    const galleries = SEED_PLACES.filter(p => p.categories.includes('art-gallery')).slice(0, 4).map(addImg);
+    const coffee = SEED_PLACES.filter(p => p.categories.includes('specialty-coffee')).slice(0, 3).map(addImg);
+    const music = SEED_PLACES.filter(p => p.categories.includes('music-venue')).slice(0, 3).map(addImg);
+    const workshops = SEED_PLACES.filter(p => p.categories.includes('workshop')).slice(0, 3).map(addImg);
+    const restaurants = SEED_PLACES.filter(p => p.categories.includes('restaurant')).slice(0, 3).map(addImg);
     return {
-      collections: [],
-      directory: {
-        places: [],
-        events: [],
-        creators: [],
-      },
+      upcomingEvents: upcoming.slice(0, 6),
+      galleries, coffee, music, workshops, restaurants,
+      creators: SEED_CREATORS.slice(0, 6),
+      reviews: SEED_REVIEWS.slice(0, 4),
+      totalPlaces: SEED_PLACES.length,
+      totalEvents: SEED_EVENTS.length,
+      totalCreators: SEED_CREATORS.length,
     };
+  } catch (e) {
+    return {upcomingEvents:[], galleries:[], coffee:[], music:[], workshops:[], restaurants:[], creators:[], reviews:[], totalPlaces:0, totalEvents:0, totalCreators:0};
   }
 }
 
-async function loadCriticalData({ context }) {
-  const [{ collections }] = await Promise.all([
-    context.storefront.query(COLLECTIONS_WITH_PRODUCTS_QUERY),
-  ]);
+const SECTIONS = [
+  {id:'experiences', label:'Curated Experiences', desc:'Descend through sky, canopy, understory, water, and soil — Barcelona mapped as a living ecosystem.', href:'/city-world', cta:'Begin the journey'},
+  {id:'directory', label:'Directory', desc:'100+ places — galleries, coffee, music venues, workshops, and restaurants curated by neighbourhood.', href:'/city', cta:'Browse places'},
+  {id:'tools', label:'Creative Tools', desc:'Generative instruments and parametric sketches built for experimentation.', href:'/tools', cta:'Open tools'},
+  {id:'labs', label:'Speculative Futures Lab', desc:'Research into speculative design, embodied interaction, and emergent systems.', href:'/labs', cta:'Enter lab'},
+];
 
-  const filteredCollections = (collections.nodes || []).filter((collection) => {
-    const handle = collection.handle?.toLowerCase();
-    const excludedHandles = ['home-page', 'frontpage', 'homepage'];
-    return !excludedHandles.includes(handle);
-  });
+const PLACE_META = {
+  'art-gallery':      { icon: '🎨', gradient: 'linear-gradient(135deg, #f0e6ff 0%, #e8d5f5 50%, #dfc4eb 100%)' },
+  'specialty-coffee':  { icon: '☕', gradient: 'linear-gradient(135deg, #f5e6d0 0%, #eddcc4 50%, #e5d2b8 100%)' },
+  'music-venue':       { icon: '🎵', gradient: 'linear-gradient(135deg, #d0e8f5 0%, #c4dced 50%, #b8d0e5 100%)' },
+  'workshop':          { icon: '🔧', gradient: 'linear-gradient(135deg, #e6f0d0 0%, #dce8c4 50%, #d2e0b8 100%)' },
+  'restaurant':        { icon: '🍽️', gradient: 'linear-gradient(135deg, #f5d0d0 0%, #edc4c4 50%, #e5b8b8 100%)' },
+  'bar':               { icon: '🍸', gradient: 'linear-gradient(135deg, #f0d0e6 0%, #e8c4dc 50%, #e0b8d2 100%)' },
+  'coworking':         { icon: '💻', gradient: 'linear-gradient(135deg, #d0f0e6 0%, #c4e8dc 50%, #b8e0d2 100%)' },
+};
+const DEFAULT_META = { icon: '📍', gradient: 'linear-gradient(135deg, #f0edd0 0%, #e8e5c4 50%, #e0ddb8 100%)' };
 
-  return {
-    collections: filteredCollections,
-  };
-}
+/** Six layers of the city-world journey — same language as Curated Experiences */
+const ECO_LAYERS = [
+  {i: '01', slug: 'sky', title: 'Sky', blurb: 'Light, weather, and signal — where the city meets the open air.'},
+  {i: '02', slug: 'canopy', title: 'Canopy', blurb: 'Visible culture — openings, rooftops, and the stories everyone sees.'},
+  {i: '03', slug: 'understory', title: 'Understory', blurb: 'Shade and texture — studios, cafés, and the work just below the canopy.'},
+  {i: '04', slug: 'forest-floor', title: 'Forest floor', blurb: 'Ground-level rhythm — shops, venues, and daily creative life.'},
+  {i: '05', slug: 'water', title: 'Water', blurb: 'Flow and exchange — events, transit, and how people move through the map.'},
+  {i: '06', slug: 'soil', title: 'Soil', blurb: 'Roots and residue — archives, research, and what feeds the next season.'},
+];
 
-export default function Homepage() {
-  const data = useLoaderData();
-  
-  console.log('Homepage component - data:', data);
-  console.log('Homepage component - data.directory:', data?.directory);
-
+function PlaceCard({p}) {
+  const meta = p.categories?.map(c => PLACE_META[c]).find(Boolean) || DEFAULT_META;
   return (
-    <WorldShell>
-      {/* Immediate entry: domain strip + positioning (no welcome screen) */}
-      <header
-        className="relative z-[120] border-b"
-        style={{
-          borderColor: 'var(--sotabosc-border)',
-          backgroundColor: 'var(--sotabosc-surface)',
-        }}
-      >
-        <div className="max-w-6xl mx-auto px-4 pt-6 pb-2 text-center sm:text-left">
-          <p className="text-[10px] font-bold uppercase tracking-[0.35em] opacity-50 mb-2">Sotabosc · Barcelona</p>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight">
-            Nature is the map.{' '}
-            <span className="opacity-70">Community is the city.</span>
-          </h1>
-          <p className="text-sm mt-3 max-w-2xl opacity-70">
-            Scroll through the forest, then explore places, events, and creators matched to your domain — or browse
-            everything before you choose.
-          </p>
-        </div>
-        <DomainSelector variant="strip" />
-      </header>
-
-      <ScrollWorld directory={data?.directory || { places: [], events: [], creators: [] }} />
-
-      <HomeExploreFeed directory={data?.directory || { places: [], events: [], creators: [] }} />
-
-      {data.collections?.length > 0 && (
-        <section className="py-14 px-4 relative z-[100]" style={{ backgroundColor: 'var(--sotabosc-bg)' }}>
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-xl font-black mb-6" style={{ color: 'var(--sotabosc-text)' }}>
-              Shop — ecosystem archives
-            </h2>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {data.collections.map((collection) => (
-                <Link
-                  key={collection.id}
-                  to={`/collections/${collection.handle}`}
-                  className="block p-5 rounded-2xl border transition-shadow hover:shadow-md"
-                  style={{
-                    backgroundColor: 'var(--sotabosc-surface)',
-                    borderColor: 'var(--sotabosc-border)',
-                    color: 'var(--sotabosc-text)',
-                  }}
-                >
-                  <h3 className="font-bold">{collection.title}</h3>
-                  <p className="text-xs mt-1 opacity-50">Artefacts & goods</p>
-                </Link>
-              ))}
-            </div>
+    <Link to={`/city/places/${p.slug}`} className="mag-place">
+      {p.imageUrl
+        ? <img src={p.imageUrl} alt={p.name} className="mag-place-img" loading="lazy" />
+        : (
+          <div className="mag-place-placeholder" style={{ background: meta.gradient }}>
+            <span style={{ fontSize: '36px', filter: 'saturate(0.8)' }}>{meta.icon}</span>
+            <span style={{
+              fontSize: '8px', letterSpacing: '.2em', textTransform: 'uppercase',
+              color: 'rgba(0,0,0,0.25)', fontWeight: 700, marginTop: '6px'
+            }}>
+              {p.categories?.[0]?.replace(/-/g, ' ') || 'place'}
+            </span>
           </div>
-        </section>
-      )}
-
-      <section
-        className="py-10 px-4 relative z-[100]"
-        style={{ backgroundColor: 'var(--sotabosc-accent)', color: 'var(--sotabosc-surface)' }}
-      >
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-center sm:text-left opacity-90">
-            Missing a place or spotted something off? This directory is alive — tell us.
-          </p>
-          <Link
-            to="/feedback"
-            className="shrink-0 inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full bg-white text-black hover:bg-white/90 transition-colors"
-          >
-            Feedback
-          </Link>
-        </div>
-      </section>
-
-      <ArtifactDock />
-    </WorldShell>
+        )
+      }
+      <div className="mag-place-body">
+        <span className="mag-place-cat">{p.neighborhood}</span>
+        <h4>{p.name}</h4>
+        <p>{p.summary}</p>
+      </div>
+    </Link>
   );
 }
 
-const COLLECTIONS_WITH_PRODUCTS_QUERY = `#graphql
-  fragment CollectionProduct on Product {
-    id
-    title
-    handle
-    featuredImage {
-      id
-      url
-      altText
-      width
-      height
-    }
-    priceRange {
-      minVariantPrice {
-        amount
-        currencyCode
-      }
-    }
-  }
+export default function Homepage() {
+  const d = useLoaderData();
+  const title = 'Sotabosc';
 
-  fragment CollectionWithProduct on Collection {
-    id
-    title
-    handle
-    products(first: 1) {
-      nodes {
-        ...CollectionProduct
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "Sotabosc",
+        "url": "https://sotabosc.org",
+        "description": "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more.",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://sotabosc.org/search?q={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "name": "Sotabosc",
+        "url": "https://sotabosc.org",
+        "logo": "https://sotabosc.org/favicon.svg",
+        "description": "Barcelona's Living Creative Ecosystem"
       }
-    }
-  }
+    ]
+  };
 
-  query CollectionsWithProducts($country: CountryCode, $language: LanguageCode)
-    @inContext(country: $country, language: $language) {
-    collections(first: 10, sortKey: UPDATED_AT, reverse: true) {
-      nodes {
-        ...CollectionWithProduct
-      }
-    }
-  }
-`;
+  return (
+    <div className="mag">
+      <JsonLd data={jsonLd} />
+       {/* ═══════════════ HERO ═══════════════ */}
+      <section className="mag-home-hero">
+        <motion.div 
+          className="max-w-[1400px] mx-auto w-full"
+          variants={{
+            hidden: { opacity: 0 },
+            visible: {
+              opacity: 1,
+              transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+            }
+          }}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0, y: 20 },
+              visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+            }} 
+            style={{ marginBottom: '4rem' }}
+          >
+            <span style={{ fontSize: 'var(--step--1)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.5em', color: 'var(--ink)' }}>
+              Curated Directory & Research Lab
+            </span>
+          </motion.div>
+          
+          <div className="mag-home-hero-grid">
+            <motion.h1 
+              variants={{
+                hidden: { opacity: 0, y: 40 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+              }}
+              style={{ 
+                fontSize: 'clamp(5rem, 15vw, 15rem)', 
+                fontWeight: 900, 
+                lineHeight: 0.8, 
+                letterSpacing: '-0.06em', 
+                margin: 0,
+                textTransform: 'uppercase',
+                color: 'var(--ink)'
+              }}
+            >
+              The <br />Creative <br />Soil.
+            </motion.h1>
+            
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0, y: 20 },
+                visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1] } }
+              }}
+              className="mag-home-hero-aside"
+            >
+               <p style={{ fontSize: 'var(--step-2)', fontWeight: 800, lineHeight: 1.1, color: 'var(--ink)', maxWidth: '500px' }}>
+                We are mapping the mycelial networks of Barcelona. From independent studios to speculative labs.
+              </p>
+              <div className="mag-home-cta-row">
+                <Link to="/city-world" className="mag-btn">Explore Directory</Link>
+                <Link to="/membership" className="mag-btn-o">Join the Network</Link>
+              </div>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
 
-/** @typedef {import('./+types/_index').Route} Route */
-/** @typedef {import('@shopify/remix-oxygen').SerializeFrom<typeof loader>} LoaderReturnData */
+      {/* ═══════════════ MARQUEE ═══════════════ */}
+      <div className="mag-mq" style={{ borderBottom: '4px solid var(--ink)' }}>
+        <div className="mag-mq-inner">
+          {[...Array(2)].map((_, r) => (
+            <span key={r} style={{ display: 'flex' }}>
+              {['Directory', 'Curated Experiences', 'Generative Tools', 'Speculative Research', 'Gallery', 'Community', 'Barcelona', 'Nature × Culture'].map((item, i) => (
+                <span key={i} className="mag-mq-item">{item} ·</span>
+              ))}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* ═══════════════ ECOSYSTEM MAP (mycelial band) ═══════════════ */}
+      <section className="mag-home-ecosphere">
+        <div className="mag-home-ecosphere-inner">
+          <motion.div
+            className="mag-home-ecosphere-copy"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span style={{ fontSize: 'var(--step--1)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', marginBottom: '1rem', display: 'block', opacity: 0.9 }}>
+              The Mycelial Call
+            </span>
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, var(--step-5))', fontWeight: 900, lineHeight: 0.9, letterSpacing: '-0.05em', textTransform: 'uppercase' }}>
+              Six layers. <br />Six domains.
+            </h2>
+            <p className="mag-home-ecosphere-lede">
+              <strong>Layers</strong> are how you move through the map — sky to soil in City world. <strong>Domains</strong> are how you choose to belong — plants, algae, fungi, unseen, animals, or earth — so trips and listings can match your vibe. Browse the directory, then descend the forest.
+            </p>
+            <div className="mag-home-ecosphere-cta">
+              <Link to="/membership" className="mag-pill mag-pill-primary">
+                Membership — from €50/mo
+              </Link>
+              <Link to="/city-world">Enter City world →</Link>
+            </div>
+          </motion.div>
+
+          <div className="mag-home-ecosphere-grids">
+            <motion.div
+              className="mag-home-stack"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-40px' }}
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
+              }}
+            >
+              <h3 className="mag-home-stack-label">Layers — where you scroll</h3>
+              <div className="mag-home-layers">
+                {ECO_LAYERS.map((layer) => (
+                  <motion.div
+                    key={layer.slug}
+                    variants={{
+                      hidden: { opacity: 0, y: 14 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+                    }}
+                  >
+                    <Link to="/city-world" className="mag-home-layer">
+                      <div className="mag-home-card-head">
+                        <span className="mag-home-icon-slot mag-home-icon-slot--layer">
+                          <MagLayerGlyph slug={layer.slug} size={14} color="rgba(255,255,255,0.88)" />
+                        </span>
+                        <div className="mag-home-card-head-text">
+                          <span className="mag-home-layer-index">Layer {layer.i}</span>
+                          <span className="mag-home-layer-title">{layer.title}</span>
+                        </div>
+                      </div>
+                      <p className="mag-home-layer-blurb">{layer.blurb}</p>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div
+              className="mag-home-stack"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-40px' }}
+              variants={{
+                hidden: {},
+                visible: { transition: { staggerChildren: 0.06, delayChildren: 0.12 } },
+              }}
+            >
+              <h3 className="mag-home-stack-label">Domains — how you enter</h3>
+              <div className="mag-home-domains">
+                {DOMAIN_KEYS.map((domainKey, idx) => {
+                  const domain = DOMAINS[domainKey];
+                  return (
+                    <motion.div
+                      key={domainKey}
+                      variants={{
+                        hidden: { opacity: 0, y: 14 },
+                        visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+                      }}
+                    >
+                      <Link
+                        to="/city-world"
+                        className="mag-home-domain"
+                        style={{ borderLeft: `3px solid ${domain.color}` }}
+                      >
+                        <div className="mag-home-card-head">
+                          <span className="mag-home-icon-slot mag-home-icon-slot--domain">
+                            <MagDomainGlyph
+                              domainKey={domainKey}
+                              size={14}
+                              color={domain.color}
+                            />
+                          </span>
+                          <div className="mag-home-card-head-text">
+                            <span className="mag-home-domain-index">
+                              Domain {(idx + 1).toString().padStart(2, '0')}
+                            </span>
+                            <span className="mag-home-domain-title">{domain.label}</span>
+                          </div>
+                        </div>
+                        <p className="mag-home-domain-blurb">{domain.description}</p>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════ FEATURED ═══════════════ */}
+      <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Featured</h2></div></div>
+      <div className="mag-feat">
+        <Link to="/city-world" className="mag-feat-main">
+          <span className="mag-feat-main-tag">Curated Experiences</span>
+          <h3>Descend Through Barcelona's Living Layers</h3>
+          <p>Sky → canopy → understory → forest floor → water → soil. An immersive vertical journey mapping the city to the natural world.</p>
+        </Link>
+        <div className="mag-feat-side">
+          {SECTIONS.slice(1, 3).map(s => (
+            <Link key={s.id} to={s.href} className="mag-feat-card">
+              <span className="mag-feat-card-tag">{s.label}</span>
+              <h4>{s.desc.split('.')[0]}</h4>
+              <p>{s.cta} →</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* ═══════════════ UPCOMING EVENTS ═══════════════ */}
+      {d.upcomingEvents?.length > 0 && (<>
+        <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Upcoming Events</h2><Link to="/city/events" className="mag-sec-link">View all →</Link></div></div>
+        <div className="mag-events">
+          {d.upcomingEvents.map(ev => (
+            <Link key={ev.id} to={`/city/events/${ev.slug}`} className="mag-ev">
+              <div className="mag-ev-date">{new Date(ev.startsAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+              <h4>{ev.title}</h4>
+              <p>{ev.placeName}</p>
+            </Link>
+          ))}
+        </div>
+      </>)}
+
+      {/* ═══════════════ GALLERIES ═══════════════ */}
+      {d.galleries?.length > 0 && (<>
+        <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Art Galleries</h2><Link to="/city?cat=art-gallery" className="mag-sec-link">All galleries →</Link></div></div>
+        <div className="mag-places">
+          {d.galleries.map(p => <PlaceCard key={p.id} p={p} />)}
+        </div>
+      </>)}
+
+      {/* ═══════════════ COFFEE ═══════════════ */}
+      {d.coffee?.length > 0 && (<>
+        <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Specialty Coffee</h2><Link to="/city?cat=specialty-coffee" className="mag-sec-link">All cafés →</Link></div></div>
+        <div className="mag-places">
+          {d.coffee.map(p => <PlaceCard key={p.id} p={p} />)}
+        </div>
+      </>)}
+
+      {/* ═══════════════ STATS ═══════════════ */}
+      <motion.div className="mag-stats" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: .5 }}>
+        <div className="mag-stat"><div className="mag-stat-num">{d.totalPlaces || '100'}+</div><div className="mag-stat-label">Places mapped</div></div>
+        <div className="mag-stat"><div className="mag-stat-num">{d.totalEvents || '24'}</div><div className="mag-stat-label">Events</div></div>
+        <div className="mag-stat"><div className="mag-stat-num">{d.totalCreators || '14'}</div><div className="mag-stat-label">Creators</div></div>
+        <div className="mag-stat"><div className="mag-stat-num">6</div><div className="mag-stat-label">Ecosystem layers</div></div>
+      </motion.div>
+
+      {/* ═══════════════ MUSIC ═══════════════ */}
+      {d.music?.length > 0 && (<>
+        <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Live Music</h2><Link to="/city?cat=music-venue" className="mag-sec-link">All venues →</Link></div></div>
+        <div className="mag-places">
+          {d.music.map(p => <PlaceCard key={p.id} p={p} />)}
+        </div>
+      </>)}
+
+      {/* ═══════════════ CREATORS ═══════════════ */}
+      {d.creators?.length > 0 && (<>
+        <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Creators</h2><Link to="/city/creators" className="mag-sec-link">All creators →</Link></div></div>
+        <div className="mag-creators">
+          {d.creators.map(c => (
+            <Link key={c.id} to={`/city/creators/${c.slug}`} className="mag-creator">
+              <h4>{c.displayName}</h4>
+              <p>{c.bio}</p>
+            </Link>
+          ))}
+        </div>
+      </>)}
+
+      {/* ═══════════════ EXPLORE MORE ═══════════════ */}
+      <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Explore More</h2></div></div>
+      <div className="mag-feat">
+        <Link to="/labs" className="mag-feat-main" style={{ background: '#1a1a1a' }}>
+          <span className="mag-feat-main-tag">Speculative Futures Lab</span>
+          <h3>Research at the Edge of Nature and Technology</h3>
+          <p>Speculative design, embodied interaction, and emergent systems — four active research areas.</p>
+        </Link>
+        <div className="mag-feat-side">
+          <Link to="/tools" className="mag-feat-card">
+            <span className="mag-feat-card-tag">Creative Tools</span>
+            <h4>Generative instruments and parametric sketches</h4>
+            <p>Open tools →</p>
+          </Link>
+          <Link to="/gallery" className="mag-feat-card">
+            <span className="mag-feat-card-tag">Gallery</span>
+            <h4>Discovered specimens — an evolving archive</h4>
+            <p>View gallery →</p>
+          </Link>
+        </div>
+      </div>
+
+      {/* ═══════════════ REVIEWS ═══════════════ */}
+      {d.reviews?.length > 0 && (<>
+        <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Community Voices</h2></div></div>
+        <div className="mag-reviews">
+          {d.reviews.map(r => (
+            <div key={r.id} className="mag-review">
+              <q>{r.body}</q>
+              <cite>— {r.authorName}</cite>
+            </div>
+          ))}
+        </div>
+      </>)}
+
+      {/* ═══════════════ RESTAURANTS ═══════════════ */}
+      {d.restaurants?.length > 0 && (<>
+        <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Food & Dining</h2><Link to="/city?cat=restaurant" className="mag-sec-link">All restaurants →</Link></div></div>
+        <div className="mag-places">
+          {d.restaurants.map(p => <PlaceCard key={p.id} p={p} />)}
+        </div>
+      </>)}
+
+      {d.workshops?.length > 0 && (<>
+        <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Workshops & Classes</h2><Link to="/city?cat=workshop" className="mag-sec-link">All workshops →</Link></div></div>
+        <div className="mag-places">
+          {d.workshops.map(p => <PlaceCard key={p.id} p={p} />)}
+        </div>
+      </>)}
+
+      {/* ═══════════════ FOOTER ═══════════════ */}
+      <footer className="mag-footer">
+        <div className="mag-footer-links">
+          <Link to="/about">About</Link><Link to="/work">Work</Link><Link to="/contact">Contact</Link><Link to="/feedback">Feedback</Link>
+        </div>
+        <span className="mag-footer-brand">Sotabosc · Barcelona</span>
+      </footer>
+    </div>
+  );
+}

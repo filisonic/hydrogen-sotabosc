@@ -1,6 +1,7 @@
 import {useLoaderData} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+import { JsonLd } from '~/components/seo/JsonLd';
 
 /**
  * @type {Route.MetaFunction}
@@ -83,21 +84,44 @@ export default function Article() {
     day: 'numeric',
   }).format(new Date(article.publishedAt));
 
-  return (
-    <div className="article">
-      <h1>
-        {title}
-        <div>
-          <time dateTime={article.publishedAt}>{publishedDate}</time> &middot;{' '}
-          <address>{author?.name}</address>
-        </div>
-      </h1>
+  const articleLd = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "headline": title,
+    "image": image ? [image.url] : [],
+    "datePublished": article.publishedAt,
+    "author": [{
+        "@type": "Person",
+        "name": author?.name || 'Sotabosc Editorial'
+    }]
+  };
 
-      {image && <Image data={image} sizes="90vw" loading="eager" />}
-      <div
+  return (
+    <div className="mag">
+      <JsonLd data={articleLd} />
+      
+      <div className="max-w-4xl mx-auto px-4 py-12">
+        <h1 className="text-4xl md:text-5xl font-black mb-6 font-[family-name:var(--font-display)]">
+          {title}
+        </h1>
+        <div className="flex items-center gap-2 mb-8 text-sm" style={{ color: 'var(--sotabosc-muted)' }}>
+          <time dateTime={article.publishedAt}>{publishedDate}</time>
+          <span>&middot;</span>
+          <address className="not-italic font-bold">{author?.name || 'Editorial Team'}</address>
+        </div>
+
+
+      {image && (
+        <div className="mb-10 rounded-2xl overflow-hidden aspect-[21/9]">
+          <Image data={image} sizes="90vw" loading="eager" className="w-full h-full object-cover" />
+        </div>
+      )}
+      <article
         dangerouslySetInnerHTML={{__html: contentHtml}}
-        className="article"
+        className="prose prose-lg max-w-none prose-headings:font-[family-name:var(--font-display)]"
+        style={{ color: 'var(--sotabosc-text)' }}
       />
+      </div>
     </div>
   );
 }

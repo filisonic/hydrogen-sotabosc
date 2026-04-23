@@ -1,4 +1,5 @@
 import { useLoaderData, Link } from 'react-router';
+import { motion } from 'framer-motion';
 import { openGraphImageMeta } from '~/lib/seo/siteImagery';
 
 /**
@@ -31,7 +32,7 @@ export async function loader(args) {
         year: "2024",
         description: "A symbiotic network connecting creators, wellness spaces, cultural venues, and community hubs through nature's living patterns. The platform reimagines city discovery as an organic ecosystem.",
         url: "/city",
-        image: "/images/work/barcelona-directory.jpg",
+        image: "/images/hero/robynne-o-HOrhCnQsxnQ-unsplash.jpg",
         details: {
           challenge: "Barcelona's rich cultural landscape was fragmented across isolated platforms, making it difficult for visitors and locals to discover the interconnected nature of the city's creative ecosystem.",
           approach: "We developed a botanical framework that maps cultural venues as living organisms within interconnected domains - from underground/soil spaces to sky-level experiences.",
@@ -45,7 +46,7 @@ export async function loader(args) {
         year: "2024",
         description: "Comprehensive mapping of cultural flows and community connections in Barcelona's creative landscape, identifying patterns of collaboration and symbiosis.",
         url: "/work/ecosystem-research",
-        image: "/images/work/ecosystem-research.jpg",
+        image: "/images/hero/tom-prejeant-IaEsXtU8iN4-unsplash.jpg",
         details: {
           challenge: "Understanding how creative communities form, connect, and sustain themselves in urban environments.",
           approach: "Ethnographic studies, network analysis, and community interviews to map invisible relationships and cultural flows.",
@@ -59,7 +60,7 @@ export async function loader(args) {
         year: "2023",
         description: "Digital preservation of local stories, traditions, and knowledge through community-contributed content and oral histories.",
         url: "/work/memory-archive",
-        image: "/images/work/memory-archive.jpg",
+        image: "/images/hero/lai-man-nung-bnZ8_95Q8NE-unsplash.jpg",
         details: {
           challenge: "Rapid gentrification was displacing longtime residents and erasing neighborhood memory.",
           approach: "Co-designed a platform with residents to capture and share stories, with special attention to elder knowledge.",
@@ -72,116 +73,133 @@ export async function loader(args) {
 
 export default function WorkPage() {
   const data = useLoaderData();
+  const title = 'Our Work';
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* Header */}
-      <div className="bg-stone-50 border-b border-stone-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <Link
-            to="/"
-            className="inline-flex items-center text-sm text-stone-600 hover:text-stone-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 rounded-md"
-          >
-            ← Back to agency
-          </Link>
+    <div className="mag">
+      {/* ═══════════════ HERO ═══════════════ */}
+      <section className="mag-hero" style={{ minHeight: '60vh' }}>
+        <motion.h1
+          className="mag-hero-title"
+          initial="hidden" animate="visible"
+          variants={{ hidden: {}, visible: { transition: { staggerChildren: .04 } } }}
+          style={{ fontSize: 'clamp(60px, 12vw, 160px)' }}
+        >
+          {title.split('').map((l, i) => (
+            <motion.span
+              key={i}
+              className="mag-hero-letter"
+              variants={{
+                hidden: { opacity: 0, y: 60, rotateX: -40 },
+                visible: {
+                  opacity: 1, y: 0, rotateX: 0,
+                  transition: { duration: .6, ease: [.22, 1, .36, 1] }
+                }
+              }}
+            >
+              {l === ' ' ? '\u00A0' : l}
+            </motion.span>
+          ))}
+        </motion.h1>
+
+        <motion.div
+          className="mag-hero-sub"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: .7, delay: .45, ease: [.22, 1, .36, 1] }}
+        >
+          <p className="mag-hero-tag">
+            Projects that strengthen communities, preserve culture, and foster sustainable growth through design and technology.
+          </p>
+        </motion.div>
+      </section>
+
+      {/* ═══════════════ MARQUEE ═══════════════ */}
+      <div className="mag-mq">
+        <div className="mag-mq-inner">
+          {[...Array(2)].map((_, r) => (
+            <span key={r} style={{ display: 'flex' }}>
+              {['Cultural Platforms', 'Urban Research', 'Generative Systems', 'Speculative Design', 'Community Networks', 'Barcelona', 'Living Systems'].map((item, i) => (
+                <span key={i} className="mag-mq-item">{item} ·</span>
+              ))}
+            </span>
+          ))}
         </div>
       </div>
 
-      {/* Hero */}
-      <section className="py-20 sm:py-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="text-5xl sm:text-6xl font-bold text-stone-900 leading-tight font-[family-name:var(--font-editorial)]">
-              Our work
-            </h1>
-            <p className="mt-6 text-xl text-stone-600 leading-relaxed">
-              Projects that strengthen communities, preserve culture, and foster sustainable growth through design and technology.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Grid */}
-      <section className="pb-20 sm:pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-20">
-            {data.projects.map((project, index) => (
-              <div key={project.id} className={`grid lg:grid-cols-2 gap-12 items-center ${index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''}`}>
-                <div className={index % 2 === 1 ? 'lg:col-start-2' : ''}>
-                  <div className="aspect-[4/3] bg-stone-100 rounded-2xl overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-br from-green-100 to-stone-100 flex items-center justify-center">
-                      <span className="text-stone-400">Project image</span>
-                    </div>
-                  </div>
+      {/* ═══════════════ PROJECTS ═══════════════ */}
+      <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Selected Projects</h2></div></div>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '64px', padding: '0 32px 32px' }}>
+        {data.projects.map((project, index) => (
+          <div key={project.id} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '48px', alignItems: 'center' }}>
+            <div style={{ order: index % 2 === 1 ? 2 : 1 }}>
+              <div className="mag-place-img" style={{ height: 'auto', aspectRatio: '4/3', borderRadius: '14px', overflow: 'hidden', border: '1px solid var(--border)', boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}>
+                <img src={project.image} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              </div>
+            </div>
+            
+            <div style={{ order: index % 2 === 1 ? 1 : 2 }}>
+              <div style={{ marginBottom: '16px' }}>
+                <span className="mag-feat-main-tag" style={{ color: 'var(--ink)' }}>{project.category} · {project.year}</span>
+              </div>
+              
+              <h3 style={{ fontFamily: 'var(--serif)', fontSize: '36px', fontWeight: '600', marginBottom: '20px', lineHeight: '1.2' }}>
+                {project.title}
+              </h3>
+              
+              <p style={{ fontSize: '15px', color: 'var(--ink2)', lineHeight: '1.6', marginBottom: '32px' }}>
+                {project.description}
+              </p>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', marginBottom: '40px' }}>
+                <div>
+                  <h4 style={{ fontSize: '10px', letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink)', marginBottom: '8px', fontWeight: '700' }}>Challenge</h4>
+                  <p style={{ fontSize: '13px', color: 'var(--ink3)', lineHeight: '1.5', margin: 0 }}>{project.details.challenge}</p>
                 </div>
                 
-                <div className={index % 2 === 1 ? 'lg:col-start-1 lg:row-start-1' : ''}>
-                  <div className="flex items-center gap-3 mb-4">
-                    <span className="text-sm font-medium text-green-700">{project.category}</span>
-                    <span className="text-sm text-stone-400">•</span>
-                    <span className="text-sm text-stone-600">{project.year}</span>
-                  </div>
-                  
-                  <h2 className="text-3xl sm:text-4xl font-bold text-stone-900 mb-4 font-[family-name:var(--font-editorial)]">
-                    {project.title}
-                  </h2>
-                  
-                  <p className="text-lg text-stone-600 leading-relaxed mb-8">
-                    {project.description}
-                  </p>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider mb-2">Challenge</h3>
-                      <p className="text-stone-600 leading-relaxed">{project.details.challenge}</p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider mb-2">Approach</h3>
-                      <p className="text-stone-600 leading-relaxed">{project.details.approach}</p>
-                    </div>
-                    
-                    <div>
-                      <h3 className="text-sm font-bold text-stone-900 uppercase tracking-wider mb-2">Impact</h3>
-                      <p className="text-stone-600 leading-relaxed">{project.details.impact}</p>
-                    </div>
-                  </div>
-                  
-                  {project.url.startsWith('/') && (
-                    <div className="mt-8">
-                      <Link
-                        to={project.url}
-                        className="inline-flex items-center px-6 py-3 bg-green-700 text-white font-semibold rounded-full hover:bg-green-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2"
-                      >
-                        Explore project →
-                      </Link>
-                    </div>
-                  )}
+                <div>
+                  <h4 style={{ fontSize: '10px', letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink)', marginBottom: '8px', fontWeight: '700' }}>Approach</h4>
+                  <p style={{ fontSize: '13px', color: 'var(--ink3)', lineHeight: '1.5', margin: 0 }}>{project.details.approach}</p>
+                </div>
+                
+                <div>
+                  <h4 style={{ fontSize: '10px', letterSpacing: '.15em', textTransform: 'uppercase', color: 'var(--ink)', marginBottom: '8px', fontWeight: '700' }}>Impact</h4>
+                  <p style={{ fontSize: '13px', color: 'var(--ink3)', lineHeight: '1.5', margin: 0 }}>{project.details.impact}</p>
                 </div>
               </div>
-            ))}
+              
+              {project.url.startsWith('/') && (
+                <Link to={project.url} className="mag-btn">
+                  Explore project →
+                </Link>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* ═══════════════ CTA ═══════════════ */}
+      <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Collaborate</h2></div></div>
+      <div className="mag-feat">
+        <div className="mag-feat-main" style={{ minHeight: 'auto', padding: '64px 48px', gridColumn: '1 / -1' }}>
+          <span className="mag-feat-main-tag">Let's create something meaningful</span>
+          <h3 style={{ marginTop: '16px', marginBottom: '24px', maxWidth: '800px' }}>Have a project that could benefit from our cultural research and community-centered design approach?</h3>
+          <div>
+            <Link to="/contact" className="mag-btn" style={{ background: 'var(--y)', color: 'var(--ink)' }}>
+              Start a conversation →
+            </Link>
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* CTA */}
-      <section className="py-20 sm:py-24 bg-stone-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-stone-900 mb-6 font-[family-name:var(--font-editorial)]">
-            Let's create something meaningful together
-          </h2>
-          <p className="text-lg text-stone-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Have a project that could benefit from our cultural research and community-centered design approach?
-          </p>
-          <Link
-            to="/contact"
-            className="inline-flex items-center px-8 py-4 bg-green-700 text-white font-semibold rounded-full hover:bg-green-800 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2"
-          >
-            Start a conversation
-          </Link>
+      {/* ═══════════════ FOOTER ═══════════════ */}
+      <footer className="mag-footer">
+        <div className="mag-footer-links">
+          <Link to="/about">About</Link><Link to="/work">Work</Link><Link to="/contact">Contact</Link><Link to="/feedback">Feedback</Link>
         </div>
-      </section>
-    </main>
+        <span className="mag-footer-brand">Sotabosc · Barcelona</span>
+      </footer>
+    </div>
   );
 }
 

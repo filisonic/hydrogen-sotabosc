@@ -104,6 +104,15 @@ export function HeaderMenu({
       >
         Hikes
       </NavLink>
+      <NavLink
+        className="header-menu-item"
+        onClick={close}
+        prefetch="intent"
+        style={activeLinkStyle}
+        to="/collections"
+      >
+        Store
+      </NavLink>
       {(menu || FALLBACK_HEADER_MENU).items.map((item) => {
         if (!item.url) return null;
 
@@ -135,17 +144,43 @@ export function HeaderMenu({
 /**
  * @param {Pick<HeaderProps, 'isLoggedIn' | 'cart'>}
  */
+function HeaderAccountNavLink({isLoggedIn}) {
+  const authState = isLoggedIn ?? Promise.resolve(false);
+  return (
+    <Suspense
+      fallback={
+        <NavLink prefetch="intent" to="/account/login" style={activeLinkStyle}>
+          Sign in
+        </NavLink>
+      }
+    >
+      <Await
+        resolve={authState}
+        errorElement={
+          <NavLink prefetch="intent" to="/account/login" style={activeLinkStyle}>
+            Sign in
+          </NavLink>
+        }
+      >
+        {(loggedIn) => (
+          <NavLink
+            prefetch="intent"
+            to={loggedIn ? '/account' : '/account/login'}
+            style={activeLinkStyle}
+          >
+            {loggedIn ? 'Account' : 'Sign in'}
+          </NavLink>
+        )}
+      </Await>
+    </Suspense>
+  );
+}
+
 function HeaderCtas({isLoggedIn, cart}) {
   return (
     <nav className="header-ctas" role="navigation">
       <HeaderMenuMobileToggle />
-      <NavLink prefetch="intent" to="/account" style={activeLinkStyle}>
-        <Suspense fallback="Sign in">
-          <Await resolve={isLoggedIn} errorElement="Sign in">
-            {(isLoggedIn) => (isLoggedIn ? 'Account' : 'Sign in')}
-          </Await>
-        </Suspense>
-      </NavLink>
+      <HeaderAccountNavLink isLoggedIn={isLoggedIn} />
       <SearchToggle />
       <CartToggle cart={cart} />
     </nav>

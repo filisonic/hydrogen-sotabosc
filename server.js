@@ -15,6 +15,36 @@ export default {
    */
   async fetch(request, env, executionContext) {
     try {
+      // ─── Subdomain routing ───────────────────────────────────
+      // Rewrite URLs based on subdomain so a single Oxygen deployment
+      // serves city.sotabosc.world, directory.sotabosc.world, etc.
+      const url = new URL(request.url);
+      const hostname = url.hostname;
+      let rewritten = false;
+
+      if (hostname.startsWith('city.')) {
+        // city.sotabosc.world/foo → /city-world/foo
+        url.pathname = '/city-world' + (url.pathname === '/' ? '' : url.pathname);
+        rewritten = true;
+      } else if (hostname.startsWith('directory.')) {
+        // directory.sotabosc.world/foo → /city/foo
+        url.pathname = '/city' + (url.pathname === '/' ? '' : url.pathname);
+        rewritten = true;
+      } else if (hostname.startsWith('tools.')) {
+        // tools.sotabosc.world/foo → /tools/foo
+        url.pathname = '/tools' + (url.pathname === '/' ? '' : url.pathname);
+        rewritten = true;
+      } else if (hostname.startsWith('labs.')) {
+        // labs.sotabosc.world/foo → /labs/foo
+        url.pathname = '/labs' + (url.pathname === '/' ? '' : url.pathname);
+        rewritten = true;
+      }
+
+      if (rewritten) {
+        request = new Request(url.toString(), request);
+      }
+      // ─────────────────────────────────────────────────────────
+
       const hydrogenContext = await createHydrogenRouterContext(
         request,
         env,

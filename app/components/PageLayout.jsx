@@ -2,7 +2,8 @@ import { Await, Link, useLocation } from 'react-router';
 import { Suspense, useId } from 'react';
 import { Aside } from '~/components/Aside';
 import { Footer } from '~/components/Footer';
-import { Header, HeaderMenu } from '~/components/Header';
+import { HeaderMenu } from '~/components/Header';
+import { MagNav } from '~/components/MagNav';
 import { CartMain } from '~/components/CartMain';
 import {
   SEARCH_ENDPOINT,
@@ -23,6 +24,16 @@ export function PageLayout({
 }) {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
+  const isCityWorld =
+    location.pathname === '/city-world' ||
+    location.pathname.startsWith('/city-world/');
+  const isToolsPage =
+    location.pathname === '/tools' ||
+    location.pathname.startsWith('/tools/');
+  const isLabsPage =
+    location.pathname === '/labs' ||
+    location.pathname.startsWith('/labs/');
+  const isMinimalChrome = isHomePage || isCityWorld || isToolsPage || isLabsPage;
   const isDirectoryChrome =
     location.pathname === '/city' ||
     location.pathname.startsWith('/city/') ||
@@ -34,21 +45,21 @@ export function PageLayout({
       <SearchAside />
       <MobileMenuAside header={header} publicStoreDomain={publicStoreDomain} />
       <div className={isDirectoryChrome ? 'layout-directory flex flex-col' : 'min-h-screen flex flex-col'}>
-        {header && !isHomePage && (
-          <Header
-            header={header}
-            cart={cart}
-            isLoggedIn={isLoggedIn}
-            publicStoreDomain={publicStoreDomain}
-            directoryChrome={isDirectoryChrome}
-          />
-        )}
+        {header ? (
+          <MagNav cart={cart} isLoggedIn={isLoggedIn} header={header} />
+        ) : null}
         <main
-          className={`${isHomePage ? '' : 'page-content'} ${isDirectoryChrome ? 'flex-1 w-full' : ''}`}
+          className={[
+            header ? 'mag-nav-main-offset' : '',
+            isMinimalChrome ? '' : 'page-content',
+            isDirectoryChrome ? 'flex-1 w-full' : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
         >
           {children}
         </main>
-        {!isHomePage && (
+        {!isMinimalChrome && (
           <Footer
             footer={footer}
             header={header}

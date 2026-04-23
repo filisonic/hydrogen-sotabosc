@@ -1,0 +1,923 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Organism Lab — Parametric Generative Life</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.9.0/p5.min.js"></script>
+<style>
+  :root {
+    --bg: #07080a;
+    --panel: #0d0f12;
+    --panel-2: #12151a;
+    --line: #1c2029;
+    --line-2: #252a34;
+    --ink: #e8ecf2;
+    --ink-dim: #8a93a1;
+    --ink-dimmer: #555b66;
+    --accent: #7cf3d8;
+    --accent-2: #f3c07c;
+    --accent-3: #c07cf3;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; background: var(--bg); color: var(--ink);
+    font: 12px/1.5 ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    -webkit-font-smoothing: antialiased;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 340px 1fr 440px;
+    height: 100vh;
+  }
+  .controls, .code-panel { overflow-y: auto; }
+  .controls {
+    background: var(--panel);
+    border-right: 1px solid var(--line);
+    padding: 16px 14px 40px;
+  }
+  .code-panel {
+    background: var(--panel-2);
+    border-left: 1px solid var(--line);
+    padding: 16px 14px 40px;
+    display: flex; flex-direction: column;
+  }
+  .stage {
+    background: #050607;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .brand {
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-dim); margin: 0 0 4px;
+  }
+  h1 {
+    font: 600 17px/1.2 "Helvetica Neue", system-ui, sans-serif;
+    margin: 0 0 14px; letter-spacing: -0.01em;
+  }
+
+  /* category tabs */
+  .cats {
+    display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 10px;
+    padding-bottom: 12px; border-bottom: 1px solid var(--line);
+  }
+  .cat {
+    appearance: none; background: transparent; border: 1px solid var(--line);
+    color: var(--ink-dim); padding: 5px 8px; cursor: pointer;
+    font: 500 10px/1 ui-monospace, monospace; letter-spacing: 0.08em;
+    border-radius: 3px;
+  }
+  .cat:hover { color: var(--ink); border-color: var(--line-2); }
+  .cat.active { color: var(--accent); border-color: var(--accent); background: #0f1a18; }
+
+  .presets {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 5px;
+    margin-bottom: 10px;
+  }
+  .preset {
+    appearance: none; border: 1px solid var(--line);
+    background: #0a0c10; color: var(--ink);
+    padding: 7px 9px; text-align: left; cursor: pointer;
+    font: 500 10.5px/1 ui-monospace, monospace;
+    letter-spacing: 0.03em; border-radius: 3px;
+    transition: border-color .12s, background .12s, color .12s;
+  }
+  .preset:hover { border-color: var(--accent); color: var(--accent); }
+  .preset.active { border-color: var(--accent); background: #0f1a18; color: var(--accent); }
+
+  .actions { display: flex; gap: 5px; margin: 10px 0 14px; flex-wrap: wrap; }
+  .btn {
+    appearance: none; border: 1px solid var(--line);
+    background: transparent; color: var(--ink);
+    padding: 6px 9px; cursor: pointer; border-radius: 3px;
+    font: 500 10.5px/1 ui-monospace, monospace; letter-spacing: 0.06em;
+  }
+  .btn:hover { border-color: var(--accent-2); color: var(--accent-2); }
+  .btn.primary { border-color: var(--accent); color: var(--accent); }
+  .btn.primary:hover { background: #0f1a18; }
+
+  /* collapsible sections */
+  .section { border-bottom: 1px solid var(--line); }
+  .section-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 2px; cursor: pointer; user-select: none;
+  }
+  .section-head h2 {
+    font: 600 10px/1 ui-monospace, monospace;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ink-dim); margin: 0; border: none; padding: 0;
+  }
+  .section.open .section-head h2 { color: var(--ink); }
+  .section .chev { color: var(--ink-dimmer); font-size: 10px; transition: transform .15s; }
+  .section.open .chev { transform: rotate(90deg); color: var(--accent); }
+  .section-body { display: none; padding: 4px 2px 12px; }
+  .section.open .section-body { display: block; }
+
+  .slider {
+    display: grid; grid-template-columns: 108px 1fr 44px;
+    align-items: center; gap: 8px; margin: 5px 0;
+  }
+  .slider label { color: var(--ink-dim); font-size: 10.5px; letter-spacing: 0.04em; }
+  .slider input[type="range"] {
+    appearance: none; width: 100%; height: 3px; background: var(--line);
+    border-radius: 2px; outline: none;
+  }
+  .slider input[type="range"]::-webkit-slider-thumb {
+    appearance: none; width: 10px; height: 14px; background: var(--accent);
+    border-radius: 1px; cursor: pointer;
+  }
+  .slider input[type="range"]::-moz-range-thumb {
+    width: 10px; height: 14px; background: var(--accent); border: none;
+    border-radius: 1px; cursor: pointer;
+  }
+  .slider .val { text-align: right; color: var(--ink); font-variant-numeric: tabular-nums; font-size: 10.5px; }
+
+  .code-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+  }
+  .code-title { font: 600 10px/1 ui-monospace; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-dim); }
+  pre.code {
+    flex: 1; margin: 0; padding: 14px;
+    background: #05070a; border: 1px solid var(--line); border-radius: 6px;
+    font: 11px/1.55 ui-monospace, Menlo, Consolas, monospace;
+    color: #cbd3dd; overflow: auto; white-space: pre; min-height: 0;
+  }
+  .tok-k { color: #c792ea; }   /* keyword */
+  .tok-f { color: #82aaff; }   /* function */
+  .tok-n { color: #f78c6c; }   /* number */
+  .tok-c { color: #546e7a; font-style: italic; } /* comment */
+
+  .hint { color: var(--ink-dimmer); font-size: 10.5px; margin-top: 8px; }
+  .stage-hud {
+    position: absolute; bottom: 14px; left: 14px; color: var(--ink-dim);
+    font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    pointer-events: none;
+  }
+  .stage-hud .current { color: var(--ink); }
+  .stage-hud .cat-chip { color: var(--accent-3); margin-right: 8px; }
+  .footer { margin-top: 14px; color: var(--ink-dimmer); font-size: 10px; line-height: 1.6; padding: 0 2px; }
+
+  @media (max-width: 1100px) {
+    .layout { grid-template-columns: 1fr; grid-template-rows: auto 50vh auto; }
+    .controls, .code-panel { border: none; border-bottom: 1px solid var(--line); max-height: 46vh; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+  <aside class="controls">
+    <p class="brand">Parametric · p5.js</p>
+    <h1>Organism Lab</h1>
+
+    <div class="cats" id="cats"></div>
+    <div class="presets" id="presets"></div>
+
+    <div class="actions">
+      <button class="btn primary" id="randomize">⚄ Randomize</button>
+      <button class="btn" id="reseed">↻ Reseed</button>
+      <button class="btn" id="save">⬇ PNG</button>
+      <button class="btn" id="pause">⏸ Pause</button>
+    </div>
+
+    <div id="sections"></div>
+
+    <div class="footer">
+      Space = pause · S = save PNG · R = randomize · Click section headers to expand
+    </div>
+  </aside>
+
+  <main class="stage">
+    <div id="canvas-host"></div>
+    <div class="stage-hud"><span id="hud-cat" class="cat-chip">animals</span><span id="hud-preset" class="current">jellyfish</span></div>
+  </main>
+
+  <aside class="code-panel">
+    <div class="code-head">
+      <span class="code-title">p5.js · paste into editor.p5js.org</span>
+      <button class="btn" id="copy">Copy</button>
+    </div>
+    <pre class="code" id="code"></pre>
+    <div class="hint">Head to <b>editor.p5js.org</b>, clear the template, paste this, press ▶.</div>
+  </aside>
+</div>
+
+<script>
+/* ======================================================================
+   PARAMETER SCHEMA — grouped into collapsible sections
+   ====================================================================== */
+const SCHEMA = {
+  form: {
+    label: "Form", open: true,
+    fields: [
+      { k:"points",   label:"points",      min:1000, max:30000, step:500 },
+      { k:"amp",      label:"k amp",       min:0,    max:15,    step:0.1 },
+      { k:"fx",       label:"x freq (÷)",  min:2,    max:40,    step:0.5 },
+      { k:"fy",       label:"y freq (÷)",  min:4,    max:80,    step:0.5 },
+      { k:"fe",       label:"e scale",     min:2,    max:30,    step:0.5 },
+      { k:"yOffset",  label:"e offset",    min:0,    max:30,    step:0.5 },
+      { k:"baseR",    label:"base radius", min:10,   max:150,   step:1 },
+    ],
+  },
+  dist: {
+    label: "Distance & Twist", open: false,
+    fields: [
+      { k:"dExp",     label:"d power",     min:1,    max:4,     step:0.05 },
+      { k:"dDiv",     label:"d divisor",   min:10,   max:200,   step:1 },
+      { k:"dBase",    label:"d base",      min:0,    max:20,    step:0.1 },
+      { k:"twistAmp", label:"twist",       min:0,    max:20,    step:0.1 },
+      { k:"stretch",  label:"stretch",     min:0,    max:30,    step:0.1 },
+    ],
+  },
+  wave: {
+    label: "Wave & Motion", open: false,
+    fields: [
+      { k:"waveBase", label:"wave base",   min:0,    max:10,    step:0.1 },
+      { k:"waveDiv",  label:"wave div",    min:0,    max:15,    step:0.1 },
+      { k:"cDiv",     label:"c / d÷",      min:0.5,  max:10,    step:0.1 },
+      { k:"eDiv",     label:"c / e÷",      min:10,   max:300,   step:1 },
+      { k:"tDiv",     label:"c / t÷",      min:5,    max:60,    step:0.5 },
+      { k:"speedMod", label:"wave·t",      min:0,    max:5,     step:0.05 },
+      { k:"tStep",    label:"time step",   min:0,    max:0.6,   step:0.005 },
+    ],
+  },
+  intricacy: {
+    label: "Intricacy", open: true,
+    fields: [
+      { k:"harmonic",  label:"harmonic",    min:0, max:1,  step:0.01,
+        hint:"Adds a higher-frequency overlay to the trig field — fine detail." },
+      { k:"harmFreq",  label:"harm × freq", min:2, max:8,  step:1,
+        hint:"How many times tighter the harmonic ripples." },
+      { k:"facet",     label:"facet step",  min:0, max:5,  step:0.1,
+        hint:"Quantize distance in steps — crystalline banding." },
+      { k:"radialSym", label:"radial n",    min:1, max:16, step:1,
+        hint:"Replicate each point around center N times. 1 = off." },
+      { k:"mirror",    label:"mirror",      min:0, max:1,  step:1,
+        hint:"Bilateral symmetry (left↔right)." },
+    ],
+  },
+  render: {
+    label: "Render", open: false,
+    fields: [
+      { k:"hue",      label:"hue",         min:0,    max:360,   step:1 },
+      { k:"sat",      label:"sat",         min:0,    max:100,   step:1 },
+      { k:"light",    label:"light",       min:0,    max:100,   step:1 },
+      { k:"alpha",    label:"opacity",     min:10,   max:255,   step:1 },
+      { k:"strokeW",  label:"stroke",      min:0.5,  max:3,     step:0.1 },
+      { k:"bgAlpha",  label:"trail (bg α)",min:3,    max:255,   step:1 },
+    ],
+  },
+};
+
+/* ======================================================================
+   CATEGORIES & PRESETS
+   ====================================================================== */
+const CATEGORIES = {
+  animals:  ["jellyfish","insect","bird","spider","squid","octopus","butterfly","beetle","crustacean","worm","reptile"],
+  plants:   ["fern","flower","succulent","ivy","thistle","palm","moss"],
+  algae:    ["kelp","diatom","spirogyra","volvox","phytoplankton"],
+  fungi:    ["mushroom","lichen","mycelium","bracket","coral-fungus","slime-mold","puffball"],
+  microbes: ["bacteria","paramecium","virus","amoeba","radiolaria","tardigrade"],
+  minerals: ["crystal","snowflake","geode","dendrite","mica","agate","quartz"],
+  cosmic:   ["nebula","galaxy","plasma","aurora"],
+};
+
+// Default values for every param — any preset can omit values and inherit these.
+const DEFAULTS = {
+  points:10000, amp:5, fx:14, fy:30, fe:8, yOffset:13, baseR:60,
+  dExp:2, dDiv:59, dBase:4, twistAmp:3, stretch:9,
+  waveBase:3, waveDiv:4, cDiv:2, eDiv:99, tDiv:18, speedMod:2, tStep:0.157,
+  harmonic:0, harmFreq:3, facet:0, radialSym:1, mirror:0,
+  hue:195, sat:35, light:90, alpha:120, strokeW:1, bgAlpha:255,
+};
+
+const PRESETS = {
+  /* ---------- ANIMALS ---------- */
+  "jellyfish": { hue:195, sat:35, light:90, alpha:120 },
+  "insect":    { points:12000, amp:8, fx:7, fy:15, fe:6, yOffset:12, baseR:50,
+                 dExp:2.2, dDiv:50, dBase:3, twistAmp:8, stretch:15,
+                 waveBase:4, waveDiv:3, cDiv:1.6, eDiv:60, tDiv:25, speedMod:1.5, tStep:0.08,
+                 harmonic:0.15, harmFreq:4, mirror:1,
+                 hue:35, sat:75, light:60, alpha:130 },
+  "bird":      { points:9000, amp:3, fx:25, fy:10, fe:10, yOffset:12, baseR:70,
+                 dExp:2, dDiv:80, dBase:5, twistAmp:10, stretch:6,
+                 waveBase:4, waveDiv:6, cDiv:3, eDiv:120, tDiv:15, speedMod:2.5, tStep:0.105,
+                 mirror:1,
+                 hue:215, sat:55, light:72, alpha:110 },
+  "spider":    { points:11000, amp:5, fx:12, fy:18, fe:6, yOffset:13, baseR:40,
+                 dExp:2.1, dDiv:55, dBase:3, twistAmp:5, stretch:18,
+                 waveBase:3, waveDiv:4, cDiv:1.8, eDiv:70, tDiv:22, speedMod:1.6, tStep:0.06,
+                 harmonic:0.2, harmFreq:3, radialSym:8,
+                 hue:260, sat:40, light:55, alpha:140 },
+  "squid":     { points:12000, amp:6, fx:22, fy:45, fe:5, yOffset:14, baseR:45,
+                 dExp:1.9, dDiv:85, dBase:2, twistAmp:4, stretch:22,
+                 waveBase:4, waveDiv:7, cDiv:1.2, eDiv:130, tDiv:18, speedMod:2.2, tStep:0.12,
+                 mirror:1,
+                 hue:300, sat:60, light:65, alpha:115 },
+  "octopus":   { points:13000, amp:7, fx:16, fy:25, fe:6, yOffset:10, baseR:50,
+                 dExp:2, dDiv:60, dBase:3, twistAmp:6, stretch:16,
+                 waveBase:5, waveDiv:8, cDiv:1.5, eDiv:90, tDiv:20, speedMod:2, tStep:0.09,
+                 radialSym:8,
+                 hue:15, sat:70, light:62, alpha:125 },
+  "butterfly": { points:11000, amp:6, fx:10, fy:22, fe:7, yOffset:13, baseR:55,
+                 dExp:2.2, dDiv:55, dBase:4, twistAmp:9, stretch:10,
+                 waveBase:4, waveDiv:5, cDiv:2, eDiv:85, tDiv:24, speedMod:1.8, tStep:0.1,
+                 harmonic:0.1, harmFreq:4, mirror:1,
+                 hue:320, sat:65, light:70, alpha:130 },
+  "beetle":    { points:9000, amp:5, fx:8, fy:16, fe:7, yOffset:12, baseR:60,
+                 dExp:2.3, dDiv:45, dBase:6, twistAmp:4, stretch:6,
+                 waveBase:3, waveDiv:3, cDiv:2, eDiv:80, tDiv:28, speedMod:1, tStep:0.05,
+                 harmonic:0.25, harmFreq:5, mirror:1,
+                 hue:50, sat:80, light:45, alpha:150 },
+  "crustacean":{ points:13000, amp:9, fx:6, fy:18, fe:7, yOffset:11, baseR:55,
+                 dExp:2.5, dDiv:40, dBase:5, twistAmp:7, stretch:10,
+                 waveBase:5, waveDiv:2, cDiv:1.4, eDiv:70, tDiv:28, speedMod:1.2, tStep:0.07,
+                 harmonic:0.1, harmFreq:4, mirror:1,
+                 hue:15, sat:75, light:60, alpha:140 },
+  "worm":      { points:11000, amp:4, fx:20, fy:50, fe:4, yOffset:16, baseR:35,
+                 dExp:1.6, dDiv:70, dBase:3, twistAmp:5, stretch:25,
+                 waveBase:4, waveDiv:7, cDiv:1.1, eDiv:50, tDiv:16, speedMod:2, tStep:0.143,
+                 hue:300, sat:50, light:68, alpha:120 },
+  "reptile":   { points:12000, amp:6, fx:9, fy:22, fe:5, yOffset:13, baseR:50,
+                 dExp:2.3, dDiv:38, dBase:6, twistAmp:9, stretch:14,
+                 waveBase:3, waveDiv:2, cDiv:1.5, eDiv:65, tDiv:26, speedMod:1.4, tStep:0.06,
+                 harmonic:0.1, harmFreq:5,
+                 hue:85, sat:65, light:55, alpha:135 },
+
+  /* ---------- PLANTS ---------- */
+  "fern":      { points:13000, amp:5, fx:8, fy:20, fe:6, yOffset:14, baseR:45,
+                 dExp:2, dDiv:70, dBase:3, twistAmp:3, stretch:18,
+                 waveBase:3, waveDiv:5, cDiv:1.5, eDiv:100, tDiv:30, speedMod:1, tStep:0.04,
+                 harmonic:0.35, harmFreq:5, mirror:1,
+                 hue:130, sat:60, light:55, alpha:120 },
+  "flower":    { points:12000, amp:4, fx:15, fy:10, fe:8, yOffset:12, baseR:50,
+                 dExp:2, dDiv:60, dBase:5, twistAmp:2, stretch:7,
+                 waveBase:3, waveDiv:6, cDiv:2.5, eDiv:90, tDiv:35, speedMod:1, tStep:0.04,
+                 harmonic:0.15, harmFreq:3, radialSym:5,
+                 hue:340, sat:75, light:70, alpha:130 },
+  "succulent": { points:12000, amp:4, fx:12, fy:10, fe:9, yOffset:10, baseR:60,
+                 dExp:2.1, dDiv:55, dBase:4, twistAmp:3, stretch:5,
+                 waveBase:2, waveDiv:4, cDiv:2, eDiv:85, tDiv:32, speedMod:0.8, tStep:0.035,
+                 harmonic:0.25, harmFreq:4, radialSym:6,
+                 hue:150, sat:55, light:65, alpha:135 },
+  "ivy":       { points:11000, amp:5, fx:18, fy:30, fe:5, yOffset:15, baseR:40,
+                 dExp:1.8, dDiv:80, dBase:3, twistAmp:5, stretch:20,
+                 waveBase:4, waveDiv:6, cDiv:1.3, eDiv:110, tDiv:22, speedMod:1.5, tStep:0.08,
+                 harmonic:0.2, harmFreq:3, mirror:1,
+                 hue:110, sat:60, light:50, alpha:115 },
+  "thistle":   { points:13000, amp:6, fx:14, fy:14, fe:7, yOffset:12, baseR:55,
+                 dExp:2.3, dDiv:50, dBase:4, twistAmp:4, stretch:8,
+                 waveBase:3, waveDiv:4, cDiv:2, eDiv:85, tDiv:25, speedMod:1.2, tStep:0.06,
+                 harmonic:0.45, harmFreq:6, radialSym:12,
+                 hue:280, sat:55, light:60, alpha:125 },
+  "palm":      { points:13000, amp:5, fx:22, fy:38, fe:5, yOffset:15, baseR:50,
+                 dExp:1.9, dDiv:70, dBase:3, twistAmp:6, stretch:15,
+                 waveBase:4, waveDiv:7, cDiv:1.4, eDiv:120, tDiv:18, speedMod:1.8, tStep:0.09,
+                 harmonic:0.15, harmFreq:4, radialSym:7,
+                 hue:90, sat:60, light:55, alpha:120 },
+  "moss":      { points:13000, amp:4, fx:10, fy:12, fe:8, yOffset:11, baseR:55,
+                 dExp:2, dDiv:65, dBase:4, twistAmp:2, stretch:4,
+                 waveBase:2, waveDiv:3, cDiv:2.5, eDiv:100, tDiv:38, speedMod:0.6, tStep:0.03,
+                 harmonic:0.3, harmFreq:6,
+                 hue:100, sat:65, light:45, alpha:130 },
+
+  /* ---------- ALGAE ---------- */
+  "kelp":          { points:11000, amp:5, fx:25, fy:60, fe:4, yOffset:16, baseR:40,
+                     dExp:1.7, dDiv:95, dBase:2, twistAmp:3, stretch:25,
+                     waveBase:3, waveDiv:6, cDiv:1.1, eDiv:150, tDiv:16, speedMod:2.5, tStep:0.14,
+                     mirror:1,
+                     hue:140, sat:70, light:45, alpha:110 },
+  "diatom":        { points:13000, amp:4, fx:14, fy:14, fe:8, yOffset:12, baseR:55,
+                     dExp:2.1, dDiv:60, dBase:4, twistAmp:1, stretch:6,
+                     waveBase:2, waveDiv:4, cDiv:2.2, eDiv:90, tDiv:40, speedMod:0.5, tStep:0.025,
+                     harmonic:0.2, harmFreq:5, facet:1.5, radialSym:10,
+                     hue:180, sat:40, light:80, alpha:140 },
+  "spirogyra":     { points:12000, amp:6, fx:18, fy:40, fe:5, yOffset:15, baseR:45,
+                     dExp:2, dDiv:90, dBase:2, twistAmp:1, stretch:20,
+                     waveBase:3, waveDiv:5, cDiv:1.2, eDiv:130, tDiv:20, speedMod:3, tStep:0.125,
+                     harmonic:0.15, harmFreq:4,
+                     hue:120, sat:70, light:55, alpha:100 },
+  "volvox":        { points:12000, amp:4, fx:12, fy:12, fe:9, yOffset:10, baseR:60,
+                     dExp:2, dDiv:60, dBase:4, twistAmp:2, stretch:6,
+                     waveBase:2, waveDiv:5, cDiv:2, eDiv:80, tDiv:30, speedMod:1.2, tStep:0.05,
+                     harmonic:0.3, harmFreq:6, radialSym:16,
+                     hue:155, sat:50, light:70, alpha:125 },
+  "phytoplankton": { points:11000, amp:3, fx:20, fy:30, fe:7, yOffset:12, baseR:55,
+                     dExp:1.8, dDiv:80, dBase:3, twistAmp:2, stretch:8,
+                     waveBase:3, waveDiv:4, cDiv:1.8, eDiv:110, tDiv:28, speedMod:1.5, tStep:0.08,
+                     harmonic:0.2, harmFreq:5, radialSym:5,
+                     hue:170, sat:50, light:78, alpha:95 },
+
+  /* ---------- FUNGI ---------- */
+  "mushroom":      { points:11000, amp:4, fx:12, fy:8, fe:7, yOffset:13, baseR:70,
+                     dExp:1.9, dDiv:65, dBase:4, twistAmp:3, stretch:6,
+                     waveBase:3, waveDiv:4, cDiv:2.2, eDiv:100, tDiv:35, speedMod:0.8, tStep:0.04,
+                     harmonic:0.2, harmFreq:5, mirror:1,
+                     hue:25, sat:60, light:58, alpha:125 },
+  "lichen":        { points:13000, amp:5, fx:10, fy:12, fe:7, yOffset:12, baseR:60,
+                     dExp:2, dDiv:55, dBase:3, twistAmp:4, stretch:8,
+                     waveBase:3, waveDiv:5, cDiv:2, eDiv:90, tDiv:35, speedMod:0.7, tStep:0.03,
+                     harmonic:0.35, harmFreq:6, radialSym:9,
+                     hue:75, sat:45, light:65, alpha:120 },
+  "mycelium":      { points:14000, amp:5, fx:20, fy:35, fe:5, yOffset:14, baseR:40,
+                     dExp:1.8, dDiv:75, dBase:2, twistAmp:6, stretch:16,
+                     waveBase:4, waveDiv:8, cDiv:1.3, eDiv:120, tDiv:22, speedMod:1.8, tStep:0.1,
+                     harmonic:0.25, harmFreq:4,
+                     hue:40, sat:30, light:80, alpha:85 },
+  "bracket":       { points:11000, amp:5, fx:10, fy:10, fe:8, yOffset:12, baseR:65,
+                     dExp:2, dDiv:50, dBase:5, twistAmp:3, stretch:5,
+                     waveBase:2, waveDiv:3, cDiv:2.5, eDiv:80, tDiv:40, speedMod:0.5, tStep:0.02,
+                     harmonic:0.15, harmFreq:7, mirror:1,
+                     hue:30, sat:55, light:50, alpha:140 },
+  "coral-fungus":  { points:13000, amp:6, fx:14, fy:18, fe:6, yOffset:13, baseR:50,
+                     dExp:2.2, dDiv:50, dBase:3, twistAmp:5, stretch:14,
+                     waveBase:4, waveDiv:6, cDiv:1.5, eDiv:80, tDiv:25, speedMod:1.5, tStep:0.07,
+                     harmonic:0.3, harmFreq:5,
+                     hue:10, sat:45, light:72, alpha:115 },
+  "slime-mold":    { points:12000, amp:5, fx:16, fy:28, fe:5, yOffset:14, baseR:55,
+                     dExp:1.9, dDiv:70, dBase:3, twistAmp:4, stretch:12,
+                     waveBase:4, waveDiv:7, cDiv:1.4, eDiv:110, tDiv:20, speedMod:2, tStep:0.11,
+                     harmonic:0.2, harmFreq:4,
+                     hue:60, sat:75, light:65, alpha:130 },
+  "puffball":      { points:10000, amp:3, fx:10, fy:10, fe:9, yOffset:10, baseR:65,
+                     dExp:2, dDiv:55, dBase:5, twistAmp:1, stretch:4,
+                     waveBase:2, waveDiv:3, cDiv:2.5, eDiv:95, tDiv:40, speedMod:0.8, tStep:0.03,
+                     harmonic:0.4, harmFreq:6,
+                     hue:35, sat:20, light:80, alpha:130 },
+
+  /* ---------- MICROBES ---------- */
+  "bacteria":    { points:10000, amp:4, fx:18, fy:32, fe:5, yOffset:14, baseR:35,
+                   dExp:1.6, dDiv:85, dBase:2, twistAmp:4, stretch:15,
+                   waveBase:3, waveDiv:5, cDiv:1.3, eDiv:120, tDiv:22, speedMod:1.8, tStep:0.1,
+                   harmonic:0.2, harmFreq:4, mirror:1,
+                   hue:190, sat:55, light:70, alpha:100 },
+  "paramecium":  { points:11000, amp:5, fx:14, fy:22, fe:6, yOffset:13, baseR:45,
+                   dExp:2, dDiv:65, dBase:3, twistAmp:3, stretch:14,
+                   waveBase:4, waveDiv:6, cDiv:1.5, eDiv:100, tDiv:20, speedMod:2, tStep:0.12,
+                   harmonic:0.35, harmFreq:7, mirror:1,
+                   hue:160, sat:50, light:72, alpha:110 },
+  "virus":       { points:13000, amp:4, fx:10, fy:10, fe:8, yOffset:12, baseR:50,
+                   dExp:2.1, dDiv:55, dBase:4, twistAmp:2, stretch:6,
+                   waveBase:2, waveDiv:4, cDiv:2.3, eDiv:90, tDiv:32, speedMod:1, tStep:0.05,
+                   harmonic:0.25, harmFreq:6, facet:2, radialSym:12,
+                   hue:220, sat:70, light:65, alpha:140 },
+  "amoeba":      { points:11000, amp:6, fx:14, fy:16, fe:6, yOffset:12, baseR:55,
+                   dExp:2, dDiv:50, dBase:3, twistAmp:6, stretch:9,
+                   waveBase:5, waveDiv:8, cDiv:1.6, eDiv:85, tDiv:22, speedMod:2.2, tStep:0.12,
+                   harmonic:0.1, harmFreq:3,
+                   hue:45, sat:45, light:70, alpha:120 },
+  "radiolaria":  { points:14000, amp:3, fx:8, fy:8, fe:9, yOffset:11, baseR:55,
+                   dExp:2.2, dDiv:50, dBase:4, twistAmp:1, stretch:5,
+                   waveBase:2, waveDiv:4, cDiv:2.2, eDiv:85, tDiv:38, speedMod:0.7, tStep:0.028,
+                   harmonic:0.4, harmFreq:7, facet:1.5, radialSym:12,
+                   hue:200, sat:35, light:85, alpha:140 },
+  "tardigrade":  { points:11000, amp:5, fx:9, fy:14, fe:6, yOffset:13, baseR:55,
+                   dExp:2, dDiv:55, dBase:5, twistAmp:4, stretch:8,
+                   waveBase:3, waveDiv:4, cDiv:2, eDiv:80, tDiv:28, speedMod:1.5, tStep:0.075,
+                   harmonic:0.3, harmFreq:5, mirror:1,
+                   hue:55, sat:60, light:65, alpha:125 },
+
+  /* ---------- MINERALS ---------- */
+  "crystal":   { points:12000, amp:3, fx:10, fy:10, fe:9, yOffset:11, baseR:55,
+                 dExp:2.3, dDiv:50, dBase:4, twistAmp:1, stretch:4,
+                 waveBase:2, waveDiv:3, cDiv:2.5, eDiv:90, tDiv:45, speedMod:0.4, tStep:0.02,
+                 harmonic:0.1, harmFreq:3, facet:1.2, radialSym:6,
+                 hue:200, sat:25, light:85, alpha:160 },
+  "snowflake": { points:13000, amp:4, fx:12, fy:12, fe:8, yOffset:12, baseR:60,
+                 dExp:2, dDiv:55, dBase:3, twistAmp:2, stretch:7,
+                 waveBase:3, waveDiv:5, cDiv:2, eDiv:85, tDiv:40, speedMod:0.5, tStep:0.025,
+                 harmonic:0.45, harmFreq:7, facet:1, radialSym:6,
+                 hue:205, sat:20, light:92, alpha:135 },
+  "geode":     { points:11000, amp:3, fx:8, fy:10, fe:8, yOffset:12, baseR:60,
+                 dExp:2.4, dDiv:45, dBase:5, twistAmp:2, stretch:5,
+                 waveBase:2, waveDiv:3, cDiv:3, eDiv:80, tDiv:50, speedMod:0.3, tStep:0.015,
+                 harmonic:0.15, harmFreq:5, facet:0.6, mirror:1,
+                 hue:270, sat:50, light:75, alpha:150 },
+  "dendrite":  { points:14000, amp:5, fx:16, fy:28, fe:5, yOffset:14, baseR:45,
+                 dExp:1.9, dDiv:70, dBase:2, twistAmp:5, stretch:14,
+                 waveBase:4, waveDiv:7, cDiv:1.3, eDiv:100, tDiv:30, speedMod:1.2, tStep:0.05,
+                 harmonic:0.3, harmFreq:6, facet:1.2, radialSym:4,
+                 hue:240, sat:25, light:70, alpha:120 },
+  "mica":      { points:12000, amp:3, fx:15, fy:15, fe:8, yOffset:12, baseR:65,
+                 dExp:2.1, dDiv:60, dBase:5, twistAmp:1, stretch:4,
+                 waveBase:2, waveDiv:4, cDiv:2.5, eDiv:90, tDiv:45, speedMod:0.6, tStep:0.03,
+                 harmonic:0.1, harmFreq:4, facet:0.4, radialSym:8,
+                 hue:240, sat:20, light:88, alpha:130 },
+  "agate":     { points:12000, amp:4, fx:10, fy:10, fe:9, yOffset:10, baseR:65,
+                 dExp:2, dDiv:60, dBase:5, twistAmp:1, stretch:5,
+                 waveBase:3, waveDiv:6, cDiv:2.8, eDiv:95, tDiv:42, speedMod:0.5, tStep:0.022,
+                 harmonic:0.2, harmFreq:6, facet:0.5,
+                 hue:30, sat:60, light:65, alpha:145 },
+  "quartz":    { points:12000, amp:3, fx:12, fy:12, fe:8, yOffset:11, baseR:55,
+                 dExp:2.3, dDiv:48, dBase:4, twistAmp:2, stretch:6,
+                 waveBase:2, waveDiv:3, cDiv:2.3, eDiv:85, tDiv:45, speedMod:0.4, tStep:0.02,
+                 harmonic:0.15, harmFreq:5, facet:1, radialSym:6,
+                 hue:0, sat:0, light:95, alpha:140 },
+
+  /* ---------- COSMIC ---------- */
+  "nebula":    { points:18000, amp:10, fx:22, fy:55, fe:9, yOffset:8, baseR:90,
+                 dExp:1.9, dDiv:120, dBase:1, twistAmp:12, stretch:8,
+                 waveBase:6, waveDiv:12, cDiv:1.5, eDiv:150, tDiv:30, speedMod:2.2, tStep:0.045,
+                 hue:265, sat:60, light:80, alpha:80, bgAlpha:16 },
+  "galaxy":    { points:16000, amp:7, fx:16, fy:30, fe:6, yOffset:13, baseR:55,
+                 dExp:1.8, dDiv:90, dBase:2, twistAmp:8, stretch:12,
+                 waveBase:5, waveDiv:10, cDiv:1.4, eDiv:120, tDiv:20, speedMod:2.5, tStep:0.08,
+                 harmonic:0.15, harmFreq:4, radialSym:2,
+                 hue:235, sat:55, light:78, alpha:90, bgAlpha:20 },
+  "plasma":    { points:14000, amp:8, fx:10, fy:18, fe:5, yOffset:14, baseR:60,
+                 dExp:2, dDiv:65, dBase:2, twistAmp:9, stretch:10,
+                 waveBase:5, waveDiv:12, cDiv:1.3, eDiv:80, tDiv:15, speedMod:3, tStep:0.15,
+                 harmonic:0.3, harmFreq:5,
+                 hue:350, sat:85, light:65, alpha:100, bgAlpha:30 },
+  "aurora":    { points:14000, amp:5, fx:25, fy:50, fe:5, yOffset:14, baseR:70,
+                 dExp:1.7, dDiv:100, dBase:2, twistAmp:7, stretch:18,
+                 waveBase:4, waveDiv:8, cDiv:1.2, eDiv:140, tDiv:16, speedMod:2.8, tStep:0.11,
+                 hue:140, sat:70, light:70, alpha:70, bgAlpha:25 },
+};
+
+// Fill in defaults for every preset so we never read `undefined`
+for (const name of Object.keys(PRESETS)) PRESETS[name] = { ...DEFAULTS, ...PRESETS[name] };
+
+function categoryOf(name) {
+  for (const [cat, list] of Object.entries(CATEGORIES)) if (list.includes(name)) return cat;
+  return "animals";
+}
+
+/* ======================================================================
+   STATE
+   ====================================================================== */
+let P = { ...PRESETS.jellyfish };
+let currentPreset = "jellyfish";
+let currentCategory = "animals";
+let paused = false;
+
+/* ======================================================================
+   UI — categories & presets
+   ====================================================================== */
+const catsEl = document.getElementById("cats");
+const presetsEl = document.getElementById("presets");
+
+function renderCats() {
+  catsEl.innerHTML = "";
+  for (const name of Object.keys(CATEGORIES)) {
+    const b = document.createElement("button");
+    b.className = "cat" + (name === currentCategory ? " active" : "");
+    b.textContent = name;
+    b.addEventListener("click", () => {
+      currentCategory = name;
+      document.getElementById("hud-cat").textContent = name;
+      renderCats();
+      renderPresets();
+    });
+    catsEl.appendChild(b);
+  }
+}
+function renderPresets() {
+  presetsEl.innerHTML = "";
+  for (const name of CATEGORIES[currentCategory]) {
+    const b = document.createElement("button");
+    b.className = "preset" + (name === currentPreset ? " active" : "");
+    b.textContent = name;
+    b.addEventListener("click", () => applyPreset(name));
+    presetsEl.appendChild(b);
+  }
+}
+
+/* ======================================================================
+   UI — collapsible slider sections
+   ====================================================================== */
+const sectionsEl = document.getElementById("sections");
+function buildSections() {
+  sectionsEl.innerHTML = "";
+  for (const key of Object.keys(SCHEMA)) {
+    const sec = SCHEMA[key];
+    const wrap = document.createElement("div");
+    wrap.className = "section" + (sec.open ? " open" : "");
+    wrap.innerHTML = `
+      <div class="section-head">
+        <h2>${sec.label}</h2>
+        <span class="chev">▶</span>
+      </div>
+      <div class="section-body"></div>`;
+    const head = wrap.querySelector(".section-head");
+    head.addEventListener("click", () => wrap.classList.toggle("open"));
+    const body = wrap.querySelector(".section-body");
+    for (const def of sec.fields) body.appendChild(makeSlider(def));
+    sectionsEl.appendChild(wrap);
+  }
+}
+function makeSlider(def) {
+  const row = document.createElement("div");
+  row.className = "slider";
+  row.innerHTML = `
+    <label title="${def.hint || def.k}">${def.label}</label>
+    <input type="range" min="${def.min}" max="${def.max}" step="${def.step}" value="${P[def.k]}" data-k="${def.k}">
+    <span class="val" data-val="${def.k}">${fmt(P[def.k])}</span>`;
+  row.querySelector("input").addEventListener("input", e => {
+    const v = parseFloat(e.target.value);
+    P[def.k] = v;
+    row.querySelector(".val").textContent = fmt(v);
+    setActivePreset(null);
+    renderCode();
+  });
+  return row;
+}
+function fmt(v) { return (Math.abs(v) >= 100 || Number.isInteger(v)) ? String(v) : (+v).toFixed(2); }
+
+function syncSlidersToState() {
+  document.querySelectorAll('input[type="range"][data-k]').forEach(inp => {
+    const k = inp.dataset.k;
+    inp.value = P[k];
+    const val = document.querySelector(`[data-val="${k}"]`);
+    if (val) val.textContent = fmt(P[k]);
+  });
+}
+
+function setActivePreset(name) {
+  currentPreset = name;
+  document.querySelectorAll(".preset").forEach(b =>
+    b.classList.toggle("active", b.textContent === name));
+  document.getElementById("hud-preset").textContent = name || "custom";
+}
+
+function applyPreset(name) {
+  P = { ...PRESETS[name] };
+  currentCategory = categoryOf(name);
+  document.getElementById("hud-cat").textContent = currentCategory;
+  renderCats();
+  renderPresets();
+  setActivePreset(name);
+  syncSlidersToState();
+  renderCode();
+}
+
+/* ======================================================================
+   RANDOMIZE
+   ====================================================================== */
+function randomize() {
+  const skipKeys = new Set(["hue","sat","light","alpha","strokeW","bgAlpha"]);
+  for (const group of Object.values(SCHEMA)) {
+    for (const def of group.fields) {
+      if (skipKeys.has(def.k)) continue;
+      const mid = (def.min + def.max) / 2;
+      const span = (def.max - def.min) * 0.55;
+      let v = mid + (Math.random() - 0.5) * span;
+      v = Math.max(def.min, Math.min(def.max, v));
+      v = (def.step >= 1) ? Math.round(v) : Math.round(v / def.step) * def.step;
+      P[def.k] = v;
+    }
+  }
+  // gentle color
+  P.hue = Math.floor(Math.random() * 360);
+  P.sat = 40 + Math.floor(Math.random() * 55);
+  P.light = 55 + Math.floor(Math.random() * 35);
+  setActivePreset(null);
+  syncSlidersToState();
+  renderCode();
+}
+
+/* ======================================================================
+   BUTTONS & KEYS
+   ====================================================================== */
+document.getElementById("randomize").addEventListener("click", randomize);
+document.getElementById("reseed").addEventListener("click", () => applyPreset(currentPreset || "jellyfish"));
+document.getElementById("pause").addEventListener("click", togglePause);
+document.getElementById("save").addEventListener("click", () => window._p5inst?.saveCanvas(`organism-${currentPreset||"custom"}`, "png"));
+document.getElementById("copy").addEventListener("click", copyCode);
+
+function togglePause() {
+  paused = !paused;
+  const p = window._p5inst;
+  if (!p) return;
+  if (paused) p.noLoop(); else p.loop();
+  document.getElementById("pause").textContent = paused ? "▶ Play" : "⏸ Pause";
+}
+window.addEventListener("keydown", (e) => {
+  if (e.target.tagName === "INPUT") return;
+  if (e.code === "Space") { e.preventDefault(); togglePause(); }
+  if (e.key === "s" || e.key === "S") window._p5inst?.saveCanvas(`organism-${currentPreset||"custom"}`, "png");
+  if (e.key === "r" || e.key === "R") randomize();
+});
+
+/* ======================================================================
+   CODE GENERATION — export to stand-alone p5.js sketch
+   ====================================================================== */
+function hslToRgb(h, s, l) {
+  s /= 100; l /= 100;
+  const k = n => (n + h / 30) % 12;
+  const a = s * Math.min(l, 1 - l);
+  const f = n => l - a * Math.max(-1, Math.min(k(n) - 3, Math.min(9 - k(n), 1)));
+  return [Math.round(f(0) * 255), Math.round(f(8) * 255), Math.round(f(4) * 255)];
+}
+function n(v) {
+  if (Number.isInteger(v)) return String(v);
+  return (+v).toFixed(3).replace(/\.?0+$/, '');
+}
+function buildCode() {
+  const [r,g,b] = hslToRgb(P.hue, P.sat, P.light);
+  const bgLine = P.bgAlpha >= 255
+    ? `background(9);`
+    : `background(9, ${n(P.bgAlpha)});`;
+
+  const harmonicBlock = P.harmonic > 0
+    ? `\n    // harmonic overlay — finer detail\n    k += ${n(P.amp * P.harmonic)} * cos(x / ${n(P.fx/P.harmFreq)}) * cos(y / ${n(P.fy/P.harmFreq)});`
+    : "";
+
+  const facetBlock = P.facet > 0
+    ? `\n    // facet — quantize distance into discrete steps\n    d = floor(d / ${n(P.facet)}) * ${n(P.facet)};`
+    : "";
+
+  const drawBlock = (P.radialSym > 1 || P.mirror > 0)
+    ? buildSymmetryBlock()
+    : `    point(px + width / 2, py + height / 2);`;
+
+  return `// Organism — ${currentPreset || "custom"} (${categoryOf(currentPreset || "jellyfish") || "custom"})
+// Generated by Organism Lab. Paste into editor.p5js.org and hit Run.
+
+let t = 0;
+
+function setup() {
+  createCanvas(560, 560);
+  stroke(${r}, ${g}, ${b}, ${n(P.alpha)});
+  strokeWeight(${n(P.strokeW)});
+}
+
+function draw() {
+  ${bgLine}
+  t += ${n(P.tStep)};
+
+  for (let i = 0; i < ${n(P.points)}; i++) {
+    let x = i % 80;
+    let y = i / 43;
+
+    // trig waves
+    let k = ${n(P.amp)} * cos(x / ${n(P.fx)}) * cos(y / ${n(P.fy)});${harmonicBlock}
+
+    let e = y / ${n(P.fe)} - ${n(P.yOffset)};
+
+    // radial distance — defines the shell of the form
+    let d = pow(mag(k, e), ${n(P.dExp)}) / ${n(P.dDiv)} + ${n(P.dBase)};${facetBlock}
+
+    // angular twist
+    let angleTerm = atan2(k, e);
+    let q = ${n(P.baseR)} - ${n(P.twistAmp)} * sin(angleTerm * e);
+
+    // live ripple driven by time
+    let wave = k * (${n(P.waveBase)} + ${n(P.waveDiv)} / d * sin(d * d - t * ${n(P.speedMod)}));
+
+    let c = d / ${n(P.cDiv)} + e / ${n(P.eDiv)} - t / ${n(P.tDiv)};
+
+    let px = (q + wave) * sin(c);
+    let py = (q + d * ${n(P.stretch)}) * cos(c);
+
+${drawBlock}
+  }
+}
+`;
+}
+function buildSymmetryBlock() {
+  const n_ = P.radialSym;
+  const mirror = P.mirror > 0;
+  if (n_ > 1) {
+    return `    // radial symmetry × ${n_}${mirror ? " + mirror" : ""}
+    for (let s = 0; s < ${n_}; s++) {
+      let a = s * TWO_PI / ${n_};
+      let rx = px * cos(a) - py * sin(a);
+      let ry = px * sin(a) + py * cos(a);
+      point(rx + width / 2, ry + height / 2);${mirror ? `
+      point(-rx + width / 2, ry + height / 2);` : ""}
+    }`;
+  }
+  // mirror only
+  return `    // bilateral mirror
+    point(px + width / 2, py + height / 2);
+    point(-px + width / 2, py + height / 2);`;
+}
+
+function highlight(code) {
+  const esc = s => s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  code = esc(code);
+  code = code.replace(/(\/\/[^\n]*)/g, '<span class="tok-c">$1</span>');
+  code = code.replace(/\b(let|const|for|if|function|return|new|var)\b/g, '<span class="tok-k">$1</span>');
+  code = code.replace(/\b(cos|sin|pow|mag|atan2|point|background|createCanvas|stroke|strokeWeight|setup|draw|width|height|floor|TWO_PI)\b/g, '<span class="tok-f">$1</span>');
+  code = code.replace(/\b(\d+\.?\d*)\b/g, '<span class="tok-n">$1</span>');
+  return code;
+}
+function renderCode() {
+  const src = buildCode();
+  document.getElementById("code").innerHTML = highlight(src);
+  window._currentCode = src;
+}
+function copyCode() {
+  navigator.clipboard.writeText(window._currentCode || buildCode()).then(() => {
+    const b = document.getElementById("copy");
+    const t0 = b.textContent;
+    b.textContent = "✓ copied";
+    setTimeout(() => b.textContent = t0, 1200);
+  });
+}
+
+/* ======================================================================
+   p5 SKETCH (instance mode) — runs live in the canvas
+   ====================================================================== */
+let tTime = 0;
+const sketch = (p) => {
+  let W = 560, H = 560;
+  p.setup = () => {
+    const host = document.getElementById("canvas-host");
+    const avail = Math.min(
+      window.innerHeight - 32,
+      (host.parentElement?.clientWidth || 600) - 32,
+      720
+    );
+    W = H = Math.max(360, avail);
+    p.createCanvas(W, H);
+    p.pixelDensity(window.devicePixelRatio > 1 ? 2 : 1);
+  };
+
+  p.draw = () => {
+    const [r,g,b] = hslToRgb(P.hue, P.sat, P.light);
+    if (P.bgAlpha >= 255) p.background(9);
+    else p.background(9, P.bgAlpha);
+    p.stroke(r, g, b, P.alpha);
+    p.strokeWeight(P.strokeW);
+
+    tTime += P.tStep;
+
+    const { amp, fx, fy, fe, yOffset, dExp, dDiv, dBase,
+            baseR, twistAmp, stretch,
+            waveBase, waveDiv, cDiv, eDiv, tDiv, speedMod, points,
+            harmonic, harmFreq, facet, radialSym, mirror } = P;
+
+    const cx = W / 2, cy = H / 2;
+    const usesSym = radialSym > 1 || mirror > 0;
+    // precompute rotations
+    const rotCos = [], rotSin = [];
+    if (radialSym > 1) {
+      for (let s = 0; s < radialSym; s++) {
+        const a = s * Math.PI * 2 / radialSym;
+        rotCos.push(Math.cos(a));
+        rotSin.push(Math.sin(a));
+      }
+    }
+
+    for (let i = 0; i < points; i++) {
+      const x = i % 80;
+      const y = i / 43;
+
+      let k = amp * Math.cos(x / fx) * Math.cos(y / fy);
+      if (harmonic > 0) {
+        k += amp * harmonic * Math.cos(x / (fx / harmFreq)) * Math.cos(y / (fy / harmFreq));
+      }
+      const e = y / fe - yOffset;
+
+      let d = Math.pow(Math.hypot(k, e), dExp) / dDiv + dBase;
+      if (facet > 0) d = Math.floor(d / facet) * facet;
+
+      const angleTerm = Math.atan2(k, e);
+      const q = baseR - twistAmp * Math.sin(angleTerm * e);
+      const wave = k * (waveBase + waveDiv / d * Math.sin(d * d - tTime * speedMod));
+      const c = d / cDiv + e / eDiv - tTime / tDiv;
+
+      const px = (q + wave) * Math.sin(c);
+      const py = (q + d * stretch) * Math.cos(c);
+
+      if (!usesSym) {
+        p.point(px + cx, py + cy);
+      } else if (radialSym > 1) {
+        for (let s = 0; s < radialSym; s++) {
+          const rx = px * rotCos[s] - py * rotSin[s];
+          const ry = px * rotSin[s] + py * rotCos[s];
+          p.point(rx + cx, ry + cy);
+          if (mirror) p.point(-rx + cx, ry + cy);
+        }
+      } else { // mirror only
+        p.point(px + cx, py + cy);
+        p.point(-px + cx, py + cy);
+      }
+    }
+  };
+
+  p.windowResized = () => {
+    const host = document.getElementById("canvas-host");
+    const avail = Math.min(
+      window.innerHeight - 32,
+      (host.parentElement?.clientWidth || 600) - 32,
+      720
+    );
+    W = H = Math.max(360, avail);
+    p.resizeCanvas(W, H);
+  };
+};
+
+/* ======================================================================
+   BOOT
+   ====================================================================== */
+renderCats();
+renderPresets();
+buildSections();
+renderCode();
+window._p5inst = new p5(sketch, "canvas-host");
+</script>
+</body>
+</html>

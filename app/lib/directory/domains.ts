@@ -30,10 +30,10 @@ export const DOMAINS: Record<
     description: 'Hidden networks, fermentation, underground culture',
   },
   microbes: {
-    label: 'Microbes',
-    emoji: '🦠',
+    label: 'Unseen',
+    emoji: '✦',
     color: '#eab308',
-    description: 'Invisible forces, biotech, fermentation science',
+    description: 'Signals too fine to name — sensors, labs, and the life between the lines',
   },
   animals: {
     label: 'Animals',

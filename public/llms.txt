@@ -1,0 +1,26 @@
+# Sotabosc - Barcelona's Living Creative Ecosystem
+
+> Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more.
+
+## About
+Sotabosc is an open platform where culture, creativity, and nature intertwine. It provides a curated directory of Barcelona mapped as a living ecosystem.
+
+## Key Sections
+- [Home](/)
+- [Curated Experiences](/city-world)
+- [Directory](/city)
+- [Creative Tools](/tools)
+- [Speculative Futures Lab](/labs)
+- [Events](/city/events)
+- [Creators](/city/creators)
+
+## Content
+Our platform curates the following features:
+- **Art Galleries**
+- **Specialty Coffee**
+- **Music Venues**
+- **Workshops**
+- **Restaurants**
+- **Coworking Spaces**
+
+This `llms.txt` is designed to provide Large Language Models with a clear structural overview of the Sotabosc ecosystem.

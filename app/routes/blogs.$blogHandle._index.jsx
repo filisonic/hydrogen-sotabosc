@@ -2,6 +2,7 @@ import {Link, useLoaderData} from 'react-router';
 import {Image, getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
+import { motion } from 'framer-motion';
 
 /**
  * @type {Route.MetaFunction}
@@ -72,51 +73,92 @@ export default function Blog() {
   const {articles} = blog;
 
   return (
-    <div className="blog">
-      <h1>{blog.title}</h1>
-      <div className="blog-grid">
-        <PaginatedResourceSection connection={articles}>
-          {({node: article, index}) => (
-            <ArticleItem
-              article={article}
-              key={article.id}
-              loading={index < 2 ? 'eager' : 'lazy'}
-            />
-          )}
-        </PaginatedResourceSection>
-      </div>
+    <div className="mag" style={{ backgroundColor: '#fff', color: '#000' }}>
+      <section style={{ padding: '10rem 2rem 4rem', maxWidth: '1400px', margin: '0 auto' }}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+        >
+          <Link to="/blogs" style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', textDecoration: 'none', color: 'var(--sotabosc-accent)', display: 'block', marginBottom: '2rem' }}>← Back to Issues</Link>
+          <h1 style={{ fontSize: 'clamp(3rem, 10vw, 8rem)', fontWeight: 900, lineHeight: 0.8, letterSpacing: '-0.05em', margin: 0 }}>
+            {blog.title}
+          </h1>
+        </motion.div>
+      </section>
+
+      <main className="max-w-[1400px] mx-auto px-6 pb-32">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12, 1fr)', gap: '4rem' }}>
+          <PaginatedResourceSection connection={articles}>
+            {({node: article, index}) => (
+              <ArticleItem
+                article={article}
+                key={article.id}
+                index={index}
+                loading={index < 2 ? 'eager' : 'lazy'}
+              />
+            )}
+          </PaginatedResourceSection>
+        </div>
+      </main>
     </div>
   );
 }
 
-/**
- * @param {{
- *   article: ArticleItemFragment;
- *   loading?: HTMLImageElement['loading'];
- * }}
- */
-function ArticleItem({article, loading}) {
+function ArticleItem({article, loading, index}) {
   const publishedAt = new Intl.DateTimeFormat('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
   }).format(new Date(article.publishedAt));
+
+  // Create an asymmetrical layout based on index
+  const isLarge = index % 3 === 0;
+  const gridColumn = isLarge ? 'span 12' : 'span 6';
+  
   return (
-    <div className="blog-article" key={article.id}>
-      <Link to={`/blogs/${article.blog.handle}/${article.handle}`}>
-        {article.image && (
-          <div className="blog-article-image">
-            <Image
-              alt={article.image.altText || article.title}
-              aspectRatio="3/2"
-              data={article.image}
-              loading={loading}
-              sizes="(min-width: 768px) 50vw, 100vw"
-            />
+    <div style={{ gridColumn }} className="group">
+      <Link 
+        to={`/blogs/${article.blog.handle}/${article.handle}`} 
+        style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+      >
+        <div style={{ display: 'flex', flexDirection: isLarge ? 'row' : 'column', gap: '3rem', alignItems: 'flex-start' }}>
+          {article.image && (
+            <div style={{ 
+              width: isLarge ? '60%' : '100%', 
+              aspectRatio: isLarge ? '16/9' : '4/5',
+              overflow: 'hidden',
+              backgroundColor: '#f5f5f5'
+            }}>
+              <Image
+                alt={article.image.altText || article.title}
+                data={article.image}
+                loading={loading}
+                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+              />
+            </div>
+          )}
+          <div style={{ flex: 1, paddingTop: isLarge ? '2rem' : '0' }}>
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <span style={{ fontSize: '0.7rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{publishedAt}</span>
+              <span style={{ width: '20px', height: '1px', background: '#000' }}></span>
+              <span style={{ fontSize: '0.7rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--sotabosc-accent)' }}>Premium Content</span>
+            </div>
+            <h3 style={{ 
+              fontSize: isLarge ? 'clamp(2rem, 5vw, 4.5rem)' : '2rem', 
+              fontWeight: 900, 
+              lineHeight: 1, 
+              letterSpacing: '-0.02em',
+              marginBottom: '1.5rem' 
+            }}>
+              {article.title}
+            </h3>
+            <p style={{ fontSize: '1rem', lineHeight: 1.6, opacity: 0.6, marginBottom: '2rem', maxWidth: '500px' }}>
+              {article.contentHtml?.replace(/<[^>]*>?/gm, '').slice(0, 150)}...
+            </p>
+            <span style={{ fontSize: '0.8rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.2em', borderBottom: '2px solid #000', paddingBottom: '0.5rem' }}>Read Article</span>
           </div>
-        )}
-        <h3>{article.title}</h3>
-        <small>{publishedAt}</small>
+        </div>
       </Link>
     </div>
   );

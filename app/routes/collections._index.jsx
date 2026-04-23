@@ -10,7 +10,7 @@ import {canonicalLinkMeta} from '~/lib/seo/metaHelpers';
 export const meta = ({data}) => {
   const origin = data?.origin;
   return [
-    {title: 'Shop — Sotabosc'},
+    {title: 'Store — Sotabosc'},
     {
       name: 'description',
       content:
@@ -82,7 +82,7 @@ export default function Collections() {
               Shopify storefront
             </p>
             <h1 className="text-4xl md:text-5xl font-black tracking-tight mb-4 font-[family-name:var(--font-display)]">
-              Shop
+              Store
             </h1>
             <p className="text-lg max-w-2xl mb-8" style={{color: 'var(--sotabosc-muted)'}}>
               Collections group our listings — pick a theme or jump straight to the full catalog.
