@@ -244,7 +244,7 @@ main.mag-nav-main-offset {
 .mag-home-ecosphere {
   background-color: var(--pink);
   color: #fff;
-  padding: clamp(3.5rem, 9vw, 5.5rem) 2rem;
+  padding: clamp(2.25rem, 6vw, 3.5rem) 1.25rem;
   border-bottom: 4px solid var(--ink);
   position: relative;
 }
@@ -253,7 +253,7 @@ main.mag-nav-main-offset {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: clamp(2rem, 4vw, 3rem);
+  gap: clamp(1rem, 2.5vw, 1.75rem);
   align-items: stretch;
 }
 .mag-home-ecosphere-grids {
@@ -275,14 +275,14 @@ main.mag-nav-main-offset {
   opacity: 0.72;
 }
 .mag-home-ecosphere-copy h2 {
-  margin: 0 0 1rem;
+  margin: 0 0 0.65rem;
 }
 .mag-home-ecosphere-lede {
-  font-size: var(--step-1);
+  font-size: var(--step-0);
   font-weight: 700;
-  line-height: 1.35;
-  max-width: 34rem;
-  margin: 0 0 1.5rem;
+  line-height: 1.3;
+  max-width: 38rem;
+  margin: 0 0 0.9rem;
   opacity: 0.95;
 }
 .mag-home-ecosphere-cta {
@@ -393,7 +393,7 @@ main.mag-nav-main-offset {
 .mag-home-domains {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 7px;
 }
 @media (min-width: 640px) {
   .mag-home-domains {
@@ -404,7 +404,7 @@ main.mag-nav-main-offset {
   display: block;
   text-decoration: none;
   color: inherit;
-  padding: 0.5rem 0.5rem 0.55rem 0.55rem;
+  padding: 0.45rem 0.45rem 0.5rem 0.5rem;
   border: 1px solid oklch(100% 0 0 / 0.32);
   background: oklch(12% 0.05 330 / 0.3);
   transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.2s, background 0.2s;
@@ -431,9 +431,9 @@ main.mag-nav-main-offset {
   display: block;
 }
 .mag-home-domain-blurb {
-  font-size: 9px;
-  line-height: 1.35;
-  margin: 5px 0 0;
+  font-size: 8px;
+  line-height: 1.3;
+  margin: 4px 0 0;
   padding-left: 34px;
   opacity: 0.8;
   font-weight: 500;

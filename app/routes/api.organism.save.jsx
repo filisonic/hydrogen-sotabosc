@@ -29,9 +29,11 @@ export async function action({ request, context }) {
         // If we only have anon key, we can do a magic link signup or just sign in with OTP.
         // For a seamless "save" experience without requiring password creation right now,
         // we can trigger an OTP signup which creates the user and sends a magic link.
+        const siteUrl = context.env.PUBLIC_SITE_URL || 'https://sotabosc.world';
         const { data: authData, error: authError } = await supabase.auth.signInWithOtp({
             email: email.toString(),
             options: {
+                emailRedirectTo: `${siteUrl}/account/authorize`,
                 data: {
                     domain: domain.toString(),
                     organism_name: organismName?.toString(),

@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { MAG_IMAGE_COVER, MAG_IMAGE_PERKS } from '~/lib/magAssets';
 
 export const meta = () => [
@@ -308,13 +309,7 @@ export default function MembershipIndex() {
                 <li style={{ marginBottom: '1.5rem' }}>★ Monthly Original Art Artifact</li>
                 <li style={{ marginBottom: '1.5rem' }}>★ Speculative Lab Early Access</li>
               </ul>
-              <button 
-                onClick={() => alert('Checkout integration pending!')}
-                className="mag-btn"
-                style={{ width: '100%', textAlign: 'center', background: 'var(--y)', color: 'var(--ink)' }}
-              >
-                Join the Network
-              </button>
+              <JoinForm />
             </motion.div>
 
           </div>
@@ -348,5 +343,206 @@ export default function MembershipIndex() {
         </motion.div>
       </section>
     </div>
+  );
+}
+
+function JoinForm() {
+  const [mode, setMode] = useState('idle'); // idle | pay | waitlist
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [status, setStatus] = useState('idle'); // idle | loading | success | error
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleWaitlist = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    setStatus('loading');
+    setErrorMsg('');
+    try {
+      const fd = new FormData();
+      fd.append('email', email);
+      fd.append('name', name);
+      const res = await fetch('/api/membership/join', { method: 'POST', body: fd });
+      const json = await res.json();
+      if (res.ok) {
+        setStatus('success');
+      } else {
+        setErrorMsg(json.error || 'Something went wrong.');
+        setStatus('error');
+      }
+    } catch {
+      setErrorMsg('Network error. Please try again.');
+      setStatus('error');
+    }
+  };
+
+  const handleCheckout = async () => {
+    setStatus('loading');
+    setErrorMsg('');
+    try {
+      const res = await fetch('/api/membership/checkout', { method: 'POST' });
+      if (res.redirected) {
+        window.location.href = res.url;
+        return;
+      }
+      // If not redirected, parse error
+      const json = await res.json();
+      setErrorMsg(json.error || 'Could not start checkout.');
+      setStatus('error');
+    } catch {
+      setErrorMsg('Network error. Please try again.');
+      setStatus('error');
+    }
+  };
+
+  if (status === 'success') {
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        style={{
+          background: 'rgba(255,255,255,0.15)',
+          border: '2px solid rgba(255,255,255,0.4)',
+          padding: '2rem',
+          textAlign: 'center',
+        }}
+      >
+        <p style={{ fontSize: 'var(--step-1)', fontWeight: 900, marginBottom: '0.5rem' }}>
+          You're on the list.
+        </p>
+        <p style={{ fontSize: 'var(--step--1)', opacity: 0.8 }}>
+          Check your email — a magic link is waiting. We'll reach out to founding
+          members as soon as payments go live.
+        </p>
+      </motion.div>
+    );
+  }
+
+  if (mode === 'idle') {
+    return (
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <button
+          type="button"
+          onClick={handleCheckout}
+          disabled={status === 'loading'}
+          className="mag-btn"
+          style={{
+            width: '100%',
+            textAlign: 'center',
+            background: 'var(--y)',
+            color: 'var(--ink)',
+            opacity: status === 'loading' ? 0.6 : 1,
+          }}
+        >
+          {status === 'loading' ? 'Connecting…' : 'Join Now — €50 / month'}
+        </button>
+
+        {errorMsg && (
+          <p style={{ color: 'var(--y)', fontSize: 'var(--step--1)', fontWeight: 700, textAlign: 'center' }}>
+            {errorMsg}
+          </p>
+        )}
+
+        <button
+          type="button"
+          onClick={() => setMode('waitlist')}
+          style={{
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            color: 'rgba(255,255,255,0.55)',
+            fontSize: 'var(--step--2)',
+            fontWeight: 700,
+            textDecoration: 'underline',
+            textUnderlineOffset: '3px',
+            padding: '0.25rem 0',
+          }}
+        >
+          Not ready to pay yet? Reserve your spot on the waitlist →
+        </button>
+      </div>
+    );
+  }
+
+  // Waitlist form
+  return (
+    <motion.form
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      onSubmit={handleWaitlist}
+      style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}
+    >
+      <input
+        type="text"
+        placeholder="Your name (optional)"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+        style={{
+          padding: '1rem 1.25rem',
+          fontSize: 'var(--step-0)',
+          fontWeight: 700,
+          border: '3px solid rgba(255,255,255,0.5)',
+          background: 'rgba(255,255,255,0.1)',
+          color: '#fff',
+          outline: 'none',
+        }}
+      />
+      <input
+        type="email"
+        required
+        placeholder="Your email *"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        style={{
+          padding: '1rem 1.25rem',
+          fontSize: 'var(--step-0)',
+          fontWeight: 700,
+          border: '3px solid rgba(255,255,255,0.5)',
+          background: 'rgba(255,255,255,0.1)',
+          color: '#fff',
+          outline: 'none',
+        }}
+      />
+      {status === 'error' && (
+        <p style={{ color: 'var(--y)', fontSize: 'var(--step--1)', fontWeight: 700 }}>
+          {errorMsg}
+        </p>
+      )}
+      <p style={{ fontSize: 'var(--step--2)', opacity: 0.65, margin: 0 }}>
+        We'll email you as soon as founding memberships open. No charge yet.
+      </p>
+      <div style={{ display: 'flex', gap: '0.75rem' }}>
+        <button
+          type="button"
+          onClick={() => setMode('idle')}
+          style={{
+            flex: '0 0 auto',
+            background: 'none',
+            border: '2px solid rgba(255,255,255,0.3)',
+            color: '#fff',
+            padding: '0.9rem 1.25rem',
+            fontWeight: 700,
+            fontSize: 'var(--step--1)',
+            cursor: 'pointer',
+          }}
+        >
+          ←
+        </button>
+        <button
+          type="submit"
+          disabled={status === 'loading'}
+          className="mag-btn"
+          style={{
+            flex: 1,
+            textAlign: 'center',
+            background: 'var(--y)',
+            color: 'var(--ink)',
+            opacity: status === 'loading' ? 0.6 : 1,
+          }}
+        >
+          {status === 'loading' ? 'Saving…' : 'Reserve My Spot'}
+        </button>
+      </div>
+    </motion.form>
   );
 }

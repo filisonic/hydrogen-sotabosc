@@ -2,7 +2,8 @@ import {useLoaderData, Link} from 'react-router';
 import {motion} from 'framer-motion';
 import { JsonLd } from '~/components/seo/JsonLd';
 import {DOMAIN_KEYS, DOMAINS} from '~/lib/directory/domains';
-import {MagDomainGlyph, MagLayerGlyph} from '~/components/mag/MagEcosphereGlyphs';
+import {MagDomainGlyph} from '~/components/mag/MagEcosphereGlyphs';
+import {resolveEventImageUrl, resolvePlaceImageUrl} from '~/lib/directory/sceneVisuals';
 
 export const meta = () => [
   {title: "Sotabosc — Barcelona's Living Creative Ecosystem"},
@@ -20,25 +21,54 @@ export const meta = () => [
 export async function loader() {
   try {
     const {SEED_PLACES, SEED_EVENTS, SEED_CREATORS, SEED_REVIEWS, getUpcomingEvents} = await import('~/lib/directory/seed.server');
-    const {VENUE_LOCAL_IMAGE_BY_SLUG} = await import('~/lib/directory/venueImages.generated');
     const upcoming = getUpcomingEvents();
-    const addImg = (p) => ({...p, imageUrl: VENUE_LOCAL_IMAGE_BY_SLUG[p.slug] || null});
+    const placesById = new Map(SEED_PLACES.map((place) => [place.id, place]));
+    const eventImageByPlaceSlug = new Map();
+
+    for (const ev of SEED_EVENTS) {
+      const eventPlace = ev.placeId ? placesById.get(ev.placeId) : null;
+      if (!eventPlace || eventImageByPlaceSlug.has(eventPlace.slug)) continue;
+      const resolvedEventImage = resolveEventImageUrl(ev, eventPlace);
+      if (resolvedEventImage) eventImageByPlaceSlug.set(eventPlace.slug, resolvedEventImage);
+    }
+
+    const addImg = (p) => {
+      return {
+        ...p,
+        imageUrl:
+          p.imageUrl ||
+          eventImageByPlaceSlug.get(p.slug) ||
+          resolvePlaceImageUrl(p) ||
+          null,
+      };
+    };
     const galleries = SEED_PLACES.filter(p => p.categories.includes('art-gallery')).slice(0, 4).map(addImg);
     const coffee = SEED_PLACES.filter(p => p.categories.includes('specialty-coffee')).slice(0, 3).map(addImg);
     const music = SEED_PLACES.filter(p => p.categories.includes('music-venue')).slice(0, 3).map(addImg);
     const workshops = SEED_PLACES.filter(p => p.categories.includes('workshop')).slice(0, 3).map(addImg);
     const restaurants = SEED_PLACES.filter(p => p.categories.includes('restaurant')).slice(0, 3).map(addImg);
+    const featuredImage =
+      upcoming
+        .map((ev) => resolveEventImageUrl(ev, ev.placeId ? placesById.get(ev.placeId) : null))
+        .find(Boolean) ||
+      galleries[0]?.imageUrl ||
+      coffee[0]?.imageUrl ||
+      music[0]?.imageUrl ||
+      workshops[0]?.imageUrl ||
+      restaurants[0]?.imageUrl ||
+      null;
     return {
       upcomingEvents: upcoming.slice(0, 6),
       galleries, coffee, music, workshops, restaurants,
       creators: SEED_CREATORS.slice(0, 6),
       reviews: SEED_REVIEWS.slice(0, 4),
+      featuredImage,
       totalPlaces: SEED_PLACES.length,
       totalEvents: SEED_EVENTS.length,
       totalCreators: SEED_CREATORS.length,
     };
   } catch (e) {
-    return {upcomingEvents:[], galleries:[], coffee:[], music:[], workshops:[], restaurants:[], creators:[], reviews:[], totalPlaces:0, totalEvents:0, totalCreators:0};
+    return {upcomingEvents:[], galleries:[], coffee:[], music:[], workshops:[], restaurants:[], creators:[], reviews:[], featuredImage:null, totalPlaces:0, totalEvents:0, totalCreators:0};
   }
 }
 
@@ -59,16 +89,6 @@ const PLACE_META = {
   'coworking':         { icon: '💻', gradient: 'linear-gradient(135deg, #d0f0e6 0%, #c4e8dc 50%, #b8e0d2 100%)' },
 };
 const DEFAULT_META = { icon: '📍', gradient: 'linear-gradient(135deg, #f0edd0 0%, #e8e5c4 50%, #e0ddb8 100%)' };
-
-/** Six layers of the city-world journey — same language as Curated Experiences */
-const ECO_LAYERS = [
-  {i: '01', slug: 'sky', title: 'Sky', blurb: 'Light, weather, and signal — where the city meets the open air.'},
-  {i: '02', slug: 'canopy', title: 'Canopy', blurb: 'Visible culture — openings, rooftops, and the stories everyone sees.'},
-  {i: '03', slug: 'understory', title: 'Understory', blurb: 'Shade and texture — studios, cafés, and the work just below the canopy.'},
-  {i: '04', slug: 'forest-floor', title: 'Forest floor', blurb: 'Ground-level rhythm — shops, venues, and daily creative life.'},
-  {i: '05', slug: 'water', title: 'Water', blurb: 'Flow and exchange — events, transit, and how people move through the map.'},
-  {i: '06', slug: 'soil', title: 'Soil', blurb: 'Roots and residue — archives, research, and what feeds the next season.'},
-];
 
 function PlaceCard({p}) {
   const meta = p.categories?.map(c => PLACE_META[c]).find(Boolean) || DEFAULT_META;
@@ -181,7 +201,7 @@ export default function Homepage() {
               className="mag-home-hero-aside"
             >
                <p style={{ fontSize: 'var(--step-2)', fontWeight: 800, lineHeight: 1.1, color: 'var(--ink)', maxWidth: '500px' }}>
-                We are mapping the mycelial networks of Barcelona. From independent studios to speculative labs.
+                We map Barcelona’s creative network through places, events, and creators shaped by sustainability, community, and spirit.
               </p>
               <div className="mag-home-cta-row">
                 <Link to="/city-world" className="mag-btn">Explore Directory</Link>
@@ -205,128 +225,18 @@ export default function Homepage() {
         </div>
       </div>
 
-      {/* ═══════════════ ECOSYSTEM MAP (mycelial band) ═══════════════ */}
-      <section className="mag-home-ecosphere">
-        <div className="mag-home-ecosphere-inner">
-          <motion.div
-            className="mag-home-ecosphere-copy"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span style={{ fontSize: 'var(--step--1)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', marginBottom: '1rem', display: 'block', opacity: 0.9 }}>
-              The Mycelial Call
-            </span>
-            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, var(--step-5))', fontWeight: 900, lineHeight: 0.9, letterSpacing: '-0.05em', textTransform: 'uppercase' }}>
-              Six layers. <br />Six domains.
-            </h2>
-            <p className="mag-home-ecosphere-lede">
-              <strong>Layers</strong> are how you move through the map — sky to soil in City world. <strong>Domains</strong> are how you choose to belong — plants, algae, fungi, unseen, animals, or earth — so trips and listings can match your vibe. Browse the directory, then descend the forest.
-            </p>
-            <div className="mag-home-ecosphere-cta">
-              <Link to="/membership" className="mag-pill mag-pill-primary">
-                Membership — from €50/mo
-              </Link>
-              <Link to="/city-world">Enter City world →</Link>
-            </div>
-          </motion.div>
-
-          <div className="mag-home-ecosphere-grids">
-            <motion.div
-              className="mag-home-stack"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-40px' }}
-              variants={{
-                hidden: {},
-                visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
-              }}
-            >
-              <h3 className="mag-home-stack-label">Layers — where you scroll</h3>
-              <div className="mag-home-layers">
-                {ECO_LAYERS.map((layer) => (
-                  <motion.div
-                    key={layer.slug}
-                    variants={{
-                      hidden: { opacity: 0, y: 14 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
-                    }}
-                  >
-                    <Link to="/city-world" className="mag-home-layer">
-                      <div className="mag-home-card-head">
-                        <span className="mag-home-icon-slot mag-home-icon-slot--layer">
-                          <MagLayerGlyph slug={layer.slug} size={14} color="rgba(255,255,255,0.88)" />
-                        </span>
-                        <div className="mag-home-card-head-text">
-                          <span className="mag-home-layer-index">Layer {layer.i}</span>
-                          <span className="mag-home-layer-title">{layer.title}</span>
-                        </div>
-                      </div>
-                      <p className="mag-home-layer-blurb">{layer.blurb}</p>
-                    </Link>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              className="mag-home-stack"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: '-40px' }}
-              variants={{
-                hidden: {},
-                visible: { transition: { staggerChildren: 0.06, delayChildren: 0.12 } },
-              }}
-            >
-              <h3 className="mag-home-stack-label">Domains — how you enter</h3>
-              <div className="mag-home-domains">
-                {DOMAIN_KEYS.map((domainKey, idx) => {
-                  const domain = DOMAINS[domainKey];
-                  return (
-                    <motion.div
-                      key={domainKey}
-                      variants={{
-                        hidden: { opacity: 0, y: 14 },
-                        visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
-                      }}
-                    >
-                      <Link
-                        to="/city-world"
-                        className="mag-home-domain"
-                        style={{ borderLeft: `3px solid ${domain.color}` }}
-                      >
-                        <div className="mag-home-card-head">
-                          <span className="mag-home-icon-slot mag-home-icon-slot--domain">
-                            <MagDomainGlyph
-                              domainKey={domainKey}
-                              size={14}
-                              color={domain.color}
-                            />
-                          </span>
-                          <div className="mag-home-card-head-text">
-                            <span className="mag-home-domain-index">
-                              Domain {(idx + 1).toString().padStart(2, '0')}
-                            </span>
-                            <span className="mag-home-domain-title">{domain.label}</span>
-                          </div>
-                        </div>
-                        <p className="mag-home-domain-blurb">{domain.description}</p>
-                      </Link>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
       {/* ═══════════════ FEATURED ═══════════════ */}
       <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Featured</h2></div></div>
       <div className="mag-feat">
-        <Link to="/city-world" className="mag-feat-main">
+        <Link
+          to="/city-world"
+          className="mag-feat-main"
+          style={d.featuredImage ? {
+            backgroundImage: `linear-gradient(rgba(20,16,8,0.45), rgba(20,16,8,0.78)), url(${d.featuredImage})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          } : undefined}
+        >
           <span className="mag-feat-main-tag">Curated Experiences</span>
           <h3>Descend Through Barcelona's Living Layers</h3>
           <p>Sky → canopy → understory → forest floor → water → soil. An immersive vertical journey mapping the city to the natural world.</p>
@@ -401,10 +311,98 @@ export default function Homepage() {
         </div>
       </>)}
 
+      {/* ═══════════════ ECOSYSTEM MAP (mycelial band) ═══════════════ */}
+      <section className="mag-home-ecosphere">
+        <div className="mag-home-ecosphere-inner">
+          <motion.div
+            className="mag-home-ecosphere-copy"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <span style={{ fontSize: 'var(--step--1)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', marginBottom: '1rem', display: 'block', opacity: 0.9 }}>
+              The Mycelial Call
+            </span>
+            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, var(--step-5))', fontWeight: 900, lineHeight: 0.9, letterSpacing: '-0.05em', textTransform: 'uppercase' }}>
+              Six domains.
+            </h2>
+            <p className="mag-home-ecosphere-lede">
+              Choose your entry point into the ecosystem — plants, algae, fungi, unseen, animals, or earth — so listings, trips, and future paths match your vibe.
+            </p>
+            <div className="mag-home-ecosphere-cta">
+              <Link to="/membership" className="mag-pill mag-pill-primary">
+                Membership — from €50/mo
+              </Link>
+              <Link to="/city-world">Enter City world →</Link>
+            </div>
+          </motion.div>
+
+          <motion.div
+            className="mag-home-stack"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-40px' }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
+            }}
+          >
+            <h3 className="mag-home-stack-label">Domains — how you enter</h3>
+            <div className="mag-home-domains">
+              {DOMAIN_KEYS.map((domainKey, idx) => {
+                const domain = DOMAINS[domainKey];
+                return (
+                  <motion.div
+                    key={domainKey}
+                    variants={{
+                      hidden: { opacity: 0, y: 14 },
+                      visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+                    }}
+                  >
+                    <Link
+                      to="/city-world"
+                      className="mag-home-domain"
+                      style={{ borderLeft: `3px solid ${domain.color}` }}
+                    >
+                      <div className="mag-home-card-head">
+                        <span className="mag-home-icon-slot mag-home-icon-slot--domain">
+                          <MagDomainGlyph
+                            domainKey={domainKey}
+                            size={14}
+                            color={domain.color}
+                          />
+                        </span>
+                        <div className="mag-home-card-head-text">
+                          <span className="mag-home-domain-index">
+                            Domain {(idx + 1).toString().padStart(2, '0')}
+                          </span>
+                          <span className="mag-home-domain-title">{domain.label}</span>
+                        </div>
+                      </div>
+                      <p className="mag-home-domain-blurb">{domain.description}</p>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ═══════════════ EXPLORE MORE ═══════════════ */}
       <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Explore More</h2></div></div>
       <div className="mag-feat">
-        <Link to="/labs" className="mag-feat-main" style={{ background: '#1a1a1a' }}>
+        <Link
+          to="/labs"
+          className="mag-feat-main"
+          style={{
+            backgroundImage:
+              'linear-gradient(rgba(20,16,8,0.52), rgba(20,16,8,0.82)), url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&h=800&q=80)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
           <span className="mag-feat-main-tag">Speculative Futures Lab</span>
           <h3>Research at the Edge of Nature and Technology</h3>
           <p>Speculative design, embodied interaction, and emergent systems — four active research areas.</p>

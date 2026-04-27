@@ -73,24 +73,25 @@ async function loadCriticalData({ context }) {
 
 export default function CityWorld() {
   const data = useLoaderData();
+  const directory = data?.directory || { places: [], events: [], creators: [] };
 
   return (
     <WorldShell>
       <header
-        className="relative z-[120] border-b mag pt-8"
+        className="relative z-[120] border-b mag pt-4 md:pt-5"
         style={{
           borderColor: 'var(--border)',
           backgroundColor: 'var(--bg)',
           color: 'var(--ink)'
         }}
       >
-        <div className="max-w-6xl mx-auto px-4 pb-12 text-center sm:text-left">
+        <div className="max-w-6xl mx-auto px-4 pb-4 md:pb-5 text-center sm:text-left">
           <p className="text-[10px] font-bold uppercase tracking-[0.35em] opacity-50 mb-2" style={{fontFamily: 'var(--mono)'}}>Sotabosc · Barcelona</p>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight" style={{fontFamily: 'var(--sans)'}}>
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight leading-tight mb-2" style={{fontFamily: 'var(--sans)'}}>
             Nature is the map.{' '}
             <span className="opacity-70">Community is the city.</span>
           </h1>
-          <p className="text-sm mt-3 max-w-2xl opacity-70" style={{fontFamily: 'var(--sans)'}}>
+          <p className="text-sm max-w-2xl opacity-70" style={{fontFamily: 'var(--sans)'}}>
             Scroll through the forest, then explore places, events, and creators matched to your domain — or browse
             everything before you choose.
           </p>
@@ -98,51 +99,80 @@ export default function CityWorld() {
         <DomainSelector variant="strip" />
       </header>
 
-      <ScrollWorld directory={data?.directory || { places: [], events: [], creators: [] }} />
+      <ScrollWorld directory={directory} />
 
-      <HomeExploreFeed directory={data?.directory || { places: [], events: [], creators: [] }} />
+      <HomeExploreFeed directory={directory} />
 
       {data.collections?.length > 0 && (
-        <section className="py-14 px-4 relative z-[100]" style={{ backgroundColor: 'var(--sotabosc-bg)' }}>
-          <div className="max-w-6xl mx-auto">
-            <h2 className="text-xl font-black mb-6" style={{ color: 'var(--sotabosc-text)' }}>
-              Shop — ecosystem archives
-            </h2>
-            <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
-              {data.collections.map((collection) => (
-                <Link
-                  key={collection.id}
-                  to={`/collections/${collection.handle}`}
-                  className="block p-5 rounded-2xl border transition-shadow hover:shadow-md"
-                  style={{
-                    backgroundColor: 'var(--sotabosc-surface)',
-                    borderColor: 'var(--sotabosc-border)',
-                    color: 'var(--sotabosc-text)',
-                  }}
-                >
-                  <h3 className="font-bold">{collection.title}</h3>
-                  <p className="text-xs mt-1 opacity-50">Artefacts & goods</p>
-                </Link>
-              ))}
+        <section className="relative z-[100]" style={{ backgroundColor: 'var(--sotabosc-bg)' }}>
+          <div className="mag-sec">
+            <div className="mag-sec-head">
+              <h2 className="mag-sec-label">Shop</h2>
             </div>
+          </div>
+          <div className="mag-places">
+            {data.collections.map((collection) => {
+              const featured = collection.products?.nodes?.[0]?.featuredImage;
+              return (
+                <Link key={collection.id} to={`/collections/${collection.handle}`} className="mag-place">
+                  {featured ? (
+                    <img
+                      src={featured.url}
+                      alt={featured.altText || collection.title}
+                      className="mag-place-img"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="mag-place-placeholder">
+                      <span>🧺</span>
+                    </div>
+                  )}
+                  <div className="mag-place-body">
+                    <span className="mag-place-cat">Ecosystem archives</span>
+                    <h4>{collection.title}</h4>
+                    <p>Artefacts and goods from the living catalog.</p>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </section>
       )}
 
       <section
-        className="py-10 px-4 relative z-[100]"
-        style={{ backgroundColor: 'var(--sotabosc-accent)', color: 'var(--sotabosc-surface)' }}
+        className="relative z-[100]"
+        style={{ backgroundColor: 'var(--sotabosc-bg)' }}
       >
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-center sm:text-left opacity-90">
-            Missing a place or spotted something off? This directory is alive — tell us.
-          </p>
-          <Link
-            to="/feedback"
-            className="shrink-0 inline-flex items-center gap-2 font-bold text-sm px-6 py-3 rounded-full bg-white text-black hover:bg-white/90 transition-colors"
+        <div className="mag-sec">
+          <div className="mag-sec-head">
+            <h2 className="mag-sec-label">Keep The Directory Alive</h2>
+          </div>
+        </div>
+        <div className="mag-feat" style={{ paddingBottom: '2.25rem' }}>
+          <div
+            className="mag-feat-main"
+            style={{ minHeight: 'unset', background: 'var(--sotabosc-accent)', color: 'var(--sotabosc-surface)' }}
           >
-            Feedback
-          </Link>
+            <span className="mag-feat-main-tag" style={{ color: 'rgba(255,255,255,0.78)' }}>
+              Community signal
+            </span>
+            <h3 style={{ color: 'var(--sotabosc-surface)' }}>Spotted a missing place or outdated event?</h3>
+            <p style={{ color: 'rgba(255,255,255,0.86)' }}>
+              This ecosystem map updates with community intelligence. Share edits and we will verify and integrate.
+            </p>
+          </div>
+          <div className="mag-feat-side">
+            <Link to="/feedback" className="mag-feat-card">
+              <span className="mag-feat-card-tag">Contribute</span>
+              <h4>Submit feedback and listings updates</h4>
+              <p>Open feedback form →</p>
+            </Link>
+            <Link to="/city" className="mag-feat-card">
+              <span className="mag-feat-card-tag">Browse all</span>
+              <h4>Go to full directory index</h4>
+              <p>Open directory →</p>
+            </Link>
+          </div>
         </div>
       </section>
 

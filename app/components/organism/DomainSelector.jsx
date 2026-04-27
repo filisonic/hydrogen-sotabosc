@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { generateOrganism } from '~/lib/organism/generator';
 import { useOrganismStore } from '~/lib/store/useOrganismStore';
 import { DOMAIN_KEYS, DOMAINS, getDomain } from '~/lib/directory/domains';
+import { MagDomainGlyph } from '~/components/mag/MagEcosphereGlyphs';
 /**
  * @param {{ variant?: 'full' | 'strip' }} props
  */
@@ -16,7 +17,7 @@ export function DomainSelector({ variant = 'full' }) {
 
     if (variant === 'strip') {
         return (
-            <div className="domain-strip w-full max-w-6xl mx-auto px-4 py-4">
+            <div className="domain-strip w-full max-w-6xl mx-auto px-4 py-2.5">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4">
                     <p className="text-[11px] font-bold uppercase tracking-[0.2em] shrink-0 opacity-60">
                         Your domain
@@ -30,15 +31,23 @@ export function DomainSelector({ variant = 'full' }) {
                                     key={key}
                                     type="button"
                                     onClick={() => handleSelect(key)}
-                                    className="inline-flex items-center gap-2 rounded-full border px-3 py-2 text-xs font-bold transition-all"
+                                    className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs font-bold transition-all"
                                     style={{
                                         borderColor: active ? d.color : 'var(--sotabosc-border, rgba(0,0,0,0.1))',
-                                        backgroundColor: active ? `${d.color}18` : 'var(--sotabosc-surface, #fff)',
+                                        backgroundColor: active ? `${d.color}1f` : 'var(--sotabosc-surface, #fff)',
                                         color: active ? d.color : 'var(--sotabosc-text, #1a1a1a)',
                                         boxShadow: active ? `0 0 0 2px ${d.color}44` : undefined,
                                     }}
                                 >
-                                    <span className="text-base leading-none">{d.emoji}</span>
+                                    <span
+                                        className="inline-flex h-5 w-5 items-center justify-center rounded-md border"
+                                        style={{
+                                            borderColor: active ? `${d.color}66` : 'var(--sotabosc-border, rgba(0,0,0,0.1))',
+                                            backgroundColor: active ? `${d.color}15` : 'transparent',
+                                        }}
+                                    >
+                                        <MagDomainGlyph domainKey={key} color={active ? d.color : 'currentColor'} size={13} />
+                                    </span>
                                     {d.label}
                                 </button>
                             );

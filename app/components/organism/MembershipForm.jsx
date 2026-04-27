@@ -33,11 +33,7 @@ export function MembershipForm({ domain, organismName }) {
     };
 
     return (
-        <div className="mt-8 border-t border-white/10 pt-6">
-            <span className="text-[10px] uppercase tracking-[0.2em] font-bold text-white/40 block mb-3 text-center">
-                Preserve Your Identity
-            </span>
-            
+        <div>
             <AnimatePresence mode="wait">
                 {status === 'success' ? (
                     <motion.div 

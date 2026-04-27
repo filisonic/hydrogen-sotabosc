@@ -5,6 +5,7 @@ import { useOrganismStore } from '~/lib/store/useOrganismStore';
 import { getDomainTheme } from '~/lib/theme/domainTheme';
 import { OrganismPortrait } from '~/components/organism/OrganismPortrait';
 import { getStageForXP, getNextStage, getProgressToNext } from '~/lib/organism/progression';
+import { MembershipForm } from '~/components/organism/MembershipForm';
 
 const ACTION_LABELS = {
   listing_view: 'Place visited',
@@ -149,6 +150,8 @@ export function ArtifactDock() {
                 </Link>
               </div>
 
+              <SaveNudge organism={organism} theme={theme} />
+
               <button
                 type="button"
                 onClick={() => {
@@ -201,6 +204,50 @@ function StatChip({ label, value }) {
     <div className="rounded-lg px-2 py-1.5 bg-black/[0.04] text-center">
       <p className="font-bold tabular-nums">{value}</p>
       <p className="opacity-50">{label}</p>
+    </div>
+  );
+}
+
+function SaveNudge({ organism, theme }) {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div
+      className="rounded-xl border overflow-hidden"
+      style={{ borderColor: theme.border }}
+    >
+      <button
+        type="button"
+        onClick={() => setExpanded((v) => !v)}
+        className="w-full flex items-center justify-between px-3 py-2 text-[11px] font-bold transition-opacity hover:opacity-80"
+        style={{ backgroundColor: theme.surfaceMuted, color: theme.text }}
+      >
+        <span>💾 Save your artifact across sessions</span>
+        <span className="opacity-50 text-base leading-none">{expanded ? '−' : '+'}</span>
+      </button>
+
+      <AnimatePresence>
+        {expanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="px-3 pb-3 pt-1">
+              <p className="text-[10px] opacity-50 mb-3">
+                Optional — your artifact already lives in this browser. Enter your email
+                only if you want to restore it on another device.
+              </p>
+              <MembershipForm
+                domain={organism.domain}
+                organismName={organism.displayName}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
