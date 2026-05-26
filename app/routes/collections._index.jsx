@@ -3,6 +3,7 @@ import {getPaginationVariables, Image} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {DirectorySurface} from '~/components/directory/DirectorySurface';
 import {canonicalLinkMeta} from '~/lib/seo/metaHelpers';
+import {filterStoreCollections} from '~/lib/store/filterStoreCollections';
 
 /**
  * @type {Route.MetaFunction}
@@ -50,7 +51,13 @@ async function loadCriticalData({context, request}) {
     // Add other queries here, so that they are loaded in parallel
   ]);
 
-  return {collections, origin: new URL(request.url).origin};
+  return {
+    collections: {
+      ...collections,
+      nodes: filterStoreCollections(collections.nodes ?? []),
+    },
+    origin: new URL(request.url).origin,
+  };
 }
 
 /**

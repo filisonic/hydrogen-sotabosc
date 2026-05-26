@@ -4,6 +4,7 @@ import { ScrollWorld } from '~/components/world/ScrollWorld';
 import { DomainSelector } from '~/components/organism/DomainSelector';
 import { ArtifactDock } from '~/components/artifact/ArtifactDock';
 import { HomeExploreFeed } from '~/components/home/HomeExploreFeed';
+import {filterStoreCollections} from '~/lib/store/filterStoreCollections';
 /**
  * City World — the immersive scroll ecosystem experience.
  * Served at city.sotabosc.world (via subdomain rewrite → /city-world)
@@ -60,11 +61,7 @@ async function loadCriticalData({ context }) {
     context.storefront.query(COLLECTIONS_WITH_PRODUCTS_QUERY),
   ]);
 
-  const filteredCollections = (collections.nodes || []).filter((collection) => {
-    const handle = collection.handle?.toLowerCase();
-    const excludedHandles = ['home-page', 'frontpage', 'homepage'];
-    return !excludedHandles.includes(handle);
-  });
+  const filteredCollections = filterStoreCollections(collections.nodes || []);
 
   return {
     collections: filteredCollections,

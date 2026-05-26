@@ -48,8 +48,8 @@ export function ProductForm({productOptions, selectedVariant}) {
                       to={`/products/${handle}?${variantUriQuery}`}
                       style={{
                         border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
+                          ? '2px solid var(--product-option-selected, #000)'
+                          : '1px solid var(--product-option-border, transparent)',
                         opacity: available ? 1 : 0.3,
                       }}
                     >
@@ -71,8 +71,8 @@ export function ProductForm({productOptions, selectedVariant}) {
                       key={option.name + name}
                       style={{
                         border: selected
-                          ? '1px solid black'
-                          : '1px solid transparent',
+                          ? '2px solid var(--product-option-selected, #000)'
+                          : '1px solid var(--product-option-border, transparent)',
                         opacity: available ? 1 : 0.3,
                       }}
                       disabled={!exists}
