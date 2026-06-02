@@ -16,7 +16,7 @@ function attachVenueImages(places: readonly Place[]): Place[] {
   }));
 }
 
-// ─── PLACES (101 hand + 400 auto-import) — curated first; bulk from scripts/bulk-template-places.ts + OSM
+// ─── PLACES (101 hand + verified auto-import) — curated first; real rows via google-places / OSM / ingest:listing
 
 const _PLACES: Place[] = [
   // Coworking
@@ -295,8 +295,20 @@ export function searchEvents(query: string): CityEvent[] {
 }
 
 export function getUpcomingEvents(fromISO?: string): CityEvent[] {
+  return getActiveEvents(fromISO);
+}
+
+export function isEventExpired(event: CityEvent, fromISO?: string): boolean {
   const now = fromISO ? new Date(fromISO).getTime() : Date.now();
+  const endMs = new Date(event.endsAt ?? event.startsAt).getTime();
+  return endMs < now;
+}
+
+/**
+ * Active = upcoming OR currently running; expired events are excluded.
+ */
+export function getActiveEvents(fromISO?: string): CityEvent[] {
   return SEED_EVENTS
-    .filter((e) => new Date(e.startsAt).getTime() >= now)
+    .filter((e) => !isEventExpired(e, fromISO))
     .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
 }

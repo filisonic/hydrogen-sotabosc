@@ -81,7 +81,17 @@ async function readAutoPlaces(): Promise<Place[]> {
   }
 }
 
-async function overpass(elementsInner: string, attempt = 0): Promise<OsmElement[]> {
+const OVERPASS_ENDPOINTS = [
+  'https://overpass.kumi.systems/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
+  'https://overpass-api.de/api/interpreter',
+] as const;
+
+async function overpassOn(
+  baseUrl: string,
+  elementsInner: string,
+  attempt = 0,
+): Promise<OsmElement[]> {
   const ql = `[out:json][timeout:240];
 area["wikidata"="Q1492"]->.bcn;
 (
@@ -89,21 +99,44 @@ ${elementsInner}
 );
 out center tags;`;
 
-  const res = await fetch('https://overpass-api.de/api/interpreter', {
+  const res = await fetch(baseUrl, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      Accept: 'application/json, */*;q=0.8',
+      'User-Agent': 'sotabosc-directory-osm-import/1.0 (contact: sotabosc.world)',
+    },
     body: new URLSearchParams({ data: ql }),
   });
   if (!res.ok) {
     const t = await res.text();
-    if ((res.status === 429 || res.status === 504) && attempt < 4) {
-      await sleep(4000 * (attempt + 1));
-      return overpass(elementsInner, attempt + 1);
+    if ((res.status === 429 || res.status === 504 || res.status === 406) && attempt < 2) {
+      await sleep(3000 * (attempt + 1));
+      return overpassOn(baseUrl, elementsInner, attempt + 1);
     }
     throw new Error(`Overpass HTTP ${res.status}: ${t.slice(0, 500)}`);
   }
   const json = (await res.json()) as OverpassResponse;
   return json.elements ?? [];
+}
+
+let overpassEndpointIdx = 0;
+
+async function overpass(elementsInner: string): Promise<OsmElement[]> {
+  let lastErr: unknown;
+  for (let i = 0; i < OVERPASS_ENDPOINTS.length; i += 1) {
+    const url = OVERPASS_ENDPOINTS[(overpassEndpointIdx + i) % OVERPASS_ENDPOINTS.length];
+    try {
+      const els = await overpassOn(url, elementsInner);
+      overpassEndpointIdx = (overpassEndpointIdx + i) % OVERPASS_ENDPOINTS.length;
+      return els;
+    } catch (e) {
+      lastErr = e;
+      console.warn(`[osm] endpoint failed ${url}`, e instanceof Error ? e.message : e);
+      await sleep(2000);
+    }
+  }
+  throw lastErr instanceof Error ? lastErr : new Error(String(lastErr));
 }
 
 async function fetchAllOsm(): Promise<OsmElement[]> {

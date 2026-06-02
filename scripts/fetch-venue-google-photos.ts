@@ -100,8 +100,40 @@ function googleApiKey(): string | undefined {
   return k || undefined;
 }
 
+function hasCoords(p: Place): p is Place & { latitude: number; longitude: number } {
+  return (
+    typeof p.latitude === 'number' &&
+    typeof p.longitude === 'number' &&
+    Number.isFinite(p.latitude) &&
+    Number.isFinite(p.longitude)
+  );
+}
+
+/** Build a search string; omit empty address and prefer neighborhood when address is blank. */
 function textQueryForPlace(p: Place): string {
-  return `${p.name}, ${p.address}, ${p.city}`;
+  const parts = [p.name.trim()];
+  const address = p.address?.trim();
+  if (address) parts.push(address);
+  else if (p.neighborhood?.trim()) parts.push(p.neighborhood.trim());
+  parts.push(p.city.trim());
+  return parts.join(', ');
+}
+
+type LocationBias = {
+  circle: {
+    center: { latitude: number; longitude: number };
+    radius: number;
+  };
+};
+
+function locationBiasForPlace(p: Place, radiusM = 500): LocationBias | undefined {
+  if (!hasCoords(p)) return undefined;
+  return {
+    circle: {
+      center: { latitude: p.latitude, longitude: p.longitude },
+      radius: radiusM,
+    },
+  };
 }
 
 function extFromContentType(ct: string | null): string {
@@ -123,7 +155,14 @@ function normalizeUri(u: string | undefined): string | undefined {
 async function textSearchFirstPhoto(
   apiKey: string,
   textQuery: string,
+  locationBias?: LocationBias,
 ): Promise<{ photoName: string; attributions: GoogleAttribution[] } | null> {
+  const body: Record<string, unknown> = {
+    textQuery,
+    regionCode: 'ES',
+  };
+  if (locationBias) body.locationBias = locationBias;
+
   const res = await fetch(TEXT_SEARCH, {
     method: 'POST',
     headers: {
@@ -131,10 +170,7 @@ async function textSearchFirstPhoto(
       'X-Goog-Api-Key': apiKey,
       'X-Goog-FieldMask': 'places.photos,places.displayName,places.formattedAddress',
     },
-    body: JSON.stringify({
-      textQuery,
-      regionCode: 'ES',
-    }),
+    body: JSON.stringify(body),
   });
   const raw = await res.text();
   if (!res.ok) {
@@ -164,6 +200,33 @@ async function textSearchFirstPhoto(
       uri: normalizeUri(a.uri),
     }));
   return { photoName: ph.name as string, attributions: attrs };
+}
+
+/** Text search with optional coordinate bias; widens radius once if the first pass misses. */
+async function searchPhotoForPlace(
+  apiKey: string,
+  p: Place,
+): Promise<{ textQuery: string; photoName: string | null; attributions: GoogleAttribution[] }> {
+  const textQuery = textQueryForPlace(p);
+  const bias = locationBiasForPlace(p);
+
+  let got = await textSearchFirstPhoto(apiKey, textQuery, bias);
+  if (!got && bias) {
+    await sleep(DELAY_MS);
+    got = await textSearchFirstPhoto(
+      apiKey,
+      p.name.trim(),
+      locationBiasForPlace(p, 2000),
+    );
+  }
+
+  return {
+    textQuery: bias
+      ? `${textQuery} @ ${p.latitude!.toFixed(5)},${p.longitude!.toFixed(5)}`
+      : textQuery,
+    photoName: got?.photoName ?? null,
+    attributions: got?.attributions ?? [],
+  };
 }
 
 async function fetchPhotoBytes(
@@ -298,7 +361,11 @@ async function main() {
     process.exit(1);
   }
   if (dry && !apiKey) {
-    for (const p of places) console.log(`${p.slug}\t${textQueryForPlace(p)}`);
+    for (const p of places) {
+      const q = textQueryForPlace(p);
+      const coords = hasCoords(p) ? ` [${p.latitude}, ${p.longitude}]` : '';
+      console.log(`${p.slug}\t${q}${coords}`);
+    }
     console.log(
       '\nEnable Places API (New) in Google Cloud, add GOOGLE_MAPS_API_KEY to .env, then re-run.',
     );
@@ -324,13 +391,12 @@ async function main() {
   console.log(`Places to process: ${places.length}${slug ? ` (filter: ${slug})` : ''}`);
 
   for (const p of places) {
-    const q = textQueryForPlace(p);
-
     if (!force) {
       const onDisk = await findExisting(p.slug);
       if (onDisk) {
         const base = path.basename(onDisk);
         imageMap[p.slug] = `/images/venues/google/${base}`;
+        const q = textQueryForPlace(p);
         console.log(`[skip exists] ${p.slug}`);
         rows.push({ slug: p.slug, name: p.name, textQuery: q, status: 'skip_exists' });
         continue;
@@ -340,17 +406,17 @@ async function main() {
       if (onDisk) await rm(onDisk, { force: true });
     }
 
+    let textQuery = textQueryForPlace(p);
     let photoName: string | null = null;
     let attrs: GoogleAttribution[] = [];
     let placesDetail: string | undefined;
 
     try {
       if (apiKey) {
-        const got = await textSearchFirstPhoto(apiKey, q);
-        if (got) {
-          photoName = got.photoName;
-          attrs = got.attributions;
-        }
+        const result = await searchPhotoForPlace(apiKey, p);
+        textQuery = result.textQuery;
+        photoName = result.photoName;
+        attrs = result.attributions;
         await sleep(DELAY_MS);
       }
     } catch (e) {
@@ -359,11 +425,13 @@ async function main() {
     }
 
     if (dry) {
-      console.log(`[dry] ${p.slug} ← "${q}"${photoName ? ' → photo resolved' : ' → no photo'}`);
+      console.log(
+        `[dry] ${p.slug} ← "${textQuery}"${photoName ? ' → photo resolved' : ' → no photo'}`,
+      );
       rows.push({
         slug: p.slug,
         name: p.name,
-        textQuery: q,
+        textQuery,
         status: 'dry_preview',
         detail: placesDetail,
       });
@@ -375,7 +443,7 @@ async function main() {
       rows.push({
         slug: p.slug,
         name: p.name,
-        textQuery: q,
+        textQuery,
         status: placesDetail ? 'places_error' : 'no_photo',
         detail: placesDetail,
       });
@@ -385,7 +453,7 @@ async function main() {
     const bytes = await fetchPhotoBytes(apiKey!, photoName);
     if (!bytes) {
       console.warn(`[download failed] ${p.slug}`);
-      rows.push({ slug: p.slug, name: p.name, textQuery: q, status: 'download_failed' });
+      rows.push({ slug: p.slug, name: p.name, textQuery, status: 'download_failed' });
       continue;
     }
 
@@ -394,7 +462,7 @@ async function main() {
     imageMap[p.slug] = `/images/venues/google/${filename}`;
     if (attrs.length) attrMap[p.slug] = attrs;
     console.log(`[ok] ${p.slug} → google/${filename}`);
-    rows.push({ slug: p.slug, name: p.name, textQuery: q, status: 'ok' });
+    rows.push({ slug: p.slug, name: p.name, textQuery, status: 'ok' });
   }
 
   if (!dry) {
