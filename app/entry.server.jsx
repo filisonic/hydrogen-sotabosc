@@ -19,7 +19,8 @@ export default async function handleRequest(
 ) {
   const {nonce, header, NonceProvider} = createContentSecurityPolicy({
     shop: {
-      checkoutDomain: context.env.PUBLIC_CHECKOUT_DOMAIN,
+      checkoutDomain:
+        context.env.PUBLIC_CHECKOUT_DOMAIN || context.env.PUBLIC_STORE_DOMAIN,
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
     // default-src does not cover hotlinked directory heroes; without img-src browsers still
@@ -30,6 +31,7 @@ export default async function handleRequest(
       'https://shopify.com',
       'https://images.unsplash.com',
     ],
+    frameSrc: ["'self'", 'https://api.leadconnectorhq.com'],
   });
 
   const body = await renderToReadableStream(

@@ -4,6 +4,8 @@ import { EventCard } from '~/components/directory/EventCard';
 import { ReviewList } from '~/components/directory/ReviewList';
 import { ReviewForm } from '~/components/directory/ReviewForm';
 import { ContributionActions } from '~/components/directory/ContributionActions';
+import { BookingWidget } from '~/components/directory/BookingWidget';
+import { getBookingWidgetUrl } from '~/lib/directory/booking';
 import { DirectorySurface } from '~/components/directory/DirectorySurface';
 import { getDomain, getListingCategory, LISTING_CATEGORIES } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
@@ -25,18 +27,26 @@ export const meta = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request }) {
+export async function loader({ params, request, context }) {
   const { getPlaceBySlug, getEventsForPlace, getReviewsForPlace } =
     await import('~/lib/directory/seed.server');
   const place = getPlaceBySlug(params.slug);
   if (!place) throw new Response('Place not found', { status: 404 });
   const events = getEventsForPlace(place.id);
   const reviews = getReviewsForPlace(place.id);
-  return { place, events, reviews, origin: new URL(request.url).origin };
+  const bookingWidgetUrl = getBookingWidgetUrl(params.slug, events, context?.env);
+  return {
+    place,
+    events,
+    reviews,
+    origin: new URL(request.url).origin,
+    bookingWidgetUrl,
+  };
 }
 
 export default function PlaceDetail() {
-  const { place, events, reviews: seedReviews, origin } = useLoaderData();
+  const { place, events, reviews: seedReviews, origin, bookingWidgetUrl } =
+    useLoaderData();
   const placePageUrl = `${origin}${directoryRoutes.place(place.slug)}`;
   const placeLd = buildPlaceLocalBusinessJsonLd(place, placePageUrl);
   const primaryCat = getPrimaryListingCategory(place.categories);
@@ -193,6 +203,8 @@ export default function PlaceDetail() {
               ))}
             </div>
           )}
+
+          <BookingWidget widgetUrl={bookingWidgetUrl} placeName={place.name} />
         </div>
       </section>
 
