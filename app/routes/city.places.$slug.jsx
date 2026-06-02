@@ -5,7 +5,7 @@ import { ReviewList } from '~/components/directory/ReviewList';
 import { ReviewForm } from '~/components/directory/ReviewForm';
 import { ContributionActions } from '~/components/directory/ContributionActions';
 import { BookingWidget } from '~/components/directory/BookingWidget';
-import { getBookingWidgetUrl } from '~/lib/directory/booking';
+import { getBookingForPlace } from '~/lib/directory/booking';
 import { DirectorySurface } from '~/components/directory/DirectorySurface';
 import { getDomain, getListingCategory, LISTING_CATEGORIES } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
@@ -34,18 +34,18 @@ export async function loader({ params, request, context }) {
   if (!place) throw new Response('Place not found', { status: 404 });
   const events = getEventsForPlace(place.id);
   const reviews = getReviewsForPlace(place.id);
-  const bookingWidgetUrl = getBookingWidgetUrl(params.slug, events, context?.env);
+  const booking = getBookingForPlace(params.slug, events, context?.env);
   return {
     place,
     events,
     reviews,
     origin: new URL(request.url).origin,
-    bookingWidgetUrl,
+    booking,
   };
 }
 
 export default function PlaceDetail() {
-  const { place, events, reviews: seedReviews, origin, bookingWidgetUrl } =
+  const { place, events, reviews: seedReviews, origin, booking } =
     useLoaderData();
   const placePageUrl = `${origin}${directoryRoutes.place(place.slug)}`;
   const placeLd = buildPlaceLocalBusinessJsonLd(place, placePageUrl);
@@ -204,7 +204,13 @@ export default function PlaceDetail() {
             </div>
           )}
 
-          <BookingWidget widgetUrl={bookingWidgetUrl} placeName={place.name} />
+          {booking && (
+            <BookingWidget
+              widgetUrl={booking.widgetUrl}
+              embedMode={booking.embedMode}
+              placeName={place.name}
+            />
+          )}
         </div>
       </section>
 
