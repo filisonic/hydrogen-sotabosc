@@ -5,6 +5,7 @@ import { ReviewList } from '~/components/directory/ReviewList';
 import { ReviewForm } from '~/components/directory/ReviewForm';
 import { ContributionActions } from '~/components/directory/ContributionActions';
 import { BookingWidget } from '~/components/directory/BookingWidget';
+import { BookingPreviewTeaser } from '~/components/directory/BookingPreviewTeaser';
 import { getBookingForPlace } from '~/lib/directory/booking';
 import { DirectorySurface } from '~/components/directory/DirectorySurface';
 import { getDomain, getListingCategory, LISTING_CATEGORIES } from '~/lib/directory/domains';
@@ -27,14 +28,14 @@ export const meta = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request, context }) {
+export async function loader({ params, request }) {
   const { getPlaceBySlug, getEventsForPlace, getReviewsForPlace } =
     await import('~/lib/directory/seed.server');
   const place = getPlaceBySlug(params.slug);
   if (!place) throw new Response('Place not found', { status: 404 });
   const events = getEventsForPlace(place.id);
   const reviews = getReviewsForPlace(place.id);
-  const booking = getBookingForPlace(params.slug, events, context?.env);
+  const booking = getBookingForPlace(params.slug);
   return {
     place,
     events,
@@ -114,7 +115,8 @@ export default function PlaceDetail() {
               className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full"
               style={{ backgroundColor: `${domain.color}20`, color: domain.color }}
             >
-              {domain.emoji} {domain.label}
+              {domain.emoji}{' '}
+              {domain.role ? `${domain.role} · ${domain.label}` : domain.label}
             </span>
             {place.categories.map((cat) => {
               const catMeta = getListingCategory(cat);
@@ -204,11 +206,16 @@ export default function PlaceDetail() {
             </div>
           )}
 
-          {booking && (
+          {booking ? (
             <BookingWidget
               widgetUrl={booking.widgetUrl}
               embedMode={booking.embedMode}
               placeName={place.name}
+            />
+          ) : (
+            <BookingPreviewTeaser
+              placeName={place.name}
+              isClaimed={Boolean(place.isClaimed)}
             />
           )}
         </div>

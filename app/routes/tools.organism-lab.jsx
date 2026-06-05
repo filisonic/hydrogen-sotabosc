@@ -10,7 +10,7 @@ export const meta = () => {
     {
       name: 'description',
       content:
-        'Explore parametric generative organisms with 50+ presets across animals, plants, fungi, microbes, minerals, and cosmic forms. Built with p5.js.',
+        'Explore parametric generative organisms with 50+ presets across animals, plants, fungi, minerals, and cosmic forms. Built with p5.js.',
     },
   ];
 };

@@ -1,9 +1,9 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js';
 
-// Define a type for your Env if not already available globally
 export interface SupabaseEnv {
   PUBLIC_SUPABASE_URL: string;
   PUBLIC_SUPABASE_ANON_KEY: string;
+  SUPABASE_SERVICE_ROLE_KEY?: string;
 }
 
 export function createClient(env: SupabaseEnv) {
@@ -14,14 +14,27 @@ export function createClient(env: SupabaseEnv) {
     throw new Error('Supabase environment variables are missing');
   }
 
-  // We are creating a standard server-side client. 
-  // If you need SSR cookie management in Hydrogen later, you would integrate it here.
-  // For now, since we are handling secure operations on the server side, 
-  // the standard supabase-js client is sufficient.
   return createSupabaseClient(supabaseUrl, supabaseKey, {
     auth: {
-      persistSession: false, // Since this runs on the server, we don't persist sessions locally
+      persistSession: false,
       autoRefreshToken: false,
-    }
+    },
+  });
+}
+
+/** Service-role client for trusted server operations (webhooks, cron). */
+export function createAdminClient(env: SupabaseEnv) {
+  const supabaseUrl = env.PUBLIC_SUPABASE_URL;
+  const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!supabaseUrl || !serviceKey) {
+    throw new Error('Supabase admin environment variables are missing');
+  }
+
+  return createSupabaseClient(supabaseUrl, serviceKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+    },
   });
 }

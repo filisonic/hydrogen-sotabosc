@@ -25,7 +25,13 @@ export const ACTION_XP: Record<ArtifactActionType, number> = {
   review_create: 10,
   store_click:   5,
   purchase:      15,
+  domain_join:   5,
+  trail_node:    8,
+  specimen_discover: 12,
 };
+
+/** Visitor-facing label for resonance (XP) */
+export const RESONANCE_LABEL = 'Resonance';
 
 export function getXPForAction(action: ArtifactActionType): number {
   return ACTION_XP[action] ?? 0;

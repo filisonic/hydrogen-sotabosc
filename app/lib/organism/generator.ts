@@ -6,7 +6,6 @@ const SUFFIXES = {
     plants: ['Fern', 'Root', 'Bough', 'Sprout'],
     fungi: ['Bloom', 'Strand', 'Spore', 'Network'],
     algae: ['Current', 'Bloom', 'Veil', 'Tide'],
-    microbes: ['Pulse', 'Node', 'Void', 'Cell'],
     earth: ['Shimmer', 'Vein', 'Crystal', 'Core']
 };
 
@@ -33,7 +32,6 @@ const DOMAIN_IMAGES = {
     plants: '/assets/organism/plants.png',
     fungi: '/assets/organism/fungi.png',
     algae: '/assets/organism/algae.png',
-    microbes: '/assets/organism/microbes.png',
     earth: '/assets/organism/earth.png'
 };
 

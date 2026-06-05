@@ -63,7 +63,8 @@ export function PlaceCard({ place, className = '', tone = 'directory', showMytho
             className={`inline-flex items-center gap-1 font-semibold rounded-full ${onScene ? 'text-[10px] px-2 py-0.5' : 'text-xs px-2 py-0.5'}`}
             style={{ backgroundColor: `${domain.color}28`, color: domain.color }}
           >
-            {domain.emoji} {domain.label}
+            {domain.emoji}{' '}
+            {domain.role ? `${domain.role} · ${domain.label}` : domain.label}
           </span>
           {place.categories.slice(0, 2).map((cat) => (
             <span

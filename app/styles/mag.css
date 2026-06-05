@@ -6,7 +6,7 @@
    ══════════════════════════════════════════════════════════ */
 
 /* ── Base variables ─── */
-.mag, .labs-page, .city-world-page {
+.mag, .labs-page, .city-world-page, .sotabosc-shell {
   /* Using OKLCH for perceptual uniformity and vibrant saturation */
   --y: oklch(95% 0.25 100);     /* Vibrant Yellow */
   --pink: oklch(70% 0.35 330);  /* Electric Pink */

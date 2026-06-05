@@ -7,7 +7,7 @@
 import { getCurrentSeason } from '~/lib/worldbuilding/ecosystemTheme';
 import { SEASONAL_RHYTHMS } from '~/lib/worldbuilding/ecosystemNarrative';
 
-/** @typedef {'plants'|'algae'|'fungi'|'microbes'|'animals'|'earth'|'neutral'} JourneyDomainKey */
+/** @typedef {'plants'|'algae'|'fungi'|'animals'|'earth'|'neutral'} JourneyDomainKey */
 
 /**
  * Seasonal narrative overlays that modify the base journey copy

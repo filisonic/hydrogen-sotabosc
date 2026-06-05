@@ -93,7 +93,10 @@ export type ArtifactActionType =
   | 'creator_view'
   | 'review_create'
   | 'store_click'
-  | 'purchase';
+  | 'purchase'
+  | 'domain_join'
+  | 'trail_node'
+  | 'specimen_discover';
 
 export interface ArtifactActivity {
   actionType: ArtifactActionType;

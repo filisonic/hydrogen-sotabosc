@@ -9,7 +9,6 @@ export type DomainCategory =
   | 'plants'
   | 'algae'
   | 'fungi'
-  | 'microbes'
   | 'animals'
   | 'earth';
 
@@ -252,10 +251,9 @@ function pickDomain(axisScores: Record<string, number>): DomainCategory {
   const { culture_craft, nature_wellness, community_third_place, food_slow, maker_bio } =
     axisScores;
   const scores: [DomainCategory, number][] = [
-    ['microbes', maker_bio * 1.1 + culture_craft * 0.35],
     ['plants', nature_wellness * 0.9 + culture_craft * 0.4 + food_slow * 0.5],
     ['algae', nature_wellness * 1.05 + culture_craft * 0.15],
-    ['fungi', community_third_place * 0.95 + food_slow * 0.55 + maker_bio * 0.45],
+    ['fungi', community_third_place * 0.95 + food_slow * 0.55 + maker_bio * 1.1 + culture_craft * 0.35],
     ['animals', culture_craft * 0.85 + community_third_place * 0.35],
     ['earth', food_slow * 1 + culture_craft * 0.5],
   ];

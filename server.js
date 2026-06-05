@@ -23,9 +23,9 @@ export default {
       let rewritten = false;
 
       if (hostname.startsWith('city.')) {
-        // city.sotabosc.world/foo → /city-world/foo
-        url.pathname = '/city-world' + (url.pathname === '/' ? '' : url.pathname);
-        rewritten = true;
+        // city.sotabosc.world — living map is the homepage at /
+        url.pathname = url.pathname === '/' ? '/' : url.pathname;
+        rewritten = false;
       } else if (hostname.startsWith('directory.')) {
         // directory.sotabosc.world/foo → /city/foo
         url.pathname = '/city' + (url.pathname === '/' ? '' : url.pathname);

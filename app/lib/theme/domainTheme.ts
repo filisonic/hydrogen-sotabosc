@@ -1,4 +1,5 @@
 import type { DomainCategory } from '../directory/types';
+import { normalizeDomain, normalizeDomainList } from '../directory/domains';
 
 export type DomainTheme = {
   key: DomainCategory | 'neutral';
@@ -110,8 +111,9 @@ const THEMES: Record<DomainCategory, DomainTheme> = {
 };
 
 export function getDomainTheme(domain: DomainCategory | null | undefined): DomainTheme {
-  if (!domain || !THEMES[domain]) return NEUTRAL_THEME;
-  return THEMES[domain];
+  const key = normalizeDomain(domain);
+  if (!key) return NEUTRAL_THEME;
+  return THEMES[key];
 }
 
 export function itemMatchesUserDomain(
@@ -120,6 +122,10 @@ export function itemMatchesUserDomain(
   userDomain: string | null,
 ): boolean {
   if (!userDomain) return true;
-  if (primaryDomain === userDomain) return true;
-  return Boolean(secondaryDomains?.includes(userDomain));
+  const user = normalizeDomain(userDomain);
+  if (!user) return true;
+  const primary = normalizeDomain(primaryDomain);
+  if (primary === user) return true;
+  const secondaries = normalizeDomainList(secondaryDomains as DomainCategory[] | undefined);
+  return Boolean(secondaries?.includes(user));
 }

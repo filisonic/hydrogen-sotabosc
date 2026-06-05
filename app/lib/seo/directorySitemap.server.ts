@@ -1,7 +1,7 @@
 import { LISTING_CATEGORY_KEYS } from '../directory/domains';
 import { getNeighborhoodSitemapSlugs } from '../directory/neighborhoods.server';
 import { directoryRoutes } from '../directory/routes';
-import { SEED_CREATORS, SEED_EVENTS, SEED_PLACES } from '../directory/seed.server';
+import { SEED_CREATORS, SEED_PLACES, getActiveEvents } from '../directory/seed.server';
 import type { ListingCategory } from '../directory/types';
 import { CATALUNYA_HIKES } from '../hiking/catalunya.seed';
 import { getGuideSitemapSlugs } from './guidesContent';
@@ -28,7 +28,7 @@ export function getDirectorySitemapPathnames(): string[] {
   }
 
   paths.push(directoryRoutes.events());
-  for (const e of SEED_EVENTS) {
+  for (const e of getActiveEvents()) {
     paths.push(directoryRoutes.event(e.slug));
   }
 

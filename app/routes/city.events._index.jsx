@@ -19,19 +19,18 @@ export const meta = ({ data }) => [
 ];
 
 export async function loader({ request }) {
-  const { getUpcomingEvents, SEED_EVENTS, getEventsByDomain } =
+  const { getActiveEvents, getEventsByDomain, isEventExpired } =
     await import('~/lib/directory/seed.server');
   const url = new URL(request.url);
   const domain = url.searchParams.get('domain') || '';
 
   let events;
   if (domain) {
-    events = getEventsByDomain(domain).sort(
-      (a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime(),
-    );
+    events = getEventsByDomain(domain)
+      .filter((e) => !isEventExpired(e))
+      .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
   } else {
-    events = getUpcomingEvents();
-    if (events.length === 0) events = [...SEED_EVENTS];
+    events = getActiveEvents();
   }
 
   return { events, domain, origin: new URL(request.url).origin };

@@ -95,7 +95,8 @@ export default function EventDetail() {
             className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full mb-3"
             style={{ backgroundColor: `${domain.color}20`, color: domain.color }}
           >
-            {domain.emoji} {domain.label}
+            {domain.emoji}{' '}
+            {domain.role ? `${domain.role} · ${domain.label}` : domain.label}
           </span>
 
           <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2 font-[family-name:var(--font-display)]">

@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MEMBERSHIP_PUBLIC } from '~/lib/featureFlags';
 
 export function MembershipForm({ domain, organismName }) {
     const [email, setEmail] = useState('');
@@ -41,8 +42,12 @@ export function MembershipForm({ domain, organismName }) {
                         animate={{ opacity: 1, y: 0 }}
                         className="text-center p-4 bg-green-500/10 border border-green-500/20 rounded-xl"
                     >
-                        <p className="text-sm text-green-400 font-medium mb-1">Organism Saved</p>
-                        <p className="text-xs text-green-400/60">You will receive weekly {domain} trips.</p>
+                        <p className="text-sm text-green-400 font-medium mb-1">Organism saved</p>
+                        <p className="text-xs text-green-400/60">
+                          {MEMBERSHIP_PUBLIC
+                            ? `You will receive weekly ${domain} trips.`
+                            : 'Saved in this browser — explore the map to grow your artifact.'}
+                        </p>
                     </motion.div>
                 ) : (
                     <motion.form 
@@ -70,14 +75,11 @@ export function MembershipForm({ domain, organismName }) {
                             </button>
                         </div>
                         
-                        <div className="flex items-center justify-between px-1">
-                            <p className="text-[10px] text-white/40">
-                                Free tier: Weekly curated trips
-                            </p>
-                            <a href="#paid-tier" className="text-[10px] text-cyan-400 hover:text-cyan-300 font-medium transition-colors">
-                                View Paid Tier (Magazine & Art) →
-                            </a>
-                        </div>
+                        <p className="text-[10px] text-white/40 px-1">
+                          {MEMBERSHIP_PUBLIC
+                            ? 'Optional email — restore your organism on another device.'
+                            : 'Optional email — save your organism across devices. No paid tier yet.'}
+                        </p>
                     </motion.form>
                 )}
             </AnimatePresence>

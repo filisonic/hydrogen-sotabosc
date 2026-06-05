@@ -5,13 +5,13 @@ import {
   Leaf,
   Mountain,
   PawPrint,
-  Radar,
   Share2,
   Sprout,
   Sun,
   Trees,
   Waves,
 } from 'lucide-react';
+import { normalizeDomain } from '~/lib/directory/domains';
 
 const LAYER_ICONS = {
   sky: Sun,
@@ -26,7 +26,6 @@ const DOMAIN_ICONS = {
   plants: Sprout,
   algae: Droplets,
   fungi: Share2,
-  microbes: Radar,
   animals: PawPrint,
   earth: Mountain,
 };
@@ -56,7 +55,8 @@ export function MagLayerGlyph({slug, color = 'currentColor', size = 15, classNam
  * @param {{ domainKey: string; color?: string; size?: number; className?: string }} props
  */
 export function MagDomainGlyph({domainKey, color = 'currentColor', size = 15, className = ''}) {
-  const Icon = DOMAIN_ICONS[domainKey];
+  const key = normalizeDomain(domainKey) ?? domainKey;
+  const Icon = DOMAIN_ICONS[key];
   if (!Icon) return null;
   return (
     <Icon

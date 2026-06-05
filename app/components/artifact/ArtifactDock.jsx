@@ -14,6 +14,9 @@ const ACTION_LABELS = {
   review_create: 'Review shared',
   store_click: 'Store opened',
   purchase: 'Purchase',
+  domain_join: 'League joined',
+  trail_node: 'Trail node cleared',
+  specimen_discover: 'Specimen found',
 };
 
 export function ArtifactDock() {

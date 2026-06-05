@@ -73,7 +73,7 @@ const EXPERIMENTS = [
   {
     title: 'Organism Lab',
     description:
-      'Parametric generative life — 50+ presets across animals, plants, fungi, microbes, minerals, and cosmic forms.',
+      'Parametric generative life — 50+ presets across animals, plants, fungi, minerals, and cosmic forms.',
     href: '/tools/organism-lab',
     tech: 'p5.js',
   },
@@ -88,7 +88,7 @@ const EXPERIMENTS = [
     title: 'Scroll Ecosystem',
     description:
       'Six-layer vertical cross-section of a forest ecosystem — a living interface metaphor.',
-    href: '/city-world',
+    href: '/',
     tech: 'React + GSAP',
   },
 ];

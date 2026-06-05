@@ -14,6 +14,7 @@ public/**/*_thumb.jpeg
 # Local logs / scratch
 error.log
 server.log
+reports/auto-events-pipeline.log
 ssr-test.js
 
 # Venue image fetch audit (optional: commit for team visibility)

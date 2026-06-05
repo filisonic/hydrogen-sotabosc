@@ -2,6 +2,7 @@ import {Suspense} from 'react';
 import {Await, Link, NavLink, useAsyncValue} from 'react-router';
 import {useAnalytics, useOptimisticCart} from '@shopify/hydrogen';
 import {useAside} from '~/components/Aside';
+import {MEMBERSHIP_PUBLIC} from '~/lib/featureFlags';
 
 /**
  * Primary site navigation — fixed editorial bar (Hydrogen cart / search / account).
@@ -60,15 +61,17 @@ export function MagNav({cart, isLoggedIn, header}) {
       </Link>
       <div className="mag-links">
         <Link to="/city">Directory</Link>
-        <Link to="/city-world">City world</Link>
+        <Link to="/discover">Discover</Link>
         <Link to="/tools">Tools</Link>
         <Link to="/labs">Labs</Link>
         <Link to="/collections">Store</Link>
         <Link to="/gallery">Gallery</Link>
         <Link to="/work">Work</Link>
-        <Link to="/membership" className="mag-pill mag-pill-primary">
-          Membership
-        </Link>
+        {MEMBERSHIP_PUBLIC ? (
+          <Link to="/membership" className="mag-pill mag-pill-primary">
+            Membership
+          </Link>
+        ) : null}
         <Link to="/contact" className="mag-pill">
           Contact
         </Link>

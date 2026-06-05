@@ -79,7 +79,8 @@ export default function CreatorDetail() {
                 className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full mb-2"
                 style={{ backgroundColor: `${domain.color}20`, color: domain.color }}
               >
-                {domain.emoji} {domain.label}
+                {domain.emoji}{' '}
+                {domain.role ? `${domain.role} · ${domain.label}` : domain.label}
               </span>
               <h1 className="text-2xl md:text-3xl font-black tracking-tight mb-1 font-[family-name:var(--font-display)]">
                 {creator.displayName}

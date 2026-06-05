@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Link } from 'react-router';
-import { DOMAINS } from '~/lib/directory/domains';
+import { getDomain } from '~/lib/directory/domains';
 
 /** @type {Record<string, { glyph: string; label: string }>} */
 const LAYER_BRIDGE = {
@@ -28,6 +28,8 @@ const LAYER_BRIDGE = {
  *     featuredImage?: { url: string; altText?: string | null } | null;
  *   }>;
  *   collectibles?: Array<{ id: string; href: string; image: string; label: string; color: string }>;
+ *   embedded?: boolean;
+ *   edge?: boolean;
  * }} props
  */
 export function JourneySpine({
@@ -39,10 +41,12 @@ export function JourneySpine({
   tone = 'dark',
   shopProducts = [],
   collectibles = [],
+  embedded = false,
+  edge = false,
 }) {
   const ink = tone === 'ink';
-  const accent =
-    domainKey && DOMAINS[domainKey] ? DOMAINS[domainKey].color : 'rgba(148, 163, 184, 0.55)';
+  const domainTheme = domainKey ? getDomain(domainKey) : null;
+  const accent = domainTheme?.color ?? 'rgba(148, 163, 184, 0.55)';
 
   const fromMeta = LAYER_BRIDGE[fromLayer] ?? { glyph: '·', label: fromLayer };
   const toMeta = LAYER_BRIDGE[toLayer] ?? { glyph: '·', label: toLayer };
@@ -75,36 +79,34 @@ export function JourneySpine({
     return rotated.slice(0, Math.min(4, collectibles.length));
   })();
 
+  const shellClass = embedded
+    ? `journey-spine-band journey-spine-band--embedded${edge ? ' journey-spine-band--edge' : ''} relative w-full${edge ? '' : ' px-3 py-1.5 sm:px-4'}`
+    : `journey-spine-band relative z-[15] -mb-px overflow-hidden border-y ${ink ? 'border-stone-200/75' : 'border-white/[0.07]'}`;
+
+  const rowClass = embedded && edge
+    ? 'journey-spine-band__row journey-spine-band__row--embedded journey-spine-band__row--edge relative z-[1] mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 py-2.5 sm:gap-x-4 sm:px-6'
+    : embedded
+      ? 'journey-spine-band__row journey-spine-band__row--embedded relative z-[1] mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-xl border border-stone-300/80 bg-white/92 px-3 py-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.98),0_10px_28px_rgba(0,0,0,0.08)] backdrop-blur-md sm:gap-x-4 sm:px-4'
+      : 'relative z-[1] mx-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-1 px-3 py-1.5 sm:gap-x-4 sm:px-4';
+
   return (
     <div
-      className={`relative z-[15] -mb-px overflow-hidden border-y ${ink ? 'border-stone-200/75' : 'border-white/[0.07]'}`}
-      style={{
-        minHeight: 'clamp(3.25rem, 10vw, 5.25rem)',
-        background: ink ? bgInk : bgDark,
-      }}
+      className={shellClass}
+      style={embedded ? undefined : {background: ink ? bgInk : bgDark}}
       role="separator"
       aria-label={ariaLabel}
     >
-      <div
-        className={`pointer-events-none absolute inset-0 ${ink ? 'opacity-[0.035]' : 'opacity-[0.04]'}`}
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-        }}
-      />
+      {!embedded ? (
+        <div
+          className={`pointer-events-none absolute inset-0 ${ink ? 'opacity-[0.035]' : 'opacity-[0.04]'}`}
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+          }}
+        />
+      ) : null}
 
-      <div
-        className="pointer-events-none absolute -left-8 top-1/2 h-24 w-24 -translate-y-1/2 rounded-full opacity-25 blur-3xl"
-        style={{ backgroundColor: accent }}
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -right-10 bottom-0 h-20 w-20 translate-y-1/3 rounded-full opacity-20 blur-3xl"
-        style={{ backgroundColor: accent }}
-        aria-hidden
-      />
-
-      <div className="relative z-[1] mx-auto flex w-full max-w-6xl flex-wrap items-center justify-between gap-x-6 gap-y-3 px-4 py-2.5 sm:py-3">
-        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-3 sm:gap-4">
+      <div className={rowClass}>
+        <div className="flex min-w-0 flex-wrap items-center gap-2 sm:gap-3">
           <div className="flex items-center gap-2 sm:gap-3">
             <motion.span
               className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full border text-sm sm:text-base shadow-lg backdrop-blur-sm ${
@@ -205,10 +207,14 @@ export function JourneySpine({
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-end gap-4 sm:gap-5">
+        <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
           {shopProducts.length > 0 ? (
             <div className="flex items-center gap-2" aria-label="Store picks">
-              <span className={`hidden text-[8px] font-bold uppercase tracking-[0.2em] sm:inline ${ink ? 'text-stone-400' : 'text-white/35'}`}>
+              <span
+                className={`hidden text-[8px] font-bold uppercase tracking-[0.2em] sm:inline ${
+                  embedded || ink ? 'text-stone-600' : 'text-white/35'
+                }`}
+              >
                 Shop
               </span>
               <div className="flex items-center gap-1.5">
@@ -237,7 +243,11 @@ export function JourneySpine({
           ) : (
             <Link
               to="/collections"
-              className={`text-[9px] font-bold uppercase tracking-wider ${ink ? 'text-stone-500 hover:text-stone-700' : 'text-white/40 hover:text-white/65'}`}
+              className={`text-[9px] font-bold uppercase tracking-wider ${
+                embedded || ink
+                  ? 'text-stone-800 hover:text-stone-950'
+                  : 'text-white/40 hover:text-white/65'
+              }`}
             >
               Browse shop →
             </Link>
@@ -245,7 +255,11 @@ export function JourneySpine({
 
           {rotatedCollectibles.length > 0 ? (
             <div className="flex items-center gap-2" aria-label="Trail collectibles">
-              <span className={`hidden text-[8px] font-bold uppercase tracking-[0.2em] sm:inline ${ink ? 'text-stone-400' : 'text-white/35'}`}>
+              <span
+                className={`hidden text-[8px] font-bold uppercase tracking-[0.2em] sm:inline ${
+                  embedded || ink ? 'text-stone-600' : 'text-white/35'
+                }`}
+              >
                 Finds
               </span>
               <div className="flex items-center gap-1.5">

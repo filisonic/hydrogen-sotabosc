@@ -27,6 +27,11 @@ import path from 'node:path';
 import type { DomainCategory, ListingCategory, Place } from '../app/lib/directory/types';
 import { SEED_PLACES } from '../app/lib/directory/seed.server';
 import { passesIngestGate, placeTextForAlignment } from './lib/place-alignment';
+import {
+  inferCategoriesFromPlace,
+  primaryDomainForCategories,
+  secondaryDomainsForCategories,
+} from './lib/place-domain';
 import { loadDotEnvFromRoot, PROJECT_ROOT } from './lib/project-env';
 import { scoreAlignment, slugifyHint } from './lib/sotabosc-alignment';
 
@@ -355,13 +360,17 @@ async function main() {
           continue;
         }
 
+        const categories =
+          alignment.suggestedCategories.length > 0
+            ? alignment.suggestedCategories
+            : inferCategoriesFromPlace(raw);
+        const primaryDomain = primaryDomainForCategories(categories);
+        const secondaryDomains = secondaryDomainsForCategories(categories, primaryDomain);
         accepted.push({
           ...raw,
-          primaryDomain: alignment.suggestedPrimaryDomain,
-          categories:
-            alignment.suggestedCategories.length > 0
-              ? alignment.suggestedCategories
-              : raw.categories,
+          categories,
+          primaryDomain,
+          ...(secondaryDomains ? { secondaryDomains } : {}),
         });
       }
     } while (pageToken && accepted.length < target);

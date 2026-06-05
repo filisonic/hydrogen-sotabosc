@@ -20,7 +20,7 @@ const TOOLS = [
     id: 'organism-lab',
     title: 'Organism Lab',
     description:
-      'Parametric generative life — explore 50+ organism presets across animals, plants, fungi, microbes, minerals, and cosmic forms. Built with p5.js.',
+      'Parametric generative life — explore 50+ organism presets across animals, plants, fungi, minerals, and cosmic forms. Built with p5.js.',
     tags: ['p5.js', 'generative', 'parametric'],
     status: 'live',
     href: '/tools/organism-lab',

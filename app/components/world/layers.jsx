@@ -28,7 +28,7 @@ export function LayerSky({
       heroEmbed={heroEmbed}
       className={className}
     >
-      <div className="relative h-full min-h-[140px] w-full">
+      <div className="relative h-full w-full">
         <SpecimenNode
           {...MOCK_SPECIMENS['sky-spore']}
           position={[70, 20]}
@@ -59,7 +59,7 @@ export function LayerCanopy({
       heroEmbed={heroEmbed}
       className={className}
     >
-      <div className="relative h-full min-h-[140px] w-full">
+      <div className="relative h-full w-full">
         <SpecimenNode
           {...MOCK_SPECIMENS['electric-fern']}
           position={[15, 40]}
@@ -92,7 +92,7 @@ export function LayerUnderstory({
       heroEmbed={heroEmbed}
       className={className}
     >
-      <div className="relative h-full min-h-[140px] w-full">
+      <div className="relative h-full w-full">
         <SpecimenNode
           {...MOCK_SPECIMENS['bioluminescent-mycena']}
           position={[80, 60]}
@@ -132,7 +132,7 @@ export function LayerWater({
       heroEmbed={heroEmbed}
       className={className}
     >
-      <div className="relative h-full min-h-[140px] w-full">
+      <div className="relative h-full w-full">
         <SpecimenNode
           {...MOCK_SPECIMENS['tide-lantern']}
           position={[55, 35]}
@@ -165,7 +165,7 @@ export function LayerSoil({
       heroEmbed={heroEmbed}
       className={className}
     >
-      <div className="relative h-full min-h-[140px] w-full">
+      <div className="relative h-full w-full">
         <SpecimenNode
           {...MOCK_SPECIMENS['root-archive']}
           position={[48, 42]}
@@ -198,7 +198,7 @@ export function LayerBedrock({
       heroEmbed={heroEmbed}
       className={className}
     >
-      <div className="relative h-full min-h-[140px] w-full">
+      <div className="relative h-full w-full">
         <SpecimenNode
           {...MOCK_SPECIMENS['bedrock-sigil']}
           position={[50, 38]}

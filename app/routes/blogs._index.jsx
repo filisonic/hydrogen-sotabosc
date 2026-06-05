@@ -2,6 +2,7 @@ import {Link, useLoaderData} from 'react-router';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import { motion } from 'framer-motion';
+import {MEMBERSHIP_PUBLIC} from '~/lib/featureFlags';
 
 /**
  * @type {Route.MetaFunction}
@@ -132,10 +133,12 @@ export default function Blogs() {
       {/* LUXURIOUS CTA SECTION */}
       <section style={{ background: COLORS.pink, color: '#fff', padding: '10rem 2rem', textAlign: 'center', borderTop: '4px solid #000' }}>
         <h2 style={{ fontSize: 'clamp(3rem, 8vw, 6rem)', fontWeight: 900, lineHeight: 0.9, maxWidth: '900px', margin: '0 auto 4rem', textTransform: 'uppercase' }}>
-          Get the physical edition and full digital access.
+          {MEMBERSHIP_PUBLIC
+            ? 'Get the physical edition and full digital access.'
+            : 'Explore Barcelona’s living creative map.'}
         </h2>
         <Link 
-          to="/membership" 
+          to={MEMBERSHIP_PUBLIC ? '/membership' : '/'} 
           style={{ 
             display: 'inline-block',
             background: COLORS.yellow,
@@ -149,7 +152,7 @@ export default function Blogs() {
             textDecoration: 'none'
           }}
         >
-          Join the Network
+          {MEMBERSHIP_PUBLIC ? 'Join the Network' : 'Enter the living map'}
         </Link>
       </section>
     </div>

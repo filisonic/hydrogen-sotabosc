@@ -7,7 +7,7 @@
  * @param {string} description
  * @param {React.ReactNode} background
  * @param {React.ReactNode} children — SpecimenNode(s); lives on the forest layer with room to breathe.
- * @param {React.ReactNode} [heroEmbed] — narrative + directory cards; below the specimen field.
+ * @param {React.ReactNode} [heroEmbed] — narrative + directory cards; below the specimen field (page scroll, no inner trap).
  * @param {'dark' | 'ink'} [surface] — ink: light B&W scene + dark type; dark: legacy night forest.
  */
 export function EcosystemLayer({
@@ -23,22 +23,22 @@ export function EcosystemLayer({
   const ink = surface === 'ink';
 
   return (
-    <section
-      id={id}
+    <div
+      data-eco-layer={id}
       data-eco-surface={surface}
-      className={`eco-layer-section relative h-full w-full flex flex-col overflow-hidden ${className}`}
+      className={`eco-layer-section relative w-full flex flex-col ${className}`}
     >
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">{background}</div>
 
       <div
-        className={`relative z-10 flex flex-1 min-h-0 flex-col w-full max-w-7xl mx-auto px-4 pt-5 pb-4 md:pt-7 md:pb-6 text-center ${
+        className={`eco-layer-content relative z-10 flex flex-col w-full max-w-7xl mx-auto px-4 pt-1 pb-1 md:pt-1.5 md:pb-1.5 text-center ${
           ink ? 'text-stone-900' : 'text-white'
         }`}
       >
         <div
           className={
             ink
-              ? 'shrink-0 max-w-4xl mx-auto rounded-2xl md:rounded-3xl px-4 py-3 md:px-8 md:py-5 bg-white/72 backdrop-blur-md ring-1 ring-white/70 shadow-[0_12px_40px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.95)]'
+              ? 'shrink-0 max-w-4xl mx-auto rounded-2xl md:rounded-3xl px-3 py-2.5 md:px-6 md:py-3.5 bg-white/72 backdrop-blur-md ring-1 ring-white/70 shadow-[0_12px_40px_rgba(0,0,0,0.12),inset_0_1px_0_rgba(255,255,255,0.95)]'
               : 'shrink-0 max-w-4xl mx-auto'
           }
         >
@@ -75,45 +75,33 @@ export function EcosystemLayer({
 
         {children ? (
           <div
-            className="relative z-[15] shrink-0 w-full max-w-6xl mx-auto mt-3 md:mt-5 min-h-[clamp(7.25rem,17vh,10rem)] md:min-h-[clamp(8rem,19vh,11.5rem)] pointer-events-none"
+            className="relative z-[15] w-full max-w-6xl mx-auto h-0 pointer-events-none"
             role="presentation"
           >
-            <div className="absolute inset-0 rounded-2xl md:rounded-3xl pointer-events-none overflow-visible">
-              <div
-                className="absolute inset-0 opacity-[0.35] md:opacity-40 rounded-2xl md:rounded-3xl"
-                style={{
-                  background: ink
-                    ? 'radial-gradient(ellipse 90% 75% at 50% 40%, rgba(0,0,0,0.05), transparent 70%)'
-                    : 'radial-gradient(ellipse 90% 75% at 50% 40%, rgba(255,255,255,0.14), transparent 70%)',
-                }}
-              />
+            <div className="absolute inset-x-0 top-0 flex h-14 md:h-16 items-center justify-center">
+              {children}
             </div>
-            <div className="relative h-full min-h-[inherit] w-full">{children}</div>
           </div>
         ) : null}
 
         {heroEmbed ? (
           <div
-            className="relative z-20 flex-1 min-h-0 w-full max-w-6xl mx-auto mt-4 md:mt-5 flex flex-col pointer-events-auto text-left"
+            className="relative z-20 w-full max-w-6xl mx-auto mt-3 md:mt-4 flex flex-col pointer-events-auto text-left"
             role="region"
             aria-label={`${title} listings`}
           >
             <div
               className={
                 ink
-                  ? 'flex-1 min-h-0 rounded-2xl md:rounded-3xl border border-stone-300/70 bg-gradient-to-b from-white/75 via-white/60 to-stone-100/70 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_18px_50px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col'
-                  : 'flex-1 min-h-0 rounded-2xl md:rounded-3xl border border-white/16 bg-gradient-to-b from-black/40 via-black/28 to-black/45 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_24px_70px_rgba(0,0,0,0.45)] overflow-hidden flex flex-col'
+                  ? 'rounded-2xl md:rounded-3xl border border-stone-300/70 bg-gradient-to-b from-white/75 via-white/60 to-stone-100/70 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_18px_50px_rgba(0,0,0,0.08)]'
+                  : 'rounded-2xl md:rounded-3xl border border-white/16 bg-gradient-to-b from-black/40 via-black/28 to-black/45 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_24px_70px_rgba(0,0,0,0.45)]'
               }
             >
-              <div className="flex-1 min-h-0 overflow-hidden overscroll-contain p-3 md:p-5">
-                {heroEmbed}
-              </div>
+              <div className="p-3 md:p-5">{heroEmbed}</div>
             </div>
           </div>
-        ) : (
-          <div className="flex-1 min-h-[min(12vh,120px)]" aria-hidden />
-        )}
+        ) : null}
       </div>
-    </section>
+    </div>
   );
 }

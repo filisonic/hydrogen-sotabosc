@@ -1,11 +1,18 @@
 import { useState } from 'react';
 import { Link } from 'react-router';
 import { motion, AnimatePresence } from 'framer-motion';
+import { MembershipDormantPage } from '~/components/membership/MembershipDormantPage';
+import { MEMBERSHIP_PUBLIC } from '~/lib/featureFlags';
 import { MAG_IMAGE_COVER, MAG_IMAGE_PERKS } from '~/lib/magAssets';
 
 export const meta = () => [
-  { title: "Membership — Sotabosc" },
-  { name: 'description', content: "Join Sotabosc's living ecosystem. Choose your ecological domain and get curated trips, magazines, and original art pieces." },
+  { title: MEMBERSHIP_PUBLIC ? 'Membership — Sotabosc' : 'Explore the map — Sotabosc' },
+  {
+    name: 'description',
+    content: MEMBERSHIP_PUBLIC
+      ? "Join Sotabosc's living ecosystem. Choose your ecological domain and get curated trips, magazines, and original art pieces."
+      : "Sotabosc membership is paused while we grow the public living map. Explore Barcelona's creative ecosystem.",
+  },
 ];
 
 const containerVariants = {
@@ -29,6 +36,10 @@ const itemVariants = {
 };
 
 export default function MembershipIndex() {
+  if (!MEMBERSHIP_PUBLIC) {
+    return <MembershipDormantPage />;
+  }
+
   return (
     <div className="mag" style={{ backgroundColor: 'var(--surface)', color: 'var(--ink)', overflowX: 'hidden' }}>
       {/* ═══════════════ HERO SPREAD ═══════════════ */}
@@ -267,7 +278,7 @@ export default function MembershipIndex() {
                 <li style={{ marginBottom: '1.5rem' }}>↳ Core Barcelona Directory</li>
                 <li style={{ marginBottom: '1.5rem' }}>↳ Open Lab Research Papers</li>
               </ul>
-              <Link to="/city-world" className="mag-btn-o" style={{ textAlign: 'center', display: 'block' }}>
+              <Link to="/" className="mag-btn-o" style={{ textAlign: 'center', display: 'block' }}>
                 Initialize Profile
               </Link>
             </motion.div>
@@ -327,7 +338,7 @@ export default function MembershipIndex() {
           <h2 style={{ fontSize: 'var(--step-4)', fontWeight: 900, lineHeight: 1.1, marginBottom: '4rem', textTransform: 'uppercase' }}>
             Don't just watch <br />the city change. <br />Be the reason <br />it thrives.
           </h2>
-          <Link to="/city-world" style={{ 
+          <Link to="/" style={{ 
             display: 'inline-block',
             borderBottom: '8px solid var(--y)',
             color: 'var(--y)',
@@ -380,13 +391,20 @@ function JoinForm() {
     setStatus('loading');
     setErrorMsg('');
     try {
-      const res = await fetch('/api/membership/checkout', { method: 'POST' });
-      if (res.redirected) {
-        window.location.href = res.url;
-        return;
+      const res = await fetch('/api/membership/checkout', {
+        method: 'POST',
+        redirect: 'manual',
+      });
+
+      if (res.status >= 300 && res.status < 400) {
+        const checkoutUrl = res.headers.get('Location');
+        if (checkoutUrl) {
+          window.location.href = checkoutUrl;
+          return;
+        }
       }
-      // If not redirected, parse error
-      const json = await res.json();
+
+      const json = await res.json().catch(() => ({}));
       setErrorMsg(json.error || 'Could not start checkout.');
       setStatus('error');
     } catch {
@@ -411,8 +429,8 @@ function JoinForm() {
           You're on the list.
         </p>
         <p style={{ fontSize: 'var(--step--1)', opacity: 0.8 }}>
-          Check your email — a magic link is waiting. We'll reach out to founding
-          members as soon as payments go live.
+          Check your email for a magic link to your account. We'll keep you posted
+          on founding member perks — or join now with the button above when you're ready.
         </p>
       </motion.div>
     );
@@ -509,7 +527,7 @@ function JoinForm() {
         </p>
       )}
       <p style={{ fontSize: 'var(--step--2)', opacity: 0.65, margin: 0 }}>
-        We'll email you as soon as founding memberships open. No charge yet.
+        Join the waitlist for updates. No charge — use Join Now above when you're ready to subscribe.
       </p>
       <div style={{ display: 'flex', gap: '0.75rem' }}>
         <button

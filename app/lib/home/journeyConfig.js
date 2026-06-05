@@ -3,7 +3,7 @@
  * Barcelona stays the ground truth; Sotabosc is the story wrapper.
  */
 
-/** @typedef {'plants'|'algae'|'fungi'|'microbes'|'animals'|'earth'|'neutral'} JourneyDomainKey */
+/** @typedef {'plants'|'algae'|'fungi'|'animals'|'earth'|'neutral'} JourneyDomainKey */
 
 /** @type {Record<string, Record<string, string>>} */
 const COPY = {
@@ -72,10 +72,49 @@ export function getJourneyCopy(domain) {
 }
 
 /**
+ * Domain-aware category filters so each soil/canopy layer has listings when a visitor picks a domain.
+ * Falls back to neutral filters when domain is unset.
+ * @type {Record<string, { canopy: string[]; soil: string[] }>}
+ */
+const DOMAIN_LAYER_FILTERS = {
+  plants: {
+    canopy: ['specialty-coffee', 'workshop', 'art-gallery'],
+    soil: ['restaurant', 'shop', 'art-gallery'],
+  },
+  algae: {
+    canopy: ['workshop', 'retreat', 'specialty-coffee'],
+    soil: ['restaurant', 'retreat', 'workshop'],
+  },
+  fungi: {
+    canopy: ['coworking', 'specialty-coffee', 'workshop', 'conference', 'art-gallery'],
+    soil: ['restaurant', 'coworking', 'shop', 'workshop', 'conference'],
+  },
+  animals: {
+    canopy: ['music-venue', 'specialty-coffee', 'workshop'],
+    soil: ['restaurant', 'music-venue'],
+  },
+  earth: {
+    canopy: ['specialty-coffee', 'restaurant', 'workshop'],
+    soil: ['restaurant', 'specialty-coffee', 'shop'],
+  },
+};
+
+const NEUTRAL_LAYER_FILTERS = {
+  canopy: ['specialty-coffee', 'workshop'],
+  soil: ['restaurant'],
+};
+
+function layerFiltersForDomain(domain) {
+  if (domain && DOMAIN_LAYER_FILTERS[domain]) return DOMAIN_LAYER_FILTERS[domain];
+  return NEUTRAL_LAYER_FILTERS;
+}
+
+/**
  * @param {JourneyDomainKey | null | undefined} domain
  */
 export function getJourneyChapters(domain) {
   const c = getJourneyCopy(domain);
+  const layers = layerFiltersForDomain(domain);
 
   return [
     {
@@ -86,7 +125,7 @@ export function getJourneyChapters(domain) {
       description: c.ch1Desc,
       narrative: c.ch1Story,
       kind: 'places',
-      categoryFilter: ['specialty-coffee', 'workshop'],
+      categoryFilter: layers.canopy,
       limit: 6,
     },
     {
@@ -107,7 +146,7 @@ export function getJourneyChapters(domain) {
       description: c.ch3Desc,
       narrative: c.ch3Story,
       kind: 'places',
-      categoryFilter: ['restaurant'],
+      categoryFilter: layers.soil,
       limit: 5,
     },
     {

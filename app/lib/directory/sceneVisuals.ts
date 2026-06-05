@@ -1,4 +1,5 @@
 import type { CityEvent, Creator, DomainCategory, ListingCategory, Place } from './types';
+import { normalizeDomain } from './domains';
 
 /** Stable hash 0..n-1 from slug */
 function bucket(slug: string, n: number) {
@@ -99,14 +100,16 @@ export function resolvePlaceImageUrl(place: Place): string | undefined {
 export function resolveEventImageUrl(event: CityEvent, place?: Place | null): string | undefined {
   if (event.imageUrl) return event.imageUrl;
   if (place) return resolvePlaceImageUrl(place);
-  const pool = DOMAIN_EVENT[event.primaryDomain] ?? DOMAIN_EVENT.earth;
+  const domain = normalizeDomain(event.primaryDomain) ?? 'earth';
+  const pool = DOMAIN_EVENT[domain] ?? DOMAIN_EVENT.earth;
   const path = pool[bucket(event.slug, pool.length)] ?? pool[0];
   return unsplash(path);
 }
 
 export function resolveCreatorImageUrl(creator: Creator): string | undefined {
   if (creator.imageUrl) return creator.imageUrl;
-  const pool = DOMAIN_CREATOR[creator.primaryDomain] ?? DOMAIN_CREATOR.plants;
+  const domain = normalizeDomain(creator.primaryDomain) ?? 'plants';
+  const pool = DOMAIN_CREATOR[domain] ?? DOMAIN_CREATOR.plants;
   const path = pool[bucket(creator.slug, pool.length)] ?? pool[0];
   return unsplash(path);
 }

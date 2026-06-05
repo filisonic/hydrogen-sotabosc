@@ -1,61 +1,110 @@
 import type { DomainCategory, ListingCategory } from './types';
 
+/** Five public ecosystem roles — microbes/Unseen retired from the picker. */
+export type PublicDomainCategory = Exclude<DomainCategory, 'microbes'>;
+
+export const PUBLIC_DOMAIN_KEYS: PublicDomainCategory[] = [
+  'plants',
+  'fungi',
+  'animals',
+  'algae',
+  'earth',
+];
+
+/** One-word role verb per domain (messaging + league framing). */
+export const DOMAIN_ROLES: Record<PublicDomainCategory, string> = {
+  plants: 'Grow',
+  fungi: 'Connect',
+  animals: 'Activate',
+  algae: 'Restore',
+  earth: 'Ground',
+};
+
 export type ListingCategoryMeta = {
   label: string;
-  defaultDomain: DomainCategory;
+  defaultDomain: PublicDomainCategory;
   /** Short line under the category title on directory pages */
   blurb?: string;
 };
 
 export const DOMAINS: Record<
   DomainCategory,
-  { label: string; emoji: string; color: string; description: string }
+  { label: string; emoji: string; color: string; description: string; role?: string }
 > = {
   plants: {
     label: 'Plants',
     emoji: '🌳',
     color: '#22c55e',
-    description: 'Rooted growth, gardens, green spaces',
+    role: 'Grow',
+    description: 'Root community — studios, gardens, and spaces people return to weekly',
   },
   algae: {
     label: 'Algae',
     emoji: '🌊',
     color: '#06b6d4',
-    description: 'Flow, water, coastal rhythms',
+    role: 'Restore',
+    description: 'Flow and recovery — retreats, wellness, coastal rhythm',
   },
   fungi: {
     label: 'Fungi',
     emoji: '🍄',
     color: '#a855f7',
-    description: 'Hidden networks, fermentation, underground culture',
+    role: 'Connect',
+    description: 'Hidden networks — galleries, makers, fermentation, rooms that link people',
   },
   microbes: {
     label: 'Unseen',
     emoji: '✦',
     color: '#eab308',
-    description: 'Signals too fine to name — sensors, labs, and the life between the lines',
+    description: 'Legacy tag — maps to Fungi in the five-domain model',
   },
   animals: {
     label: 'Animals',
     emoji: '🐾',
     color: '#f97316',
-    description: 'Movement, instinct, community herds',
+    role: 'Activate',
+    description: 'Motion and energy — venues, events, pop-ups, live culture',
   },
   earth: {
     label: 'Earth',
     emoji: '🪨',
     color: '#78716c',
-    description: 'Foundation, minerals, grounding practices',
+    role: 'Ground',
+    description: 'Daily ritual — coffee, food, craft, and material shops',
   },
 };
 
-export const DOMAIN_KEYS = Object.keys(DOMAINS) as DomainCategory[];
+/** Domain picker + public filters — five leagues only. */
+export const DOMAIN_KEYS = PUBLIC_DOMAIN_KEYS;
+
+/** Map retired or unknown domains to a public league. */
+export function normalizeDomain(
+  domain: string | null | undefined,
+): PublicDomainCategory | null {
+  if (!domain) return null;
+  if (domain === 'microbes') return 'fungi';
+  if (PUBLIC_DOMAIN_KEYS.includes(domain as PublicDomainCategory)) {
+    return domain as PublicDomainCategory;
+  }
+  return null;
+}
+
+export function normalizeDomainList(
+  domains: DomainCategory[] | undefined,
+): PublicDomainCategory[] | undefined {
+  if (!domains?.length) return undefined;
+  const normalized = domains
+    .map((d) => normalizeDomain(d))
+    .filter((d): d is PublicDomainCategory => Boolean(d));
+  const unique = [...new Set(normalized)];
+  return unique.length ? unique : undefined;
+}
 
 export const LISTING_CATEGORIES: Record<ListingCategory, ListingCategoryMeta> = {
   coworking: { label: 'Coworking Spaces', defaultDomain: 'fungi' },
-  'art-gallery': { label: 'Art Galleries', defaultDomain: 'plants' },
+  'art-gallery': { label: 'Art Galleries', defaultDomain: 'fungi' },
   'music-venue': { label: 'Music & Events', defaultDomain: 'animals' },
-  conference: { label: 'Conferences', defaultDomain: 'microbes' },
+  conference: { label: 'Conferences', defaultDomain: 'fungi' },
   workshop: {
     label: 'Workshops & classes',
     defaultDomain: 'fungi',
@@ -68,14 +117,16 @@ export const LISTING_CATEGORIES: Record<ListingCategory, ListingCategoryMeta> = 
   },
   'specialty-coffee': { label: 'Specialty Coffee', defaultDomain: 'earth' },
   restaurant: { label: 'Restaurants & Food', defaultDomain: 'earth' },
-  shop: { label: 'Shops & Markets', defaultDomain: 'plants' },
+  shop: { label: 'Shops & Markets', defaultDomain: 'earth' },
   other: { label: 'Other', defaultDomain: 'earth' },
 };
 
 export const LISTING_CATEGORY_KEYS = Object.keys(LISTING_CATEGORIES) as ListingCategory[];
 
-export function getDomain(key: DomainCategory) {
-  return DOMAINS[key];
+export function getDomain(key: DomainCategory | string) {
+  const normalized = normalizeDomain(key) ?? (key in DOMAINS ? (key as DomainCategory) : null);
+  if (normalized) return DOMAINS[normalized];
+  return DOMAINS[key as DomainCategory];
 }
 
 export function getListingCategory(key: ListingCategory): ListingCategoryMeta {

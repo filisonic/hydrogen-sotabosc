@@ -1,4 +1,4 @@
-export type OrganismDomain = 'animals' | 'plants' | 'fungi' | 'algae' | 'microbes' | 'earth';
+export type OrganismDomain = 'animals' | 'plants' | 'fungi' | 'algae' | 'earth';
 
 export type OrganismCard = {
     uuid: string;           // crypto.randomUUID()

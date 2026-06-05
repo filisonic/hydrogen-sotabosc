@@ -16,6 +16,7 @@ import { useOrganismStore } from '~/lib/store/useOrganismStore';
 import { getDomain, LISTING_CATEGORIES } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
 import { getJourneyChapters } from '~/lib/home/journeyConfig';
+import { getStageForXP } from '~/lib/organism/progression';
 import { resolveCreatorImageUrl } from '~/lib/directory/sceneVisuals';
 import { useFilteredDirectory } from './useFilteredDirectory';
 import { MOCK_SPECIMENS } from '~/lib/world/specimens';
@@ -46,6 +47,44 @@ function placesInCategories(places, cats) {
   return places.filter((p) => p.categories?.some((c) => cats.includes(c)));
 }
 
+/** @param {unknown} place */
+function placeKey(place) {
+  return place?.slug || place?.id || '';
+}
+
+/**
+ * Pick places per journey chapter without repeating the same business across layers.
+ * @param {ReturnType<typeof getJourneyChapters>} chapters
+ * @param {unknown[]} shuffledPlaces
+ */
+function pickUniquePlacesByChapter(chapters, shuffledPlaces) {
+  /** @type {Map<string, unknown[]>} */
+  const byStep = new Map();
+  const used = new Set();
+
+  for (const chapter of chapters) {
+    if (chapter.kind !== 'places') continue;
+    const lim = chapter.limit ?? 4;
+    const pool = shuffledPlaces.filter((p) => {
+      const key = placeKey(p);
+      return key && !used.has(key);
+    });
+
+    let picked = placesInCategories(pool, chapter.categoryFilter).slice(0, lim);
+    if (!picked.length && pool.length) {
+      picked = pool.slice(0, lim);
+    }
+
+    for (const p of picked) {
+      const key = placeKey(p);
+      if (key) used.add(key);
+    }
+    byStep.set(chapter.stepId, picked);
+  }
+
+  return byStep;
+}
+
 const LAYER_COMPONENTS = {
   canopy: LayerCanopy,
   understory: LayerUnderstory,
@@ -54,15 +93,15 @@ const LAYER_COMPONENTS = {
   bedrock: LayerBedrock,
 };
 
-/** Framed, scrollable listing stack inside each ecosystem layer */
+/** Framed listing stack — flows with page scroll (no nested scroll trap). */
 function LayerListingPanel({ eyebrow, hint, children }) {
   return (
-    <div className="rounded-xl border border-stone-200/85 bg-white/82 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_12px_40px_rgba(0,0,0,0.06)] backdrop-blur-md overflow-hidden">
+    <div className="rounded-xl border border-stone-200/85 bg-white/82 shadow-[inset_0_1px_0_rgba(255,255,255,0.95),0_12px_40px_rgba(0,0,0,0.06)] backdrop-blur-md">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-stone-200/70 px-3 py-2 md:px-4 md:py-2.5 bg-stone-100/65">
         <span className="text-[10px] font-bold uppercase tracking-[0.22em] text-stone-600">{eyebrow}</span>
         <span className="text-[10px] text-stone-500">{hint}</span>
       </div>
-      <div className="max-h-[min(58vh,680px)] overflow-y-auto overscroll-contain px-3 py-3 md:px-4 md:py-4 [scrollbar-width:thin] [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-stone-400/45">
+      <div className="px-3 py-3 md:px-4 md:py-4">
         {children}
       </div>
     </div>
@@ -75,37 +114,37 @@ function JourneyTrailBar({
   onShuffle,
   themeLabel,
   storeDomain,
+  accentColor,
+  resonancePoints,
+  resonanceStage,
 }) {
   return (
-    <div
-      className="sticky top-0 z-[110] flex flex-wrap items-center justify-between gap-2 px-3 py-2 border-b backdrop-blur-md"
-      style={{
-        borderColor: 'var(--sotabosc-border)',
-        backgroundColor: 'color-mix(in srgb, var(--sotabosc-surface) 88%, transparent)',
-        color: 'var(--sotabosc-text)',
-        boxShadow: '0 10px 30px rgba(27, 67, 50, 0.06)',
-      }}
-    >
-      <p className="text-[11px] md:text-xs font-semibold">
-        <span className="opacity-60">Trail</span>{' '}
-        <span style={{ color: 'var(--sotabosc-accent)' }}>
+    <div className="journey-trail-bar sticky top-0 z-[110] flex flex-wrap items-center justify-between gap-2 px-3 py-2 border-b border-stone-200/90 bg-[#fffef8]/94 text-stone-900 backdrop-blur-md shadow-[0_8px_24px_rgba(0,0,0,0.04)]">
+      <p className="text-[11px] md:text-xs font-semibold text-stone-800">
+        <span className="text-stone-500">Trail</span>{' '}
+        <span style={{ color: accentColor ?? '#1b4332' }}>
           {completedCount}/{totalSteps} nodes
         </span>
-        {themeLabel ? <span className="opacity-70 font-normal"> · {themeLabel}</span> : null}
+        {themeLabel ? <span className="text-stone-600 font-normal"> · {themeLabel}</span> : null}
       </p>
-      <div className="flex items-center gap-2">
-        <span className="hidden sm:inline text-[10px] opacity-50">Points & badges soon</span>
-        <div className="flex items-center gap-2">
-          <MythologyNavigation domain={themeLabel ? storeDomain : null} className="hidden md:flex" />
-          <button
-            type="button"
-            onClick={onShuffle}
-            className="text-[10px] md:text-xs font-bold px-3 py-1.5 rounded-full border transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--sotabosc-accent)] focus-visible:ring-offset-2"
-            style={{ borderColor: 'var(--sotabosc-border)' }}
+      <div className="flex items-center gap-2 flex-wrap justify-end">
+        {typeof resonancePoints === 'number' ? (
+          <span
+            className="text-[10px] md:text-xs font-bold tabular-nums px-2 py-1 rounded-full border border-stone-300/90 bg-white/90 text-stone-800"
+            title="Resonance points — scroll, discover, and explore to earn more"
           >
-            Different day's path
-          </button>
-        </div>
+            {resonanceStage ? `${resonanceStage} · ` : ''}
+            {resonancePoints} resonance
+          </span>
+        ) : null}
+        <MythologyNavigation domain={storeDomain} className="flex flex-wrap" />
+        <button
+          type="button"
+          onClick={onShuffle}
+          className="text-[10px] md:text-xs font-bold px-3 py-1.5 rounded-full border border-stone-300 bg-white text-stone-800 transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-stone-400 focus-visible:ring-offset-2"
+        >
+          Different day's path
+        </button>
       </div>
     </div>
   );
@@ -122,6 +161,9 @@ function JourneyTrailBar({
  */
 export function HomeSotaboscJourney({ directory, spineProducts = [] }) {
   const storeDomain = useOrganismStore((s) => s.organism?.domain ?? null);
+  const totalXP = useOrganismStore((s) => s.totalXP);
+  const recordActivity = useOrganismStore((s) => s.recordActivity);
+  const resonanceStage = getStageForXP(totalXP).emoji;
   /** Visual atmosphere matches chosen organism domain (plants → greener canopy, etc.). */
   const visualDomain = storeDomain;
   const {
@@ -170,6 +212,11 @@ export function HomeSotaboscJourney({ directory, spineProducts = [] }) {
 
   const chapters = useMemo(() => getJourneyChapters(storeDomain), [storeDomain]);
 
+  const placePicksByStep = useMemo(
+    () => pickUniquePlacesByChapter(chapters, shuffledPlaces),
+    [chapters, shuffledPlaces],
+  );
+
   const spineCollectibles = useMemo(() => {
     const keys = ['electric-fern', 'bioluminescent-mycena', 'sky-spore', 'tide-lantern'];
     return keys
@@ -194,8 +241,10 @@ export function HomeSotaboscJourney({ directory, spineProducts = [] }) {
 
   const markStep = useCallback((stepId) => {
     setCompletedSteps((prev) => {
+      if (prev.has(stepId)) return prev;
       const next = new Set(prev);
       next.add(stepId);
+      recordActivity('trail_node', stepId);
       if (typeof localStorage !== 'undefined') {
         try {
           localStorage.setItem(TRAIL_STORAGE, JSON.stringify([...next]));
@@ -205,7 +254,7 @@ export function HomeSotaboscJourney({ directory, spineProducts = [] }) {
       }
       return next;
     });
-  }, []);
+  }, [recordActivity]);
 
   useEffect(() => {
     if (typeof localStorage === 'undefined') return;
@@ -243,8 +292,9 @@ export function HomeSotaboscJourney({ directory, spineProducts = [] }) {
     const lim = chapter.limit ?? 4;
 
     if (chapter.kind === 'places') {
-      const picked = placesInCategories(shuffledPlaces, chapter.categoryFilter).slice(0, lim);
-      const items = [...picked].sort((a, b) => a.name.localeCompare(b.name));
+      const items = [...(placePicksByStep.get(chapter.stepId) ?? [])].sort((a, b) =>
+        a.name.localeCompare(b.name),
+      );
       return (
         <div className="text-left space-y-4">
           <p className="text-sm md:text-base text-stone-800 font-[family-name:var(--font-editorial)] leading-relaxed max-w-2xl">
@@ -394,7 +444,7 @@ export function HomeSotaboscJourney({ directory, spineProducts = [] }) {
   return (
     <div
       data-stitch-id="forest-stage"
-      className="scroll-world-container relative bg-stone-100"
+      className="scroll-world-container relative"
       data-scroll-domain={storeDomain ?? 'neutral'}
       data-visual-tone="ink"
     >
@@ -405,6 +455,9 @@ export function HomeSotaboscJourney({ directory, spineProducts = [] }) {
         completedCount={completedSteps.size}
         themeLabel={showPersonalized ? themeLabel : null}
         storeDomain={storeDomain}
+        accentColor={storeDomain ? getDomain(storeDomain).color : undefined}
+        resonancePoints={storeDomain ? totalXP : undefined}
+        resonanceStage={storeDomain ? resonanceStage : undefined}
         onShuffle={() => {
           setShuffleNonce((n) => n + 1);
           setCompletedSteps(new Set());
@@ -423,41 +476,43 @@ export function HomeSotaboscJourney({ directory, spineProducts = [] }) {
           const Layer = LAYER_COMPONENTS[chapter.layer];
           if (!Layer) return null;
           const heroEmbed = buildHeroEmbed(chapter);
-          const prev = index > 0 ? chapters[index - 1] : null;
+          const next = index < chapters.length - 1 ? chapters[index + 1] : null;
           return (
             <Fragment key={chapter.stepId}>
-              {prev ? (
-                <JourneySpine
-                  stepIndex={index}
-                  totalSteps={chapters.length}
-                  fromLayer={prev.layer}
-                  toLayer={chapter.layer}
-                  domainKey={storeDomain}
-                  tone="ink"
-                  shopProducts={spineProducts}
-                  collectibles={spineCollectibles}
-                />
-              ) : null}
               <motion.section
                 data-journey-step={chapter.stepId}
                 id={chapter.layer}
-                className="relative flex min-h-[min(88dvh,820px)] flex-col scroll-mt-2 border-b border-stone-200/70"
+                className="journey-layer-section relative overflow-hidden scroll-mt-2 p-0 m-0"
                 initial={{ opacity: 0.72, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.12, margin: '-32px 0px' }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className="flex flex-1 flex-col min-h-0 pt-2 md:pt-4">
-                  <Layer
-                    {...handlers}
-                    title={chapter.title}
-                    description={chapter.description}
-                    heroEmbed={heroEmbed}
-                    visualDomain={visualDomain}
-                    className="flex-1 min-h-0 flex flex-col"
+                <Layer
+                  {...handlers}
+                  title={chapter.title}
+                  description={chapter.description}
+                  heroEmbed={heroEmbed}
+                  visualDomain={visualDomain}
+                  className="flex flex-col w-full"
+                />
+              </motion.section>
+              {next ? (
+                <div className="journey-layer-seam" aria-hidden={false}>
+                  <JourneySpine
+                    embedded
+                    edge
+                    stepIndex={index + 1}
+                    totalSteps={chapters.length}
+                    fromLayer={chapter.layer}
+                    toLayer={next.layer}
+                    domainKey={storeDomain}
+                    tone="ink"
+                    shopProducts={spineProducts}
+                    collectibles={spineCollectibles}
                   />
                 </div>
-              </motion.section>
+              ) : null}
             </Fragment>
           );
         })}

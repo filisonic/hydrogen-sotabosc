@@ -9,7 +9,7 @@ All subdomains point to the **same Shopify Oxygen deployment**. The `server.js` 
 | Subdomain | Internal Path | What It Serves |
 |---|---|---|
 | `sotabosc.world` | `/` | Magazine portal — editorial hub linking to everything |
-| `city.sotabosc.world` | `/city-world` | Immersive scroll world experience |
+| `city.sotabosc.world` | `/` | Living map (same as homepage) |
 | `directory.sotabosc.world` | `/city/*` | Barcelona directory (places, events, creators, hikes) |
 | `tools.sotabosc.world` | `/tools/*` | Creative tools hub |
 | `labs.sotabosc.world` | `/labs/*` | Speculative Futures Lab / Research |
@@ -75,7 +75,9 @@ After DNS propagation (up to 24 hours, usually faster):
 
 Everything also works at direct paths on the main domain:
 
-- `sotabosc.world/city-world` → immersive scroll world
+- `sotabosc.world/` → living map (homepage)
+- `sotabosc.world/city-world` → 301 redirect to `/`
+- `sotabosc.world/discover` → editorial magazine browse
 - `sotabosc.world/city` → directory
 - `sotabosc.world/tools` → tools index
 - `sotabosc.world/tools/organism-lab` → organism lab
