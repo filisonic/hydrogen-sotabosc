@@ -1,5 +1,6 @@
-import { useLoaderData, Link } from 'react-router';
+import { useLoaderData, Link, useSearchParams } from 'react-router';
 import { openGraphImageMeta } from '~/lib/seo/siteImagery';
+import { CONTACT_EMAIL } from '~/lib/site/contact';
 
 /**
  * @type {Route.MetaFunction}
@@ -26,8 +27,43 @@ export async function loader(args) {
   };
 }
 
+function buildMailtoHref({name, email, organization, projectType, message}) {
+  const subject = encodeURIComponent(
+    `Sotabosc inquiry${projectType ? `: ${projectType}` : ''}`,
+  );
+  const body = encodeURIComponent(
+    [
+      `Name: ${name}`,
+      `Email: ${email}`,
+      organization ? `Organization: ${organization}` : null,
+      projectType ? `Project type: ${projectType}` : null,
+      '',
+      message,
+    ]
+      .filter(Boolean)
+      .join('\n'),
+  );
+  return `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${body}`;
+}
+
 export default function ContactPage() {
   const data = useLoaderData();
+  const [searchParams] = useSearchParams();
+  const defaultProjectType = searchParams.get('type') || '';
+
+  function handleSubmit(event) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const href = buildMailtoHref({
+      name: String(formData.get('name') || ''),
+      email: String(formData.get('email') || ''),
+      organization: String(formData.get('organization') || ''),
+      projectType: String(formData.get('project-type') || ''),
+      message: String(formData.get('message') || ''),
+    });
+    window.location.href = href;
+  }
 
   return (
     <main className="min-h-screen bg-white">
@@ -92,7 +128,7 @@ export default function ContactPage() {
             <div className="bg-stone-50 rounded-2xl p-8">
               <h2 className="text-2xl font-bold text-stone-900 mb-6">Start the conversation</h2>
               
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-stone-700 mb-2">
                     Name
@@ -139,14 +175,16 @@ export default function ContactPage() {
                   <select
                     id="project-type"
                     name="project-type"
+                    defaultValue={defaultProjectType}
                     className="w-full px-4 py-3 border border-stone-300 rounded-lg focus:ring-2 focus:ring-green-600 focus:border-green-600 transition-colors"
                   >
                     <option value="">Select a project type</option>
-                    <option value="platform">Community Platform</option>
-                    <option value="research">Cultural Research</option>
-                    <option value="documentation">Documentation Project</option>
-                    <option value="innovation">Urban Innovation</option>
-                    <option value="other">Other</option>
+                    <option value="Brand & Media">Brand & Media</option>
+                    <option value="Community Platform">Community Platform</option>
+                    <option value="Cultural Research">Cultural Research</option>
+                    <option value="Documentation Project">Documentation Project</option>
+                    <option value="Urban Innovation">Urban Innovation</option>
+                    <option value="Other">Other</option>
                   </select>
                 </div>
 
@@ -175,8 +213,8 @@ export default function ContactPage() {
                 <p className="text-sm text-stone-600">
                   We typically respond within 2-3 business days. For urgent inquiries, 
                   you can also reach us directly at{' '}
-                  <a href="mailto:hello@sotabosc.world" className="text-green-700 hover:text-green-800 transition-colors">
-                    hello@sotabosc.world
+                  <a href={`mailto:${CONTACT_EMAIL}`} className="text-green-700 hover:text-green-800 transition-colors">
+                    {CONTACT_EMAIL}
                   </a>
                 </p>
               </div>

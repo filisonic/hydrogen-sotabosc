@@ -7,6 +7,7 @@ import {
   getMediaProcess,
   getMediaProjects,
   getMediaServices,
+  getMediaSocialReels,
 } from '~/lib/media/content';
 
 /**
@@ -14,14 +15,23 @@ import {
  */
 export const meta = ({data}) => {
   const origin = data?.origin;
+  const ogImage = origin
+    ? `${origin.replace(/\/$/, '')}/images/media/posters/director-showreel.jpg`
+    : null;
   return [
     {title: 'Media — Brand & Creative Studio | Sotabosc'},
     {
       name: 'description',
       content:
-        'Brand direction, creative strategy, and media production for founders and teams building something real. A studio you trust — not an agency that pitches.',
+        'Brand direction, creative strategy, and media production for founders and teams building something real. Films, campaigns, installations, and creative systems.',
     },
-    ...openGraphImageMeta(origin),
+    ...(ogImage
+      ? [
+          {property: 'og:image', content: ogImage},
+          {name: 'twitter:card', content: 'summary_large_image'},
+          {name: 'twitter:image', content: ogImage},
+        ]
+      : openGraphImageMeta(origin)),
   ];
 };
 
@@ -35,6 +45,7 @@ export async function loader(args) {
     services: getMediaServices(),
     process: getMediaProcess(),
     projects: getMediaProjects(),
+    socialReels: getMediaSocialReels(),
   };
 }
 
@@ -48,16 +59,8 @@ const wordReveal = {
 };
 
 function ServiceCard({service}) {
-  const Tag = service.link && !service.link.external ? Link : 'div';
-  const linkProps =
-    service.link && !service.link.external
-      ? {to: service.link.href}
-      : service.link?.external
-        ? {}
-        : {};
-
   return (
-    <Tag className="mag-feat-card" style={{minHeight: '220px'}} {...linkProps}>
+    <div className="mag-feat-card" style={{minHeight: '220px'}}>
       <span className="mag-feat-card-tag">{service.tagline}</span>
       <h4>{service.title}</h4>
       <p>{service.description}</p>
@@ -77,28 +80,47 @@ function ServiceCard({service}) {
       ) : null}
       {service.link ? (
         <p style={{marginTop: '10px', marginBottom: 0}}>
-          {service.link.external ? (
-            <a
-              href={service.link.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontSize: '11px',
-                color: 'var(--ink3)',
-                textDecoration: 'underline',
-                textUnderlineOffset: '3px',
-              }}
-            >
-              {service.link.label} →
-            </a>
-          ) : (
-            <span style={{fontSize: '11px', color: 'var(--ink3)'}}>
-              {service.link.label} →
-            </span>
-          )}
+          <a
+            href={service.link.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              fontSize: '11px',
+              color: 'var(--ink3)',
+              textDecoration: 'underline',
+              textUnderlineOffset: '3px',
+            }}
+          >
+            {service.link.label} →
+          </a>
         </p>
       ) : null}
-    </Tag>
+    </div>
+  );
+}
+
+function SocialReelCard({reel}) {
+  return (
+    <article
+      className="mag-place"
+      style={{overflow: 'hidden'}}
+    >
+      <video
+        className="mag-place-img"
+        style={{height: 'auto', aspectRatio: '9/16', objectFit: 'cover', display: 'block'}}
+        src={reel.video}
+        muted
+        loop
+        playsInline
+        autoPlay
+        preload="metadata"
+        aria-label={reel.title}
+      />
+      <div className="mag-place-body">
+        <span className="mag-place-cat">{reel.client}</span>
+        <h4>{reel.title}</h4>
+      </div>
+    </article>
   );
 }
 
@@ -113,13 +135,25 @@ function ProjectCard({project}) {
         style={{height: '200px'}}
       />
       <div className="mag-place-body">
-        <span className="mag-place-cat">
-          {project.category} · {project.year}
-        </span>
+        <span className="mag-place-cat">{project.category}</span>
         <h4>{project.title}</h4>
+        {project.summary ? <p>{project.summary}</p> : null}
       </div>
     </>
   );
+
+  if (project.external || project.url?.startsWith('http')) {
+    return (
+      <a
+        href={project.url}
+        className="mag-place"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {inner}
+      </a>
+    );
+  }
 
   if (project.url?.startsWith('/')) {
     return (
@@ -133,7 +167,7 @@ function ProjectCard({project}) {
 }
 
 export default function MediaPage() {
-  const {page, services, process, projects, origin} = useLoaderData();
+  const {page, services, process, projects, socialReels, origin} = useLoaderData();
   const headlineWords = page.hero.headline.split(' ');
 
   const jsonLd = {
@@ -144,6 +178,7 @@ export default function MediaPage() {
         name: 'Media — Sotabosc',
         url: `${origin}/media`,
         description: page.hero.subhead,
+        image: `${origin}/images/media/posters/director-showreel.jpg`,
       },
       {
         '@type': 'ProfessionalService',
@@ -197,14 +232,51 @@ export default function MediaPage() {
           initial={{opacity: 0, y: 24}}
           animate={{opacity: 1, y: 0}}
           transition={{duration: 0.7, delay: 0.55, ease: [0.22, 1, 0.36, 1]}}
+          style={{alignItems: 'stretch', width: '100%'}}
         >
-          <p className="mag-hero-tag" style={{maxWidth: '560px'}}>
-            {page.hero.subhead}
-          </p>
-          <div className="mag-hero-ctas">
-            <Link to={page.cta.href} className="mag-btn">
-              {page.cta.buttonLabel} →
-            </Link>
+          <div style={{flex: '1 1 320px', maxWidth: '560px'}}>
+            <p className="mag-hero-tag" style={{maxWidth: 'none'}}>
+              {page.hero.subhead}
+            </p>
+            <div className="mag-hero-ctas" style={{marginTop: '24px'}}>
+              <Link to={page.cta.href} className="mag-btn">
+                {page.cta.buttonLabel} →
+              </Link>
+            </div>
+          </div>
+
+          <div
+            style={{
+              flex: '1 1 360px',
+              maxWidth: '520px',
+              borderRadius: '14px',
+              overflow: 'hidden',
+              border: '1px solid var(--border)',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.1)',
+              position: 'relative',
+              aspectRatio: '16/10',
+            }}
+          >
+            {page.hero.showreelVideo ? (
+              <video
+                src={page.hero.showreelVideo}
+                poster={page.hero.image}
+                muted
+                loop
+                playsInline
+                autoPlay
+                preload="metadata"
+                style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}}
+                aria-label="Director showreel preview"
+              />
+            ) : (
+              <img
+                src={page.hero.image}
+                alt=""
+                style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}}
+                loading="eager"
+              />
+            )}
           </div>
         </motion.div>
       </section>
@@ -222,6 +294,46 @@ export default function MediaPage() {
             </span>
           ))}
         </div>
+      </div>
+
+      {/* Brand & social reels */}
+      <div className="mag-sec">
+        <div className="mag-sec-head">
+          <h2 className="mag-sec-label">{page.socialSection.label}</h2>
+          <a
+            href={page.workSection.linkHref + '#social-edits'}
+            className="mag-sec-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            More on portfolio →
+          </a>
+        </div>
+      </div>
+      <p
+        style={{
+          padding: '0 32px 24px',
+          margin: 0,
+          maxWidth: '640px',
+          fontFamily: 'var(--serif)',
+          fontSize: '18px',
+          fontStyle: 'italic',
+          color: 'var(--ink2)',
+          lineHeight: 1.6,
+        }}
+      >
+        {page.socialSection.intro}
+      </p>
+      <div
+        className="mag-places"
+        style={{
+          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+          paddingBottom: '16px',
+        }}
+      >
+        {socialReels.map((reel) => (
+          <SocialReelCard key={reel.id} reel={reel} />
+        ))}
       </div>
 
       {/* What we do */}
@@ -315,9 +427,20 @@ export default function MediaPage() {
       <div className="mag-sec">
         <div className="mag-sec-head">
           <h2 className="mag-sec-label">{page.workSection.label}</h2>
-          <Link to={page.workSection.linkHref} className="mag-sec-link">
-            {page.workSection.linkLabel} →
-          </Link>
+          {page.workSection.external ? (
+            <a
+              href={page.workSection.linkHref}
+              className="mag-sec-link"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {page.workSection.linkLabel} →
+            </a>
+          ) : (
+            <Link to={page.workSection.linkHref} className="mag-sec-link">
+              {page.workSection.linkLabel} →
+            </Link>
+          )}
         </div>
       </div>
       <div className="mag-places" style={{paddingBottom: '32px'}}>
