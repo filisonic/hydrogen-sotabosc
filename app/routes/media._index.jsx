@@ -7,7 +7,6 @@ import {
   getMediaProcess,
   getMediaProjects,
   getMediaServices,
-  getMediaSocialReels,
 } from '~/lib/media/content';
 
 /**
@@ -16,7 +15,7 @@ import {
 export const meta = ({data}) => {
   const origin = data?.origin;
   const ogImage = origin
-    ? `${origin.replace(/\/$/, '')}/images/media/posters/director-showreel.jpg`
+    ? `${origin.replace(/\/$/, '')}/images/media/posters/ouroboros-projection-mapping.jpg`
     : null;
   return [
     {title: 'Media — Brand & Creative Studio | Sotabosc'},
@@ -45,7 +44,6 @@ export async function loader(args) {
     services: getMediaServices(),
     process: getMediaProcess(),
     projects: getMediaProjects(),
-    socialReels: getMediaSocialReels(),
   };
 }
 
@@ -99,45 +97,54 @@ function ServiceCard({service}) {
   );
 }
 
-function SocialReelCard({reel}) {
-  return (
-    <article
-      className="mag-place"
-      style={{overflow: 'hidden'}}
-    >
-      <video
-        className="mag-place-img"
-        style={{height: 'auto', aspectRatio: '9/16', objectFit: 'cover', display: 'block'}}
-        src={reel.video}
-        muted
-        loop
-        playsInline
-        autoPlay
-        preload="metadata"
-        aria-label={reel.title}
-      />
-      <div className="mag-place-body">
-        <span className="mag-place-cat">{reel.client}</span>
-        <h4>{reel.title}</h4>
-      </div>
-    </article>
-  );
-}
-
 function ProjectCard({project}) {
+  const media = project.video ? (
+    <video
+      src={project.video}
+      poster={project.image}
+      muted
+      loop
+      playsInline
+      autoPlay
+      preload="metadata"
+      className="mag-place-img"
+      style={{
+        height: '200px',
+        objectFit: 'cover',
+        display: 'block',
+        pointerEvents: 'none',
+      }}
+      aria-hidden="true"
+    />
+  ) : (
+    <img
+      src={project.image}
+      alt=""
+      className="mag-place-img"
+      loading="lazy"
+      style={{height: '200px', pointerEvents: 'none'}}
+    />
+  );
+
   const inner = (
     <>
-      <img
-        src={project.image}
-        alt=""
-        className="mag-place-img"
-        loading="lazy"
-        style={{height: '200px'}}
-      />
+      {media}
       <div className="mag-place-body">
         <span className="mag-place-cat">{project.category}</span>
         <h4>{project.title}</h4>
         {project.summary ? <p>{project.summary}</p> : null}
+        <p
+          style={{
+            margin: '8px 0 0',
+            fontSize: '10px',
+            letterSpacing: '.12em',
+            textTransform: 'uppercase',
+            color: 'var(--ink3)',
+            fontWeight: 700,
+          }}
+        >
+          View project →
+        </p>
       </div>
     </>
   );
@@ -149,6 +156,8 @@ function ProjectCard({project}) {
         className="mag-place"
         target="_blank"
         rel="noopener noreferrer"
+        style={{cursor: 'pointer'}}
+        aria-label={`${project.title} — open case study`}
       >
         {inner}
       </a>
@@ -157,7 +166,7 @@ function ProjectCard({project}) {
 
   if (project.url?.startsWith('/')) {
     return (
-      <Link to={project.url} className="mag-place">
+      <Link to={project.url} className="mag-place" style={{cursor: 'pointer'}}>
         {inner}
       </Link>
     );
@@ -167,7 +176,7 @@ function ProjectCard({project}) {
 }
 
 export default function MediaPage() {
-  const {page, services, process, projects, socialReels, origin} = useLoaderData();
+  const {page, services, process, projects, origin} = useLoaderData();
   const headlineWords = page.hero.headline.split(' ');
 
   const jsonLd = {
@@ -266,8 +275,14 @@ export default function MediaPage() {
                 playsInline
                 autoPlay
                 preload="metadata"
-                style={{width: '100%', height: '100%', objectFit: 'cover', display: 'block'}}
-                aria-label="Director showreel preview"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                  pointerEvents: 'none',
+                }}
+                aria-label="Projection mapping preview"
               />
             ) : (
               <img
@@ -294,46 +309,6 @@ export default function MediaPage() {
             </span>
           ))}
         </div>
-      </div>
-
-      {/* Brand & social reels */}
-      <div className="mag-sec">
-        <div className="mag-sec-head">
-          <h2 className="mag-sec-label">{page.socialSection.label}</h2>
-          <a
-            href={page.workSection.linkHref + '#social-edits'}
-            className="mag-sec-link"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            More on portfolio →
-          </a>
-        </div>
-      </div>
-      <p
-        style={{
-          padding: '0 32px 24px',
-          margin: 0,
-          maxWidth: '640px',
-          fontFamily: 'var(--serif)',
-          fontSize: '18px',
-          fontStyle: 'italic',
-          color: 'var(--ink2)',
-          lineHeight: 1.6,
-        }}
-      >
-        {page.socialSection.intro}
-      </p>
-      <div
-        className="mag-places"
-        style={{
-          gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
-          paddingBottom: '16px',
-        }}
-      >
-        {socialReels.map((reel) => (
-          <SocialReelCard key={reel.id} reel={reel} />
-        ))}
       </div>
 
       {/* What we do */}
@@ -423,7 +398,7 @@ export default function MediaPage() {
         ))}
       </div>
 
-      {/* Selected work */}
+      {/* Mapping & animation */}
       <div className="mag-sec">
         <div className="mag-sec-head">
           <h2 className="mag-sec-label">{page.workSection.label}</h2>
@@ -443,6 +418,20 @@ export default function MediaPage() {
           )}
         </div>
       </div>
+      <p
+        style={{
+          padding: '0 32px 24px',
+          margin: 0,
+          maxWidth: '640px',
+          fontFamily: 'var(--serif)',
+          fontSize: '18px',
+          fontStyle: 'italic',
+          color: 'var(--ink2)',
+          lineHeight: 1.6,
+        }}
+      >
+        {page.workSection.intro}
+      </p>
       <div className="mag-places" style={{paddingBottom: '32px'}}>
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} />

@@ -18,21 +18,13 @@ export type MediaProject = {
   id: string;
   title: string;
   category: string;
-  year?: string;
   summary?: string;
+  /** Poster / fallback still. */
   image: string;
-  /** Internal path or external portfolio URL. */
+  /** Optional preview clip (hosted on portfolio CDN). */
+  video?: string;
   url: string;
   external?: boolean;
-};
-
-export type MediaSocialReel = {
-  id: string;
-  title: string;
-  client: string;
-  video: string;
-  /** When true, video is hosted on philipcp.netlify.app (large file). */
-  remote?: boolean;
 };
 
 export type MediaPageContent = {
@@ -43,9 +35,12 @@ export type MediaPageContent = {
     showreelVideo?: string;
   };
   marquee: string[];
-  socialSection: {
+  workSection: {
     label: string;
     intro: string;
+    linkLabel: string;
+    linkHref: string;
+    external?: boolean;
   };
   servicesSection: {
     label: string;
@@ -54,12 +49,6 @@ export type MediaPageContent = {
   processSection: {
     label: string;
     intro: string;
-  };
-  workSection: {
-    label: string;
-    linkLabel: string;
-    linkHref: string;
-    external?: boolean;
   };
   cta: {
     tag: string;
@@ -72,27 +61,35 @@ export type MediaPageContent = {
 
 const PORTFOLIO_BASE = 'https://philipcp.netlify.app';
 
+/** Portfolio clip paths — served from philipcp.netlify.app public assets. */
+function portfolioClip(filename: string): string {
+  return `${PORTFOLIO_BASE}/assets/clips/${encodeURIComponent(filename)}`;
+}
+
 export const MEDIA_PAGE: MediaPageContent = {
   hero: {
     headline: 'We make brands make sense',
     subhead:
-      'Brand direction, creative strategy, and media production for people building something real — films, campaigns, installations, and systems.',
-    image: '/images/media/philatwork.jpg',
-    showreelVideo: '/images/media/clips/showreel.mp4',
+      'Brand direction, creative strategy, and media production for people building something real — projection mapping, animation, and installation work.',
+    image: '/images/media/posters/ouroboros-projection-mapping.jpg',
+    showreelVideo: portfolioClip('Ouroboros.mp4'),
   },
   marquee: [
-    'Brand Direction',
-    'Film & Animation',
-    'Social Campaigns',
     'Projection Mapping',
-    'Creative Systems',
+    'Animation',
+    'Installation',
+    'Brand Direction',
+    'Creative Strategy',
     'Barcelona',
     'Studio',
   ],
-  socialSection: {
-    label: 'Brand & social',
+  workSection: {
+    label: 'Mapping & animation',
     intro:
-      'Short-form edits for launches, listings, and always-on campaigns — built with voice, compliance, and craft.',
+      'A sample of projection and animation work — click any piece to open the full case study on the portfolio.',
+    linkLabel: 'Full portfolio',
+    linkHref: `${PORTFOLIO_BASE}/work`,
+    external: true,
   },
   servicesSection: {
     label: 'What we do',
@@ -103,12 +100,6 @@ export const MEDIA_PAGE: MediaPageContent = {
     label: 'How we work',
     intro:
       'No pitch decks. No mystery phases. Just a clear path from first conversation to finished work.',
-  },
-  workSection: {
-    label: 'Selected work',
-    linkLabel: 'Full portfolio',
-    linkHref: `${PORTFOLIO_BASE}/work`,
-    external: true,
   },
   cta: {
     tag: 'Start here',
@@ -173,89 +164,45 @@ export const MEDIA_PROCESS: MediaProcessStep[] = [
   },
 ];
 
-/** Brand & social reels — sourced from philipcp.netlify.app portfolio. */
-export const MEDIA_SOCIAL_REELS: MediaSocialReel[] = [
-  {
-    id: 'skilltude',
-    title: 'Skilltude Promo',
-    client: 'Skilltude',
-    video: '/images/media/clips/skilltude-promo.mp4',
-  },
-  {
-    id: 'minca-lab',
-    title: 'Minca Lab Reel',
-    client: 'Minca Lab',
-    video: `${PORTFOLIO_BASE}/assets/clips/minca_lab_reel.mp4`,
-    remote: true,
-  },
-  {
-    id: 'leaflooms',
-    title: 'Leaflooms Social Reel',
-    client: 'Leaflooms',
-    video: '/images/media/clips/leaflooms-reel-social.mp4',
-  },
-  {
-    id: 'automatico',
-    title: 'Automatico Promo',
-    client: 'Automatico',
-    video: '/images/media/clips/automatico-promo.mp4',
-  },
-];
-
-/** Featured portfolio projects — posters local, detail pages on philipcp.netlify.app. */
+/** Mapping + animation only — videos from philipcp.netlify.app, links open portfolio case studies. */
 export const MEDIA_PROJECTS: MediaProject[] = [
-  {
-    id: 'director-showreel',
-    title: 'Director Showreel',
-    category: 'Showreel',
-    summary: 'Cinematic montage across film, sound, and interactive work',
-    image: '/images/media/posters/director-showreel.jpg',
-    url: `${PORTFOLIO_BASE}/work/director-showreel`,
-    external: true,
-  },
-  {
-    id: 'music-video',
-    title: 'Music Video',
-    category: 'Music Video',
-    summary: 'Rhythmic, graphic, music-driven storytelling',
-    image: '/images/media/posters/music-video.jpg',
-    url: `${PORTFOLIO_BASE}/work/music-video`,
-    external: true,
-  },
-  {
-    id: 'puppet-doc-trailer',
-    title: 'Puppet Documentary Trailer',
-    category: 'Documentary',
-    summary: 'Handcrafted worlds and character-led storytelling',
-    image: '/images/media/posters/puppet-doc-trailer.jpg',
-    url: `${PORTFOLIO_BASE}/work/puppet-doc-trailer`,
-    external: true,
-  },
   {
     id: 'ouroboros',
     title: 'Ouroboros',
     category: 'Projection Mapping',
     summary: '3D projection mapping for architectural surfaces',
     image: '/images/media/posters/ouroboros-projection-mapping.jpg',
+    video: portfolioClip('Ouroboros.mp4'),
     url: `${PORTFOLIO_BASE}/work/ouroboros-projection-mapping`,
     external: true,
   },
   {
     id: 'chasing-the-sun',
     title: 'Chasing the Sun',
-    category: 'Installation',
+    category: 'Projection Mapping',
     summary: 'Meditative projection and time-based light study',
     image: '/images/media/posters/chasing-the-sun.jpg',
+    video: portfolioClip('Projection-Mapping-MashiBhootham.mp4'),
     url: `${PORTFOLIO_BASE}/work/chasing-the-sun`,
     external: true,
   },
   {
     id: 'punarjanani',
     title: 'Punarjanani (Rebirth)',
-    category: 'Short Film',
+    category: 'Animation',
     summary: 'Animation and research on ecological regeneration',
     image: '/images/media/posters/punarjanani-rebirth.jpg',
     url: `${PORTFOLIO_BASE}/work/punarjanani-rebirth`,
+    external: true,
+  },
+  {
+    id: 'puppet-doc-trailer',
+    title: 'Puppet Documentary Trailer',
+    category: 'Animation',
+    summary: 'Handcrafted worlds and character-led storytelling',
+    image: '/images/media/posters/puppet-doc-trailer.jpg',
+    video: portfolioClip('Kathputli Puppets Documentary Teaser Trailer_1080p.mp4'),
+    url: `${PORTFOLIO_BASE}/work/puppet-doc-trailer`,
     external: true,
   },
 ];
@@ -274,8 +221,4 @@ export function getMediaProcess(): MediaProcessStep[] {
 
 export function getMediaProjects(): MediaProject[] {
   return MEDIA_PROJECTS;
-}
-
-export function getMediaSocialReels(): MediaSocialReel[] {
-  return MEDIA_SOCIAL_REELS;
 }
