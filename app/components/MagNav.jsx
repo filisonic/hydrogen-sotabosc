@@ -67,6 +67,7 @@ export function MagNav({cart, isLoggedIn, header}) {
         <Link to="/collections">Store</Link>
         <Link to="/gallery">Gallery</Link>
         <Link to="/work">Work</Link>
+        <Link to="/media">Media</Link>
         {MEMBERSHIP_PUBLIC ? (
           <Link to="/membership" className="mag-pill mag-pill-primary">
             Membership
