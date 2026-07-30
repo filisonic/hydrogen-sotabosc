@@ -13,6 +13,7 @@ import {
 import { useEffect } from 'react';
 import { trackPageview } from '~/lib/analytics';
 import favicon from '~/assets/favicon.svg';
+import journalStyles from '~/styles/journal.css?url';
 import { FOOTER_QUERY, HEADER_QUERY } from '~/lib/fragments';
 import resetStyles from '~/styles/reset.css?url';
 import appStyles from '~/styles/app.css?url';
@@ -60,6 +61,8 @@ export function links() {
       href: 'https://shop.app',
     },
     { rel: 'icon', type: 'image/svg+xml', href: favicon },
+    { rel: 'apple-touch-icon', href: '/images/brand/sotabosc-logo.png' },
+    { rel: 'stylesheet', href: journalStyles },
     { rel: 'stylesheet', href: magStyles },
     { rel: 'alternate', type: 'text/plain', href: '/llms.txt', title: 'LLM-friendly content' },
   ];

@@ -9,6 +9,7 @@ export function PaginatedResourceSection({
   connection,
   children,
   resourcesClassName,
+  paginationClassName,
 }) {
   return (
     <Pagination connection={connection}>
@@ -17,18 +18,20 @@ export function PaginatedResourceSection({
           children({node, index}),
         );
 
+        const paginationClass = paginationClassName || '';
+
         return (
           <div>
-            <PreviousLink>
-              {isLoading ? 'Loading...' : <span>↑ Load previous</span>}
+            <PreviousLink className={paginationClass}>
+              {isLoading ? 'Loading…' : <span>← Previous</span>}
             </PreviousLink>
             {resourcesClassName ? (
               <div className={resourcesClassName}>{resourcesMarkup}</div>
             ) : (
               resourcesMarkup
             )}
-            <NextLink>
-              {isLoading ? 'Loading...' : <span>Load more ↓</span>}
+            <NextLink className={paginationClass}>
+              {isLoading ? 'Loading…' : <span>Next →</span>}
             </NextLink>
           </div>
         );

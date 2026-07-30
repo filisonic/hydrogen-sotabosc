@@ -2,11 +2,13 @@ import {useLoaderData, data} from 'react-router';
 import {CartForm} from '@shopify/hydrogen';
 import {CartMain} from '~/components/CartMain';
 
+import {pageTitle} from '~/lib/seo/siteMeta';
+
 /**
  * @type {Route.MetaFunction}
  */
 export const meta = () => {
-  return [{title: `Hydrogen | Cart`}];
+  return [{title: pageTitle('Cart')}];
 };
 
 /**

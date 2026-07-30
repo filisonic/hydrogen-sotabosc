@@ -1,23 +1,73 @@
 import {Suspense} from 'react';
-import {Await, NavLink} from 'react-router';
+import {Await, Link, NavLink} from 'react-router';
+import {MEMBERSHIP_PUBLIC} from '~/lib/featureFlags';
+import {CONTACT_EMAIL} from '~/lib/site/contact';
 
 /**
  * @param {FooterProps}
  */
 export function Footer({footer: footerPromise, header, publicStoreDomain, directoryChrome = false}) {
+  const year = new Date().getFullYear();
+
   return (
     <Suspense>
       <Await resolve={footerPromise}>
         {(footer) => (
-          <footer className={`footer${directoryChrome ? ' footer--directory' : ''}`}>
-            {footer?.menu && header.shop.primaryDomain?.url && (
-              <FooterMenu
-                menu={footer.menu}
-                primaryDomainUrl={header.shop.primaryDomain.url}
-                publicStoreDomain={publicStoreDomain}
-                directoryChrome={directoryChrome}
-              />
-            )}
+          <footer className={`site-footer${directoryChrome ? ' site-footer--directory' : ''}`}>
+            <div className="site-footer-top">
+              <div className="site-footer-brand">
+                <Link to="/" className="site-footer-logo">
+                  Sotabosc
+                </Link>
+                <p className="site-footer-tagline">
+                  Barcelona’s living creative map — a directory, journal, and
+                  toolkit for culture, ecology, and the creative city.
+                </p>
+                <a href={`mailto:${CONTACT_EMAIL}`} className="site-footer-email">
+                  {CONTACT_EMAIL}
+                </a>
+              </div>
+
+              <nav className="site-footer-cols" aria-label="Footer">
+                <div className="site-footer-col">
+                  <h3>Explore</h3>
+                  <Link to="/city">Directory</Link>
+                  <Link to="/discover">Discover</Link>
+                  <Link to="/blogs/news">Journal</Link>
+                  <Link to="/labs">Labs</Link>
+                  <Link to="/tools">Tools</Link>
+                </div>
+                <div className="site-footer-col">
+                  <h3>Shop</h3>
+                  <Link to="/collections">Store</Link>
+                  <Link to="/gallery">Gallery</Link>
+                  {MEMBERSHIP_PUBLIC ? (
+                    <Link to="/membership">Membership</Link>
+                  ) : null}
+                </div>
+                <div className="site-footer-col">
+                  <h3>Studio</h3>
+                  <Link to="/work">Work</Link>
+                  <Link to="/media">Media</Link>
+                  <Link to="/contact">Contact</Link>
+                </div>
+              </nav>
+            </div>
+
+            <div className="site-footer-bottom">
+              <div className="site-footer-bottom-inner">
+                <span className="site-footer-copyright">
+                  © {year} Sotabosc, Barcelona.
+                </span>
+                {footer?.menu && header.shop.primaryDomain?.url && (
+                  <FooterMenu
+                    menu={footer.menu}
+                    primaryDomainUrl={header.shop.primaryDomain.url}
+                    publicStoreDomain={publicStoreDomain}
+                  />
+                )}
+              </div>
+            </div>
           </footer>
         )}
       </Await>
@@ -32,10 +82,9 @@ export function Footer({footer: footerPromise, header, publicStoreDomain, direct
  *   publicStoreDomain: string;
  * }}
  */
-function FooterMenu({menu, primaryDomainUrl, publicStoreDomain, directoryChrome = false}) {
-  const linkStyle = directoryChrome ? directoryFooterLinkStyle : shopFooterLinkStyle;
+function FooterMenu({menu, primaryDomainUrl, publicStoreDomain}) {
   return (
-    <nav className="footer-menu" role="navigation">
+    <nav className="site-footer-legal" role="navigation" aria-label="Legal">
       {(menu || FALLBACK_FOOTER_MENU).items.map((item) => {
         if (!item.url) return null;
         // if the url is internal, we strip the domain
@@ -51,13 +100,7 @@ function FooterMenu({menu, primaryDomainUrl, publicStoreDomain, directoryChrome 
             {item.title}
           </a>
         ) : (
-          <NavLink
-            end
-            key={item.id}
-            prefetch="intent"
-            style={linkStyle}
-            to={url}
-          >
+          <NavLink end key={item.id} prefetch="intent" to={url}>
             {item.title}
           </NavLink>
         );
@@ -107,32 +150,6 @@ const FALLBACK_FOOTER_MENU = {
     },
   ],
 };
-
-/**
- * @param {{
- *   isActive: boolean;
- *   isPending: boolean;
- * }}
- */
-function shopFooterLinkStyle({isActive, isPending}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'grey' : 'var(--color-dark)',
-  };
-}
-
-/**
- * @param {{
- *   isActive: boolean;
- *   isPending: boolean;
- * }}
- */
-function directoryFooterLinkStyle({isActive, isPending}) {
-  return {
-    fontWeight: isActive ? 'bold' : undefined,
-    color: isPending ? 'rgba(255,255,255,0.45)' : 'rgba(255,255,255,0.92)',
-  };
-}
 
 /**
  * @typedef {Object} FooterProps

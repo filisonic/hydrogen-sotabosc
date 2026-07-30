@@ -1,31 +1,40 @@
-import {useLoaderData} from 'react-router';
+import {Link, useLoaderData} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
-import { JsonLd } from '~/components/seo/JsonLd';
+import {JsonLd} from '~/components/seo/JsonLd';
+import {formatJournalDate, readingTimeFromHtml} from '~/components/journal/formatDate';
+import {pageTitle} from '~/lib/seo/siteMeta';
 
 /**
  * @type {Route.MetaFunction}
  */
 export const meta = ({data}) => {
-  return [{title: `Hydrogen | ${data?.article.title ?? ''} article`}];
+  const article = data?.article;
+  const title = article?.seo?.title || article?.title || 'Article';
+  const description =
+    article?.seo?.description ||
+    (article?.contentHtml
+      ? article.contentHtml.replace(/<[^>]*>?/gm, '').slice(0, 155)
+      : '');
+
+  return [
+    {title: pageTitle(title)},
+    {name: 'description', content: description},
+    {property: 'og:type', content: 'article'},
+    {property: 'og:title', content: title},
+    {property: 'article:published_time', content: article?.publishedAt || ''},
+  ];
 };
 
 /**
  * @param {Route.LoaderArgs} args
  */
 export async function loader(args) {
-  // Start fetching non-critical data without blocking time to first byte
-  const deferredData = loadDeferredData(args);
-
-  // Await the critical data required to render initial state of the page
   const criticalData = await loadCriticalData(args);
-
-  return {...deferredData, ...criticalData};
+  return {...criticalData};
 }
 
 /**
- * Load data necessary for rendering content above the fold. This is the critical data
- * needed to render the page. If it's unavailable, the whole page should 400 or 500 error.
  * @param {Route.LoaderArgs}
  */
 async function loadCriticalData({context, request, params}) {
@@ -39,7 +48,6 @@ async function loadCriticalData({context, request, params}) {
     context.storefront.query(ARTICLE_QUERY, {
       variables: {blogHandle, articleHandle},
     }),
-    // Add other queries here, so that they are loaded in parallel
   ]);
 
   if (!blog?.articleByHandle) {
@@ -58,75 +66,81 @@ async function loadCriticalData({context, request, params}) {
     },
   );
 
-  const article = blog.articleByHandle;
-
-  return {article};
-}
-
-/**
- * Load data for rendering content below the fold. This data is deferred and will be
- * fetched after the initial page load. If it's unavailable, the page should still 200.
- * Make sure to not throw any errors here, as it will cause the page to 500.
- * @param {Route.LoaderArgs}
- */
-function loadDeferredData({context}) {
-  return {};
+  return {article: blog.articleByHandle, blogHandle: blog.handle};
 }
 
 export default function Article() {
   /** @type {LoaderReturnData} */
-  const {article} = useLoaderData();
+  const {article, blogHandle} = useLoaderData();
   const {title, image, contentHtml, author} = article;
-
-  const publishedDate = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(new Date(article.publishedAt));
+  const publishedDate = formatJournalDate(article.publishedAt);
+  const readingTime = readingTimeFromHtml(contentHtml);
+  const authorName = author?.name || 'Sotabosc Editorial';
+  const sectionName = blogHandle.replace(/-/g, ' ');
 
   const articleLd = {
-    "@context": "https://schema.org",
-    "@type": "NewsArticle",
-    "headline": title,
-    "image": image ? [image.url] : [],
-    "datePublished": article.publishedAt,
-    "author": [{
-        "@type": "Person",
-        "name": author?.name || 'Sotabosc Editorial'
-    }]
+    '@context': 'https://schema.org',
+    '@type': 'NewsArticle',
+    headline: title,
+    image: image ? [image.url] : [],
+    datePublished: article.publishedAt,
+    author: [
+      {
+        '@type': 'Person',
+        name: authorName,
+      },
+    ],
   };
 
   return (
-    <div className="mag">
+    <div className="journal mag">
       <JsonLd data={articleLd} />
-      
-      <div className="max-w-4xl mx-auto px-4 py-12">
-        <h1 className="text-4xl md:text-5xl font-black mb-6 font-[family-name:var(--font-display)]">
-          {title}
-        </h1>
-        <div className="flex items-center gap-2 mb-8 text-sm" style={{ color: 'var(--sotabosc-muted)' }}>
-          <time dateTime={article.publishedAt}>{publishedDate}</time>
-          <span>&middot;</span>
-          <address className="not-italic font-bold">{author?.name || 'Editorial Team'}</address>
-        </div>
 
-
-      {image && (
-        <div className="mb-10 rounded-2xl overflow-hidden aspect-[21/9]">
-          <Image data={image} sizes="90vw" loading="eager" className="w-full h-full object-cover" />
+      <header className="journal-masthead">
+        <div className="journal-masthead-inner">
+          <Link to={`/blogs/${blogHandle}`} className="journal-back">
+            ← {blogHandle.replace(/-/g, ' ')}
+          </Link>
         </div>
-      )}
-      <article
-        dangerouslySetInnerHTML={{__html: contentHtml}}
-        className="prose prose-lg max-w-none prose-headings:font-[family-name:var(--font-display)]"
-        style={{ color: 'var(--sotabosc-text)' }}
-      />
-      </div>
+      </header>
+
+      <article className="journal-article-wrap">
+        <header className="journal-article-header">
+          <span className="journal-kicker">{sectionName} · Barcelona</span>
+          <h1 className="journal-article-headline">{title}</h1>
+          <div className="journal-article-byline">
+            <time dateTime={article.publishedAt}>{publishedDate}</time>
+            <span aria-hidden="true">·</span>
+            <span>By <address>{authorName}</address></span>
+            {readingTime ? (
+              <>
+                <span aria-hidden="true">·</span>
+                <span>{readingTime}</span>
+              </>
+            ) : null}
+          </div>
+        </header>
+
+        {image ? (
+          <figure className="journal-article-hero">
+            <Image
+              data={image}
+              sizes="(min-width: 900px) 44rem, 100vw"
+              loading="eager"
+              alt={image.altText || title}
+            />
+          </figure>
+        ) : null}
+
+        <div
+          className="journal-article-body"
+          dangerouslySetInnerHTML={{__html: contentHtml}}
+        />
+      </article>
     </div>
   );
 }
 
-// NOTE: https://shopify.dev/docs/api/storefront/latest/objects/blog#field-blog-articlebyhandle
 const ARTICLE_QUERY = `#graphql
   query Article(
     $articleHandle: String!

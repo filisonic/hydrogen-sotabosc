@@ -4,11 +4,13 @@ import {SearchForm} from '~/components/SearchForm';
 import {SearchResults} from '~/components/SearchResults';
 import {getEmptyPredictiveSearchResult} from '~/lib/search';
 
+import {pageTitle} from '~/lib/seo/siteMeta';
+
 /**
  * @type {Route.MetaFunction}
  */
 export const meta = () => {
-  return [{title: `Hydrogen | Search`}];
+  return [{title: pageTitle('Search')}];
 };
 
 /**

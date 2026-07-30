@@ -33,7 +33,15 @@ export function PageLayout({
   const isLabsPage =
     location.pathname === '/labs' ||
     location.pathname.startsWith('/labs/');
-  const isMinimalChrome = isHomePage || isCityWorld || isToolsPage || isLabsPage;
+  const hasOwnFooter =
+    location.pathname === '/discover' ||
+    location.pathname.startsWith('/discover/') ||
+    location.pathname === '/media' ||
+    location.pathname.startsWith('/media/') ||
+    location.pathname === '/work' ||
+    location.pathname.startsWith('/work/');
+  const isMinimalChrome =
+    isHomePage || isCityWorld || isToolsPage || isLabsPage || hasOwnFooter;
   const isDirectoryChrome =
     location.pathname === '/city' ||
     location.pathname.startsWith('/city/') ||
