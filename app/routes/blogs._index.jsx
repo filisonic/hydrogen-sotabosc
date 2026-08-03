@@ -2,18 +2,24 @@ import {Link, useLoaderData} from 'react-router';
 import {getPaginationVariables} from '@shopify/hydrogen';
 import {PaginatedResourceSection} from '~/components/PaginatedResourceSection';
 import {pageTitle} from '~/lib/seo/siteMeta';
+import {openGraphImageMeta} from '~/lib/seo/siteImagery';
+import {canonicalLinkMeta} from '~/lib/seo/metaHelpers';
+
+const JOURNAL_DESCRIPTION =
+  'News, culture, and creative life in Barcelona — reports and essays from the Sotabosc editorial desk.';
 
 /**
  * @type {Route.MetaFunction}
  */
-export const meta = () => {
+export const meta = ({data}) => {
   return [
     {title: pageTitle('Journal')},
-    {
-      name: 'description',
-      content:
-        'News, culture, and creative life in Barcelona — reports and essays from the Sotabosc editorial desk.',
-    },
+    {name: 'description', content: JOURNAL_DESCRIPTION},
+    {property: 'og:type', content: 'website'},
+    {property: 'og:title', content: pageTitle('Journal')},
+    {property: 'og:description', content: JOURNAL_DESCRIPTION},
+    ...canonicalLinkMeta(data?.origin, '/blogs'),
+    ...openGraphImageMeta(data?.origin),
   ];
 };
 
@@ -41,7 +47,7 @@ async function loadCriticalData({context, request}) {
     }),
   ]);
 
-  return {blogs};
+  return {blogs, origin: new URL(request.url).origin};
 }
 
 export default function Blogs() {

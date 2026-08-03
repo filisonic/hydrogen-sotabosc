@@ -4,6 +4,8 @@ import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {JsonLd} from '~/components/seo/JsonLd';
 import {formatJournalDate, readingTimeFromHtml} from '~/components/journal/formatDate';
 import {pageTitle} from '~/lib/seo/siteMeta';
+import {openGraphImageMeta} from '~/lib/seo/siteImagery';
+import {canonicalLinkMeta} from '~/lib/seo/metaHelpers';
 
 /**
  * @type {Route.MetaFunction}
@@ -16,13 +18,32 @@ export const meta = ({data}) => {
     (article?.contentHtml
       ? article.contentHtml.replace(/<[^>]*>?/gm, '').slice(0, 155)
       : '');
+  const image = article?.image;
+  const path =
+    data?.blogHandle && article?.handle
+      ? `/blogs/${data.blogHandle}/${article.handle}`
+      : '';
 
   return [
     {title: pageTitle(title)},
     {name: 'description', content: description},
     {property: 'og:type', content: 'article'},
     {property: 'og:title', content: title},
+    {property: 'og:description', content: description},
     {property: 'article:published_time', content: article?.publishedAt || ''},
+    ...canonicalLinkMeta(data?.origin, path),
+    ...(image
+      ? [
+          {property: 'og:image', content: image.url},
+          ...(image.width ? [{property: 'og:image:width', content: String(image.width)}] : []),
+          ...(image.height ? [{property: 'og:image:height', content: String(image.height)}] : []),
+          {property: 'og:image:alt', content: image.altText || title},
+          {name: 'twitter:card', content: 'summary_large_image'},
+          {name: 'twitter:title', content: title},
+          {name: 'twitter:description', content: description},
+          {name: 'twitter:image', content: image.url},
+        ]
+      : openGraphImageMeta(data?.origin)),
   ];
 };
 
@@ -66,7 +87,11 @@ async function loadCriticalData({context, request, params}) {
     },
   );
 
-  return {article: blog.articleByHandle, blogHandle: blog.handle};
+  return {
+    article: blog.articleByHandle,
+    blogHandle: blog.handle,
+    origin: new URL(request.url).origin,
+  };
 }
 
 export default function Article() {

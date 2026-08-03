@@ -4,6 +4,8 @@ import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {ArticleCard} from '~/components/journal/ArticleCard';
 import {JournalPagination} from '~/components/journal/JournalPagination';
 import {pageTitle} from '~/lib/seo/siteMeta';
+import {openGraphImageMeta} from '~/lib/seo/siteImagery';
+import {canonicalLinkMeta} from '~/lib/seo/metaHelpers';
 
 /**
  * @type {Route.MetaFunction}
@@ -13,8 +15,23 @@ export const meta = ({data}) => {
   const description =
     data?.blog?.seo?.description ||
     `Latest articles from ${data?.blog?.title || 'Sotabosc Journal'}.`;
+  const leadImage = data?.blog?.articles?.nodes?.[0]?.image;
 
-  return [{title: pageTitle(title)}, {name: 'description', content: description}];
+  return [
+    {title: pageTitle(title)},
+    {name: 'description', content: description},
+    {property: 'og:type', content: 'website'},
+    {property: 'og:title', content: title},
+    {property: 'og:description', content: description},
+    ...canonicalLinkMeta(data?.origin, `/blogs/${data?.blog?.handle || ''}`),
+    ...(leadImage
+      ? [
+          {property: 'og:image', content: leadImage.url},
+          {name: 'twitter:card', content: 'summary_large_image'},
+          {name: 'twitter:image', content: leadImage.url},
+        ]
+      : openGraphImageMeta(data?.origin)),
+  ];
 };
 
 /**
@@ -52,7 +69,7 @@ async function loadCriticalData({context, request, params}) {
 
   redirectIfHandleIsLocalized(request, {handle: params.blogHandle, data: blog});
 
-  return {blog};
+  return {blog, origin: new URL(request.url).origin};
 }
 
 export default function Blog() {
