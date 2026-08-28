@@ -43,8 +43,9 @@ export async function createHydrogenRouterContext(
       cache,
       waitUntil,
       session,
-      // Or detect from URL path based on locale subpath, cookies, or any other strategy
-      i18n: {language: 'EN', country: 'US'},
+      // Barcelona storefront: English content with EUR pricing via Spain market context.
+      // Or detect from URL path based on locale subpath, cookies, or any other strategy.
+      i18n: {language: 'EN', country: 'ES'},
       cart: {
         queryFragment: CART_QUERY_FRAGMENT,
       },
