@@ -269,6 +269,30 @@ function ProductDetail({product}) {
                 />
               </div>
 
+              {/* Shipping summary */}
+              <div className="space-y-3">
+                <h2
+                  className="text-xs font-semibold uppercase tracking-widest"
+                  style={{color: 'var(--sotabosc-muted)'}}
+                >
+                  Shipping
+                </h2>
+                <div
+                  className="text-base leading-relaxed"
+                  style={{color: 'var(--sotabosc-text)'}}
+                >
+                  <p>
+                    Ships unframed, paper only, flat in a rigid mailer from Barcelona.
+                    {' '}Spain €6.99 (free over €55) · EU €8.99 · International €12.99.
+                    {' '}See{' '}
+                    <Link to="/policies/shipping-policy" className="underline underline-offset-4">
+                      Shipping policy
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+
               {descriptionHtml ? (
                 <div className="space-y-3">
                   <h2
