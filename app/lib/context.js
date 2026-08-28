@@ -1,6 +1,7 @@
 import {createHydrogenContext} from '@shopify/hydrogen';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
+import {getBuyerIdentity, getStoreLocale} from '~/lib/i18n';
 
 // Define the additional context object
 const additionalContext = {
@@ -36,6 +37,8 @@ export async function createHydrogenRouterContext(
     AppSession.init(request, [env.SESSION_SECRET]),
   ]);
 
+  const locale = getStoreLocale(env);
+
   const hydrogenContext = createHydrogenContext(
     {
       env,
@@ -43,9 +46,8 @@ export async function createHydrogenRouterContext(
       cache,
       waitUntil,
       session,
-      // Barcelona storefront: English content with EUR pricing via Spain market context.
-      // Or detect from URL path based on locale subpath, cookies, or any other strategy.
-      i18n: {language: 'EN', country: 'ES'},
+      i18n: locale,
+      buyerIdentity: getBuyerIdentity(locale),
       cart: {
         queryFragment: CART_QUERY_FRAGMENT,
       },

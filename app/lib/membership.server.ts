@@ -45,7 +45,11 @@ export function orderContainsMembershipLine(
 }
 
 export const MEMBERSHIP_PRODUCT_QUERY = `#graphql
-  query MembershipProduct($handle: String!) {
+  query MembershipProduct(
+    $handle: String!
+    $country: CountryCode
+    $language: LanguageCode
+  ) @inContext(country: $country, language: $language) {
     product(handle: $handle) {
       id
       title

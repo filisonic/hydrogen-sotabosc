@@ -64,6 +64,9 @@ export async function action({request, context}) {
       variables: {
         input: {
           lines: [line],
+          buyerIdentity: {
+            countryCode: context.storefront.i18n.country,
+          },
         },
       },
     });

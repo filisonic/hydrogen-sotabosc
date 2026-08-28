@@ -126,8 +126,9 @@ async function loadCriticalData({ context }) {
  * Make sure to not throw any errors here, as it will cause the page to 500.
  * @param {Route.LoaderArgs}
  */
-function loadDeferredData({ context }) {
-  const { storefront, customerAccount, cart } = context;
+function loadDeferredData({context}) {
+  const {storefront, customerAccount, cart} = context;
+  const country = storefront.i18n.country;
 
   // defer the footer query (below the fold)
   const footer = storefront
@@ -142,8 +143,22 @@ function loadDeferredData({ context }) {
       console.error(error);
       return null;
     });
+
+  const cartPromise = cart.get().then(async (cartData) => {
+    if (!cartData?.id) return cartData;
+    if (cartData.buyerIdentity?.countryCode === country) return cartData;
+
+    try {
+      const result = await cart.updateBuyerIdentity({countryCode: country});
+      return result?.cart ?? cartData;
+    } catch (error) {
+      console.error('[cart] Failed to sync buyer country for pricing:', error);
+      return cartData;
+    }
+  });
+
   return {
-    cart: cart.get(),
+    cart: cartPromise,
     isLoggedIn: customerAccount.isLoggedIn(),
     footer,
   };
