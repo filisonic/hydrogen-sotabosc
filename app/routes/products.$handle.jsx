@@ -281,14 +281,10 @@ function ProductDetail({product}) {
                   className="text-base leading-relaxed"
                   style={{color: 'var(--sotabosc-text)'}}
                 >
-                  <p>Ships from Barcelona, packed flat in a rigid mailer.</p>
-                  <ul className="list-disc pl-5 mt-2 space-y-1">
-                    <li><strong>Spain</strong>: €6.99 — <strong>free</strong> over €55</li>
-                    <li><strong>European Union</strong>: €8.99 flat</li>
-                    <li><strong>International</strong>: €12.99 flat</li>
-                  </ul>
-                  <p className="mt-2">
-                    See full details in our{' '}
+                  <p>
+                    Ships unframed, paper only, flat in a rigid mailer from Barcelona.
+                    {' '}Spain €6.99 (free over €55) · EU €8.99 · International €12.99.
+                    {' '}See{' '}
                     <Link to="/policies/shipping-policy" className="underline underline-offset-4">
                       Shipping policy
                     </Link>

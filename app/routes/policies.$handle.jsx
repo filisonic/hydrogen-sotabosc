@@ -43,13 +43,13 @@ export async function loader({params, context}) {
         handle: 'shipping-policy',
         body: `
           <div class="prose prose-neutral">
-            <p>Orders ship from Barcelona (Carrer de Progrés, 13, Ground Floor). We pack flat in a rigid mailer.</p>
-            <ul>
-              <li><strong>Spain</strong>: €6.99 — <strong>free</strong> over €55</li>
-              <li><strong>European Union</strong>: €8.99 flat</li>
-              <li><strong>International</strong>: €12.99 flat</li>
+            <p>Original plotter drawings ship from Barcelona, unframed, flat in a rigid mailer. Rates in EUR, calculated at checkout.</p>
+            <ul class="space-y-2">
+              <li><strong>Spain — Estándar:</strong> €6.99 per order. Free on orders of €55+.</li>
+              <li><strong>EU — Estándar Internacional:</strong> €8.99 flat. No free threshold. Rest of the EU (26, not Spain): AT BE BG HR CY CZ DK EE FI FR DE GR HU IE IT LV LT LU MT NL PL PT RO SK SI SE.</li>
+              <li><strong>International — Estándar:</strong> €12.99 flat. No free threshold. Destinations enabled at checkout (US, UK, AU, CA, JP, and others). Final rate at checkout.</li>
             </ul>
-            <p>Rates are applied at checkout based on your shipping address.</p>
+            <p>No framed shipping. Questions: <a href="mailto:hola@sotabosc.world">hola@sotabosc.world</a>.</p>
           </div>
         `,
       };
