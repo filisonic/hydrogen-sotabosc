@@ -34,7 +34,27 @@ export async function loader({params, context}) {
 
   const policy = data.shop?.[policyName];
 
+  // Fallback: Provide a storefront shipping policy if none is set in Admin
   if (!policy) {
+    if (policyName === 'shippingPolicy') {
+      /** @type {{title: string, body: string, handle: string}} */
+      const fallback = {
+        title: 'Shipping policy',
+        handle: 'shipping-policy',
+        body: `
+          <div class="prose prose-neutral">
+            <p>Orders ship from Barcelona (Carrer de Progrés, 13, Ground Floor). We pack flat in a rigid mailer.</p>
+            <ul>
+              <li><strong>Spain</strong>: €6.99 — <strong>free</strong> over €55</li>
+              <li><strong>European Union</strong>: €8.99 flat</li>
+              <li><strong>International</strong>: €12.99 flat</li>
+            </ul>
+            <p>Rates are applied at checkout based on your shipping address.</p>
+          </div>
+        `,
+      };
+      return {policy: fallback};
+    }
     throw new Response('Could not find the policy', {status: 404});
   }
 

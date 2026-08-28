@@ -269,6 +269,34 @@ function ProductDetail({product}) {
                 />
               </div>
 
+              {/* Shipping summary */}
+              <div className="space-y-3">
+                <h2
+                  className="text-xs font-semibold uppercase tracking-widest"
+                  style={{color: 'var(--sotabosc-muted)'}}
+                >
+                  Shipping
+                </h2>
+                <div
+                  className="text-base leading-relaxed"
+                  style={{color: 'var(--sotabosc-text)'}}
+                >
+                  <p>Ships from Barcelona, packed flat in a rigid mailer.</p>
+                  <ul className="list-disc pl-5 mt-2 space-y-1">
+                    <li><strong>Spain</strong>: €6.99 — <strong>free</strong> over €55</li>
+                    <li><strong>European Union</strong>: €8.99 flat</li>
+                    <li><strong>International</strong>: €12.99 flat</li>
+                  </ul>
+                  <p className="mt-2">
+                    See full details in our{' '}
+                    <Link to="/policies/shipping-policy" className="underline underline-offset-4">
+                      Shipping policy
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
+
               {descriptionHtml ? (
                 <div className="space-y-3">
                   <h2
