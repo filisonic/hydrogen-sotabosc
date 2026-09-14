@@ -21,9 +21,11 @@ export type MediaProject = {
   summary?: string;
   /** Poster / fallback still. */
   image: string;
-  /** Optional preview clip (hosted on portfolio CDN). */
+  /** Optional preview clip (mp4). */
   video?: string;
-  url: string;
+  /** Optional Vimeo id for in-page playback instead of external case study. */
+  vimeoId?: string;
+  url?: string;
   external?: boolean;
 };
 
@@ -87,10 +89,10 @@ export const MEDIA_PAGE: MediaPageContent = {
   workSection: {
     label: 'Selected video',
     intro:
-      'Films, animation, and mapping videos — click any piece to open the full case study on the portfolio. Interactive and installation practice lives on Labs.',
-    linkLabel: 'Full portfolio',
-    linkHref: `${PORTFOLIO_BASE}/work`,
-    external: true,
+      'Films, animation, and mapping videos — mapping pieces play here and on Labs. Animation case studies open the full portfolio when linked.',
+    linkLabel: 'Interactive practice on Labs',
+    linkHref: `/labs`,
+    external: false,
   },
   servicesSection: {
     label: 'What we do',
@@ -165,27 +167,27 @@ export const MEDIA_PROCESS: MediaProcessStep[] = [
   },
 ];
 
-/** Mapping videos + animation — videos from philipcp.netlify.app, links open portfolio case studies. */
+/** Mapping (Vimeo, on-site) + animation (portfolio where linked). */
 export const MEDIA_PROJECTS: MediaProject[] = [
   {
     id: 'ouroboros',
     title: 'Ouroboros',
     category: 'Mapping Video',
-    summary: '3D projection mapping captured as finished motion for architectural surfaces',
+    summary: '3D projection mapping for architectural surfaces — watch on-site.',
     image: '/images/media/posters/ouroboros-projection-mapping.jpg',
-    video: portfolioClip('Ouroboros.mp4'),
-    url: `${PORTFOLIO_BASE}/work/ouroboros-projection-mapping`,
-    external: true,
+    vimeoId: '854473073',
+    url: '/labs',
+    external: false,
   },
   {
     id: 'chasing-the-sun',
     title: 'Chasing the Sun',
     category: 'Mapping Video',
-    summary: 'Meditative projection and time-based light study as finished video',
+    summary: 'Meditative projection and time-based light study — watch on-site.',
     image: '/images/media/posters/chasing-the-sun.jpg',
-    video: portfolioClip('Projection-Mapping-MashiBhootham.mp4'),
-    url: `${PORTFOLIO_BASE}/work/chasing-the-sun`,
-    external: true,
+    vimeoId: '59516970',
+    url: '/labs',
+    external: false,
   },
   {
     id: 'punarjanani',

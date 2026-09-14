@@ -1,9 +1,11 @@
+import {useEffect, useState} from 'react';
 import {motion} from 'framer-motion';
 import {Link} from 'react-router';
 import {
   getLabsCapabilities,
   getLabsPageContent,
   getLabsProjects,
+  labsVimeoEmbedSrc,
 } from '~/lib/labs/content';
 
 /**
@@ -18,7 +20,7 @@ export const meta = () => {
     {
       name: 'description',
       content:
-        'Interactive design studio practice: projection mapping, displays, fabrication, and live making at Sotabosc Labs in Barcelona.',
+        'Interactive design studio practice: projection mapping, kinetic work, AR/VR, and live making at Sotabosc Labs in Barcelona.',
     },
   ];
 };
@@ -36,6 +38,21 @@ export default function Labs() {
   const capabilities = getLabsCapabilities();
   const projects = getLabsProjects();
   const [titleLead, titleMid, titleTrail] = page.hero.titleLines;
+  const [activeId, setActiveId] = useState(/** @type {string | null} */ (null));
+  const active = projects.find((p) => p.id === activeId) || null;
+
+  useEffect(() => {
+    if (!activeId) return undefined;
+    const onKey = (e) => {
+      if (e.key === 'Escape') setActiveId(null);
+    };
+    document.body.style.overflow = 'hidden';
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = '';
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [activeId]);
 
   return (
     <div className="labs-page mag">
@@ -246,12 +263,17 @@ export default function Labs() {
         .lab-project-card {
           position: relative;
           display: block;
+          width: 100%;
+          text-align: left;
           text-decoration: none;
           color: inherit;
           border: 1px solid var(--lab-border);
           border-radius: 12px;
           overflow: hidden;
           background: var(--lab-surface);
+          cursor: pointer;
+          padding: 0;
+          font: inherit;
           transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
         .lab-project-card:hover {
@@ -263,16 +285,43 @@ export default function Labs() {
           aspect-ratio: 16 / 10;
           overflow: hidden;
           background: #111;
+          position: relative;
         }
-        .lab-project-media img {
+        .lab-project-media img,
+        .lab-project-media video {
           width: 100%;
           height: 100%;
           object-fit: cover;
           display: block;
           transition: transform 0.5s ease;
         }
-        .lab-project-card:hover .lab-project-media img {
+        .lab-project-card:hover .lab-project-media img,
+        .lab-project-card:hover .lab-project-media video {
           transform: scale(1.04);
+        }
+        .lab-project-play {
+          position: absolute;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: linear-gradient(to top, rgba(0,0,0,0.4), transparent 55%);
+          pointer-events: none;
+        }
+        .lab-project-play span {
+          width: 52px;
+          height: 52px;
+          border-radius: 999px;
+          background: rgba(255,229,0,0.92);
+          color: #111;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 12px;
+          font-family: var(--lab-mono);
+          letter-spacing: 0.06em;
+          font-weight: 700;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.25);
         }
         .lab-project-body {
           padding: 22px 22px 24px;
@@ -319,6 +368,71 @@ export default function Labs() {
           color: var(--lab-accent);
           font-family: var(--lab-mono);
           letter-spacing: 0.08em;
+        }
+
+        .lab-lightbox {
+          position: fixed;
+          inset: 0;
+          z-index: 200;
+          background: rgba(8,8,8,0.88);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 24px;
+        }
+        .lab-lightbox-panel {
+          width: min(960px, 100%);
+          background: #0c0c0c;
+          border: 1px solid rgba(255,255,255,0.12);
+          border-radius: 14px;
+          overflow: hidden;
+          color: #f5f5f5;
+        }
+        .lab-lightbox-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 16px;
+          padding: 16px 18px;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .lab-lightbox-head h3 {
+          margin: 0;
+          font-size: 16px;
+          font-weight: 600;
+        }
+        .lab-lightbox-head p {
+          margin: 4px 0 0;
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.55);
+          font-family: var(--lab-mono);
+        }
+        .lab-lightbox-close {
+          border: 1px solid rgba(255,255,255,0.2);
+          background: transparent;
+          color: #fff;
+          border-radius: 8px;
+          padding: 8px 12px;
+          cursor: pointer;
+          font-family: var(--lab-mono);
+          font-size: 10px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+        }
+        .lab-lightbox-frame {
+          position: relative;
+          aspect-ratio: 16 / 9;
+          background: #000;
+        }
+        .lab-lightbox-frame iframe,
+        .lab-lightbox-frame video {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          border: 0;
         }
 
         .lab-crosslink {
@@ -537,33 +651,7 @@ export default function Labs() {
         <p className="lab-section-intro">{page.projectsIntro}</p>
         <div className="lab-project-grid">
           {projects.map((project, i) => {
-            const isExternal = Boolean(project.external && project.href);
-            const isInternal = Boolean(project.href && !project.external);
-            const cardInner = (
-              <>
-                <div className="lab-project-media">
-                  <img src={project.image} alt={project.title} />
-                </div>
-                <div className="lab-project-body">
-                  <div className="lab-project-meta">
-                    <span className="lab-project-category">
-                      {project.category}
-                    </span>
-                    {project.tech ? (
-                      <span className="lab-project-tech">{project.tech}</span>
-                    ) : null}
-                  </div>
-                  <h3 className="lab-project-title">{project.title}</h3>
-                  <p className="lab-project-summary">{project.summary}</p>
-                  {project.href ? (
-                    <span className="lab-project-link">
-                      {isExternal ? 'Case study →' : 'Inquire →'}
-                    </span>
-                  ) : null}
-                </div>
-              </>
-            );
-
+            const canPlay = Boolean(project.vimeoId || project.video);
             return (
               <motion.div
                 key={project.id}
@@ -576,32 +664,100 @@ export default function Labs() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                {isExternal ? (
-                  <a
-                    className="lab-project-card"
-                    href={project.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {cardInner}
-                  </a>
-                ) : isInternal ? (
-                  <Link className="lab-project-card" to={project.href}>
-                    {cardInner}
-                  </Link>
-                ) : (
-                  <div className="lab-project-card">{cardInner}</div>
-                )}
+                <button
+                  type="button"
+                  className="lab-project-card"
+                  onClick={() => {
+                    if (canPlay) setActiveId(project.id);
+                  }}
+                  disabled={!canPlay}
+                  style={canPlay ? undefined : {cursor: 'default', opacity: 0.92}}
+                >
+                  <div className="lab-project-media">
+                    <img src={project.image} alt="" />
+                    {canPlay ? (
+                      <div className="lab-project-play">
+                        <span>Play</span>
+                      </div>
+                    ) : null}
+                  </div>
+                  <div className="lab-project-body">
+                    <div className="lab-project-meta">
+                      <span className="lab-project-category">
+                        {project.category}
+                      </span>
+                      {project.tech ? (
+                        <span className="lab-project-tech">{project.tech}</span>
+                      ) : null}
+                    </div>
+                    <h3 className="lab-project-title">{project.title}</h3>
+                    <p className="lab-project-summary">{project.summary}</p>
+                    <span className="lab-project-link">
+                      {canPlay ? 'Watch here →' : 'Coming soon'}
+                    </span>
+                  </div>
+                </button>
               </motion.div>
             );
           })}
         </div>
       </section>
 
+      {active ? (
+        <div
+          className="lab-lightbox"
+          role="dialog"
+          aria-modal="true"
+          aria-label={active.title}
+          onClick={() => setActiveId(null)}
+        >
+          <div
+            className="lab-lightbox-panel"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="lab-lightbox-head">
+              <div>
+                <h3>{active.title}</h3>
+                <p>
+                  {active.category}
+                  {active.tech ? ` · ${active.tech}` : ''}
+                </p>
+              </div>
+              <button
+                type="button"
+                className="lab-lightbox-close"
+                onClick={() => setActiveId(null)}
+              >
+                Close
+              </button>
+            </div>
+            <div className="lab-lightbox-frame">
+              {active.vimeoId ? (
+                <iframe
+                  title={active.title}
+                  src={labsVimeoEmbedSrc(active.vimeoId, true)}
+                  allow="autoplay; fullscreen; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : active.video ? (
+                <video
+                  src={active.video}
+                  controls
+                  autoPlay
+                  playsInline
+                  poster={active.image}
+                />
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       <div className="lab-crosslink">
         <p>
-          Looking for film and motion work? Mapping and animation videos live on
-          Media. Research and living systems sit under Research.
+          Looking for film and animation deliverables? Those live on Media.
+          Research and living systems sit under Research. Plotter, aquarium, and
+          other offline pieces can be added when you have Vimeo links or files.
         </p>
         <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
           <Link to="/media">Media →</Link>

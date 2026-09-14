@@ -126,6 +126,14 @@ function ProjectCard({project}) {
     />
   );
 
+  const cta = project.vimeoId
+    ? 'Watch on Labs →'
+    : project.external || project.url?.startsWith('http')
+      ? 'View project →'
+      : project.url
+        ? 'Open →'
+        : null;
+
   const inner = (
     <>
       {media}
@@ -133,18 +141,20 @@ function ProjectCard({project}) {
         <span className="mag-place-cat">{project.category}</span>
         <h4>{project.title}</h4>
         {project.summary ? <p>{project.summary}</p> : null}
-        <p
-          style={{
-            margin: '8px 0 0',
-            fontSize: '10px',
-            letterSpacing: '.12em',
-            textTransform: 'uppercase',
-            color: 'var(--ink3)',
-            fontWeight: 700,
-          }}
-        >
-          View project →
-        </p>
+        {cta ? (
+          <p
+            style={{
+              margin: '8px 0 0',
+              fontSize: '10px',
+              letterSpacing: '.12em',
+              textTransform: 'uppercase',
+              color: 'var(--ink3)',
+              fontWeight: 700,
+            }}
+          >
+            {cta}
+          </p>
+        ) : null}
       </div>
     </>
   );

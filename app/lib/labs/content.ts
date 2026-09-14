@@ -1,5 +1,3 @@
-const PORTFOLIO_BASE = 'https://philipcp.netlify.app';
-
 export type LabsCapability = {
   id: string;
   title: string;
@@ -14,6 +12,10 @@ export type LabsProject = {
   summary: string;
   image: string;
   tech?: string;
+  /** Vimeo numeric id — preferred in-page playback */
+  vimeoId?: string;
+  /** Self-hosted clip under /videos/labs/ when not on Vimeo */
+  video?: string;
   href?: string | null;
   external?: boolean;
 };
@@ -35,22 +37,23 @@ export const LABS_PAGE: LabsPageContent = {
     meta: 'Sotabosc · Interactive Studio',
     titleLines: ['Labs', 'Interactive', 'Practice'],
     description:
-      'Mapping, interactive installation, displays, and making — light, space, and physical form for brands, culture, and live audiences.',
+      'Mapping, kinetic sculpture, interactive installation, and making — light, space, and physical form. Watch the work here.',
   },
   marquee: [
     'Projection Mapping',
+    'Kinetic',
     'Interactive',
+    'AR / VR',
     'Displays',
     '3D Printing',
     'Plotters',
     'Live Caricature',
-    'Spatial Design',
     'Barcelona',
   ],
   capabilitiesIntro:
     'Studio specialties across digital surfaces, physical making, and live presence.',
   projectsIntro:
-    'Selected mapping and interactive work. Fabrication and live practice listed as capabilities — case studies added as assets land.',
+    'Selected mapping, kinetic, and mixed-media work — play on this page. Plotter, aquarium, and other pieces not yet on Vimeo can be added as files land.',
   utilityLabel: 'Studio practice',
 };
 
@@ -63,11 +66,18 @@ export const LABS_CAPABILITIES: LabsCapability[] = [
     tags: ['TouchDesigner', 'Kinect', 'Architecture', 'Real-time'],
   },
   {
-    id: 'interactive',
-    title: 'Interactive Installation',
+    id: 'kinetic',
+    title: 'Kinetic & Motor Systems',
     description:
-      'Gesture, proximity, and presence-driven experiences that turn rooms and objects into responsive interfaces.',
-    tags: ['Spatial Computing', 'Sensors', 'Installation'],
+      'Moving sculpture and fan-driven chaos — physical motion as the medium, not only the screen.',
+    tags: ['Motors', 'Fans', 'Installation'],
+  },
+  {
+    id: 'interactive',
+    title: 'Interactive & Mixed Reality',
+    description:
+      'Gesture, proximity, AR/VR, and presence-driven experiences that turn rooms and objects into responsive interfaces.',
+    tags: ['Spatial Computing', 'AR/VR', 'Sensors'],
   },
   {
     id: 'displays',
@@ -92,6 +102,18 @@ export const LABS_CAPABILITIES: LabsCapability[] = [
   },
 ];
 
+/** Vimeo embed URL for a numeric id. */
+export function labsVimeoEmbedSrc(vimeoId: string, autoplay = false): string {
+  const params = new URLSearchParams({
+    title: '0',
+    byline: '0',
+    portrait: '0',
+    dnt: '1',
+  });
+  if (autoplay) params.set('autoplay', '1');
+  return `https://player.vimeo.com/video/${vimeoId}?${params.toString()}`;
+}
+
 export const LABS_PROJECTS: LabsProject[] = [
   {
     id: 'ouroboros',
@@ -100,8 +122,25 @@ export const LABS_PROJECTS: LabsProject[] = [
     summary: '3D projection mapping for architectural surfaces.',
     image: '/images/media/posters/ouroboros-projection-mapping.jpg',
     tech: 'Mapping',
-    href: `${PORTFOLIO_BASE}/work/ouroboros-projection-mapping`,
-    external: true,
+    vimeoId: '854473073',
+  },
+  {
+    id: 'kinetic-chaos',
+    title: 'Make Kin with Chaos',
+    category: 'Kinetic',
+    summary: 'Kinetic art with motors and fans — motion as material.',
+    image: '/images/labs/labs-image.jpg',
+    tech: 'Kinetic',
+    vimeoId: '1107034578',
+  },
+  {
+    id: 'kathakali-mapping',
+    title: 'Kathakali — Dushasana Vadham',
+    category: 'Projection Mapping',
+    summary: 'Projection mapping for Kerala folk performance.',
+    image: '/images/labs/jakub-zerdzicki-oG3rjdcSnEU-unsplash.jpg',
+    tech: 'Mapping',
+    vimeoId: '212494211',
   },
   {
     id: 'chasing-the-sun',
@@ -110,30 +149,34 @@ export const LABS_PROJECTS: LabsProject[] = [
     summary: 'Meditative projection and time-based light study.',
     image: '/images/media/posters/chasing-the-sun.jpg',
     tech: 'Light',
-    href: `${PORTFOLIO_BASE}/work/chasing-the-sun`,
-    external: true,
+    vimeoId: '59516970',
   },
   {
-    id: 'depth-projection',
-    title: 'Depth-Sensing Projection',
-    category: 'Interactive',
-    summary:
-      'Real-time depth-sensing projection onto physical objects using Kinect and TouchDesigner.',
-    image: '/images/labs/labs-image.jpg',
-    tech: 'TouchDesigner',
-    href: '/contact?type=Interactive%20%26%20Labs',
-    external: false,
+    id: 'y-mapping',
+    title: 'Koda & Bijou — There',
+    category: 'Projection Mapping',
+    summary: '3D projection mapping — Y mapping study for Koda & Bijou.',
+    image: '/images/media/posters/koda-bijou-there.jpg',
+    tech: 'Mapping',
+    vimeoId: '86099543',
   },
   {
-    id: 'spatial-displays',
-    title: 'Spatial Display Studies',
-    category: 'Displays',
-    summary:
-      'Explorations in layered light, surface, and environmental media for immersive rooms.',
+    id: 'mixed-media-portfolio',
+    title: 'AR / VR Mixed Media',
+    category: 'AR / VR',
+    summary: 'Mixed-media portfolio across AR, VR, and spatial experience.',
     image: '/images/labs/vishnu-mohanan-eaDwf4UAEhk-unsplash.jpg',
-    tech: 'Spatial',
-    href: '/contact?type=Interactive%20%26%20Labs',
-    external: false,
+    tech: 'Mixed Reality',
+    vimeoId: '1002272149',
+  },
+  {
+    id: 'early-mapping',
+    title: 'Early Projection Mapping',
+    category: 'Projection Mapping',
+    summary: 'Archival mapping study — early practice in light and surface.',
+    image: '/images/labs/laurens-van-der-drift-iv2-3AeAO-A-unsplash.jpg',
+    tech: 'Archive',
+    vimeoId: '51797706',
   },
 ];
 
