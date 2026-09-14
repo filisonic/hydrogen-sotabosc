@@ -53,7 +53,7 @@ export const LABS_PAGE: LabsPageContent = {
   capabilitiesIntro:
     'Studio specialties across digital surfaces, physical making, and live presence.',
   projectsIntro:
-    'Selected mapping, kinetic, and mixed-media work — play on this page. Plotter, aquarium, and other pieces not yet on Vimeo can be added as files land.',
+    'Selected mapping, kinetic, interactive, and fabrication work — play on this page. Aquarium and Cell & I still need a Vimeo link or an uploaded file.',
   utilityLabel: 'Studio practice',
 };
 
@@ -177,6 +177,25 @@ export const LABS_PROJECTS: LabsProject[] = [
     image: '/images/labs/laurens-van-der-drift-iv2-3AeAO-A-unsplash.jpg',
     tech: 'Archive',
     vimeoId: '51797706',
+  },
+  {
+    id: 'plotter',
+    title: 'Plotter Drawings',
+    category: 'Fabrication',
+    summary: 'Generative plotter work — machine drawing as studio practice.',
+    image: '/images/labs/labs-image.jpg',
+    tech: 'Plotter',
+    // Streamed from portfolio CDN; plays in-page on Labs (not a case-study hop).
+    video: 'https://philipcp.netlify.app/assets/clips/plotter1.mp4',
+  },
+  {
+    id: 'interactive',
+    title: 'Interactive Installation',
+    category: 'Interactive',
+    summary: 'Interactive installation study — presence and response in the room.',
+    image: '/images/labs/jakub-zerdzicki-oG3rjdcSnEU-unsplash.jpg',
+    tech: 'Interactive',
+    video: 'https://philipcp.netlify.app/assets/clips/interactive.mp4',
   },
 ];
 

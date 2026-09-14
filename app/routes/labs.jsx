@@ -756,8 +756,8 @@ export default function Labs() {
       <div className="lab-crosslink">
         <p>
           Looking for film and animation deliverables? Those live on Media.
-          Research and living systems sit under Research. Plotter, aquarium, and
-          other offline pieces can be added when you have Vimeo links or files.
+          Research and living systems sit under Research. Aquarium and Cell & I
+          can be added when you upload them or share Vimeo links.
         </p>
         <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
           <Link to="/media">Media →</Link>
