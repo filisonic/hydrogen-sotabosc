@@ -39,7 +39,9 @@ export function PageLayout({
     location.pathname === '/media' ||
     location.pathname.startsWith('/media/') ||
     location.pathname === '/work' ||
-    location.pathname.startsWith('/work/');
+    location.pathname.startsWith('/work/') ||
+    location.pathname === '/research' ||
+    location.pathname.startsWith('/research/');
   const isMinimalChrome =
     isHomePage || isCityWorld || isToolsPage || isLabsPage || hasOwnFooter;
   const isDirectoryChrome =

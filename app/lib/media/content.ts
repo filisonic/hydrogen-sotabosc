@@ -21,9 +21,11 @@ export type MediaProject = {
   summary?: string;
   /** Poster / fallback still. */
   image: string;
-  /** Optional preview clip (hosted on portfolio CDN). */
+  /** Optional preview clip (mp4). */
   video?: string;
-  url: string;
+  /** Optional Vimeo id for in-page playback instead of external case study. */
+  vimeoId?: string;
+  url?: string;
   external?: boolean;
 };
 
@@ -68,44 +70,45 @@ function portfolioClip(filename: string): string {
 
 export const MEDIA_PAGE: MediaPageContent = {
   hero: {
-    headline: 'We make brands make sense',
+    headline: 'Film, motion, and video',
     subhead:
-      'Brand direction, creative strategy, and media production for people building something real — projection mapping, animation, and installation work.',
+      'Brand direction and video production for people building something real — films, animation, trailers, and mapping videos as finished motion work.',
     image: '/images/media/posters/ouroboros-projection-mapping.jpg',
     showreelVideo: portfolioClip('Ouroboros.mp4'),
   },
   marquee: [
-    'Projection Mapping',
+    'Film',
     'Animation',
-    'Installation',
+    'Music Video',
+    'Trailers',
+    'Mapping Video',
     'Brand Direction',
-    'Creative Strategy',
     'Barcelona',
     'Studio',
   ],
   workSection: {
-    label: 'Mapping & animation',
+    label: 'Selected video',
     intro:
-      'A sample of projection and animation work — click any piece to open the full case study on the portfolio.',
-    linkLabel: 'Full portfolio',
-    linkHref: `${PORTFOLIO_BASE}/work`,
-    external: true,
+      'Films, animation, and mapping videos — mapping pieces play here and on Labs. Animation case studies open the full portfolio when linked.',
+    linkLabel: 'Interactive practice on Labs',
+    linkHref: `/labs`,
+    external: false,
   },
   servicesSection: {
     label: 'What we do',
     intro:
-      'Three ways we help — from the story you tell to the things people see, share, and remember.',
+      'Three ways we help — from the story you tell to the films and motion people watch and share.',
   },
   processSection: {
     label: 'How we work',
     intro:
-      'No pitch decks. No mystery phases. Just a clear path from first conversation to finished work.',
+      'No pitch decks. No mystery phases. Just a clear path from first conversation to finished video.',
   },
   cta: {
     tag: 'Start here',
     heading: 'Book a conversation',
     body:
-      'Tell us what you are building. We will figure out together whether brand, content, or platform is the right first move.',
+      'Tell us what you are building. We will figure out together whether brand, film, or platform is the right first move. For interactive mapping and spatial practice, see Labs.',
     buttonLabel: 'Book a conversation',
     href: '/contact?type=Brand%20%26%20Media',
   },
@@ -123,10 +126,10 @@ export const MEDIA_SERVICES: MediaService[] = [
   {
     id: 'creative-production',
     title: 'Creative Production',
-    tagline: 'Video, photo, content',
+    tagline: 'Video, film, motion',
     description:
-      'Campaigns, films, motion, and installation work — from music videos and documentaries to projection mapping.',
-    tags: ['Film', 'Motion', 'Installations', 'Campaigns'],
+      'Campaigns, films, and motion — music videos, documentaries, trailers, and mapping videos as finished deliverables.',
+    tags: ['Film', 'Motion', 'Animation', 'Campaigns'],
   },
   {
     id: 'digital-presence',
@@ -164,27 +167,27 @@ export const MEDIA_PROCESS: MediaProcessStep[] = [
   },
 ];
 
-/** Mapping + animation only — videos from philipcp.netlify.app, links open portfolio case studies. */
+/** Mapping (Vimeo, on-site) + animation (portfolio where linked). */
 export const MEDIA_PROJECTS: MediaProject[] = [
   {
     id: 'ouroboros',
     title: 'Ouroboros',
-    category: 'Projection Mapping',
-    summary: '3D projection mapping for architectural surfaces',
+    category: 'Mapping Video',
+    summary: '3D projection mapping for architectural surfaces — watch on-site.',
     image: '/images/media/posters/ouroboros-projection-mapping.jpg',
-    video: portfolioClip('Ouroboros.mp4'),
-    url: `${PORTFOLIO_BASE}/work/ouroboros-projection-mapping`,
-    external: true,
+    vimeoId: '854473073',
+    url: '/labs',
+    external: false,
   },
   {
     id: 'chasing-the-sun',
     title: 'Chasing the Sun',
-    category: 'Projection Mapping',
-    summary: 'Meditative projection and time-based light study',
+    category: 'Mapping Video',
+    summary: 'Meditative projection and time-based light study — watch on-site.',
     image: '/images/media/posters/chasing-the-sun.jpg',
-    video: portfolioClip('Projection-Mapping-MashiBhootham.mp4'),
-    url: `${PORTFOLIO_BASE}/work/chasing-the-sun`,
-    external: true,
+    vimeoId: '59516970',
+    url: '/labs',
+    external: false,
   },
   {
     id: 'punarjanani',

@@ -7,15 +7,15 @@ import {resolveEventImageUrl, resolvePlaceImageUrl} from '~/lib/directory/sceneV
 
 export const meta = () => [
   {title: "Discover — Sotabosc"},
-  {name: 'description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more."},
+  {name: 'description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research."},
   {property: 'og:title', content: "Sotabosc — Barcelona's Living Creative Ecosystem"},
-  {property: 'og:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more."},
+  {property: 'og:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research."},
   {property: 'og:type', content: 'website'},
   {property: 'og:url', content: 'https://sotabosc.org/'},
   {property: 'og:site_name', content: 'Sotabosc'},
   {name: 'twitter:card', content: 'summary_large_image'},
   {name: 'twitter:title', content: "Sotabosc — Barcelona's Living Creative Ecosystem"},
-  {name: 'twitter:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more."},
+  {name: 'twitter:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research."},
 ];
 
 export async function loader() {
@@ -76,7 +76,8 @@ const SECTIONS = [
   {id:'experiences', label:'Curated Experiences', desc:'Descend through sky, canopy, understory, water, and soil — Barcelona mapped as a living ecosystem.', href:'/', cta:'Begin the journey'},
   {id:'directory', label:'Directory', desc:'100+ places — galleries, coffee, music venues, workshops, and restaurants curated by neighbourhood.', href:'/city', cta:'Browse places'},
   {id:'tools', label:'Creative Tools', desc:'Generative instruments and parametric sketches built for experimentation.', href:'/tools', cta:'Open tools'},
-  {id:'labs', label:'Speculative Futures Lab', desc:'Research into speculative design, embodied interaction, and emergent systems.', href:'/labs', cta:'Enter lab'},
+  {id:'labs', label:'Labs', desc:'Interactive studio practice — mapping, displays, fabrication, and live making.', href:'/labs', cta:'Enter labs'},
+  {id:'research', label:'Research', desc:'Speculative design, living systems, and cultural research including the Living Map.', href:'/research', cta:'Explore research'},
 ];
 
 const PLACE_META = {
@@ -128,7 +129,7 @@ export default function DiscoverPage() {
         "@type": "WebSite",
         "name": "Sotabosc",
         "url": "https://sotabosc.org",
-        "description": "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, research lab, and more.",
+        "description": "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research.",
         "potentialAction": {
           "@type": "SearchAction",
           "target": "https://sotabosc.org/search?q={search_term_string}",
@@ -217,7 +218,7 @@ export default function DiscoverPage() {
         <div className="mag-mq-inner">
           {[...Array(2)].map((_, r) => (
             <span key={r} style={{ display: 'flex' }}>
-              {['Directory', 'Curated Experiences', 'Generative Tools', 'Speculative Research', 'Gallery', 'Community', 'Barcelona', 'Nature × Culture'].map((item, i) => (
+              {['Directory', 'Curated Experiences', 'Generative Tools', 'Labs', 'Research', 'Gallery', 'Community', 'Barcelona'].map((item, i) => (
                 <span key={i} className="mag-mq-item">{item} ·</span>
               ))}
             </span>
@@ -398,25 +399,25 @@ export default function DiscoverPage() {
           className="mag-feat-main"
           style={{
             backgroundImage:
-              'linear-gradient(rgba(20,16,8,0.52), rgba(20,16,8,0.82)), url(https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&h=800&q=80)',
+              'linear-gradient(rgba(20,16,8,0.52), rgba(20,16,8,0.82)), url(/images/labs/labs-image.jpg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
           }}
         >
-          <span className="mag-feat-main-tag">Speculative Futures Lab</span>
-          <h3>Research at the Edge of Nature and Technology</h3>
-          <p>Speculative design, embodied interaction, and emergent systems — four active research areas.</p>
+          <span className="mag-feat-main-tag">Labs</span>
+          <h3>Interactive Studio Practice</h3>
+          <p>Projection mapping, displays, fabrication, and live making — light, space, and physical form.</p>
         </Link>
         <div className="mag-feat-side">
+          <Link to="/research" className="mag-feat-card">
+            <span className="mag-feat-card-tag">Research</span>
+            <h4>Living Map, speculative design, and cultural systems</h4>
+            <p>Explore research →</p>
+          </Link>
           <Link to="/tools" className="mag-feat-card">
             <span className="mag-feat-card-tag">Creative Tools</span>
             <h4>Generative instruments and parametric sketches</h4>
             <p>Open tools →</p>
-          </Link>
-          <Link to="/gallery" className="mag-feat-card">
-            <span className="mag-feat-card-tag">Gallery</span>
-            <h4>Discovered specimens — an evolving archive</h4>
-            <p>View gallery →</p>
           </Link>
         </div>
       </div>
@@ -452,7 +453,7 @@ export default function DiscoverPage() {
       {/* ═══════════════ FOOTER ═══════════════ */}
       <footer className="mag-footer">
         <div className="mag-footer-links">
-          <Link to="/about">About</Link><Link to="/work">Work</Link><Link to="/contact">Contact</Link><Link to="/feedback">Feedback</Link>
+          <Link to="/about">About</Link><Link to="/research">Research</Link><Link to="/labs">Labs</Link><Link to="/contact">Contact</Link><Link to="/feedback">Feedback</Link>
         </div>
         <span className="mag-footer-brand">Sotabosc · Barcelona</span>
       </footer>
