@@ -14,7 +14,9 @@ export type LabsProject = {
   tech?: string;
   /** Vimeo numeric id — preferred in-page playback */
   vimeoId?: string;
-  /** Self-hosted clip under /videos/labs/ when not on Vimeo */
+  /** YouTube video / Shorts id — in-page playback */
+  youtubeId?: string;
+  /** Self-hosted or CDN mp4 when not on Vimeo/YouTube */
   video?: string;
   href?: string | null;
   external?: boolean;
@@ -53,7 +55,7 @@ export const LABS_PAGE: LabsPageContent = {
   capabilitiesIntro:
     'Studio specialties across digital surfaces, physical making, and live presence.',
   projectsIntro:
-    'Selected mapping, kinetic, interactive, and fabrication work — play on this page. Aquarium and Cell & I still need a Vimeo link or an uploaded file.',
+    'Selected mapping, kinetic, interactive, and fabrication work — play on this page. Cell & I still needs a Vimeo/YouTube link or an uploaded file.',
   utilityLabel: 'Studio practice',
 };
 
@@ -112,6 +114,17 @@ export function labsVimeoEmbedSrc(vimeoId: string, autoplay = false): string {
   });
   if (autoplay) params.set('autoplay', '1');
   return `https://player.vimeo.com/video/${vimeoId}?${params.toString()}`;
+}
+
+/** YouTube embed URL (works for watch + Shorts ids). */
+export function labsYouTubeEmbedSrc(youtubeId: string, autoplay = false): string {
+  const params = new URLSearchParams({
+    modestbranding: '1',
+    rel: '0',
+    playsinline: '1',
+  });
+  if (autoplay) params.set('autoplay', '1');
+  return `https://www.youtube.com/embed/${youtubeId}?${params.toString()}`;
 }
 
 export const LABS_PROJECTS: LabsProject[] = [
@@ -195,7 +208,16 @@ export const LABS_PROJECTS: LabsProject[] = [
     summary: 'Interactive installation study — presence and response in the room.',
     image: '/images/labs/jakub-zerdzicki-oG3rjdcSnEU-unsplash.jpg',
     tech: 'Interactive',
-    video: 'https://philipcp.netlify.app/assets/clips/interactive.mp4',
+    youtubeId: '_VRsl7DTcrU',
+  },
+  {
+    id: 'aquarium',
+    title: 'Aquarium',
+    category: 'Interactive',
+    summary: 'Immersive aquarium installation — light, water, and spatial media.',
+    image: '/images/labs/vishnu-mohanan-eaDwf4UAEhk-unsplash.jpg',
+    tech: 'Installation',
+    youtubeId: '6hyIGu6FdAE',
   },
 ];
 

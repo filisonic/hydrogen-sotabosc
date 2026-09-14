@@ -6,6 +6,7 @@ import {
   getLabsPageContent,
   getLabsProjects,
   labsVimeoEmbedSrc,
+  labsYouTubeEmbedSrc,
 } from '~/lib/labs/content';
 
 /**
@@ -651,7 +652,9 @@ export default function Labs() {
         <p className="lab-section-intro">{page.projectsIntro}</p>
         <div className="lab-project-grid">
           {projects.map((project, i) => {
-            const canPlay = Boolean(project.vimeoId || project.video);
+            const canPlay = Boolean(
+              project.vimeoId || project.youtubeId || project.video,
+            );
             return (
               <motion.div
                 key={project.id}
@@ -739,6 +742,13 @@ export default function Labs() {
                   allow="autoplay; fullscreen; picture-in-picture"
                   allowFullScreen
                 />
+              ) : active.youtubeId ? (
+                <iframe
+                  title={active.title}
+                  src={labsYouTubeEmbedSrc(active.youtubeId, true)}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                />
               ) : active.video ? (
                 <video
                   src={active.video}
@@ -756,8 +766,8 @@ export default function Labs() {
       <div className="lab-crosslink">
         <p>
           Looking for film and animation deliverables? Those live on Media.
-          Research and living systems sit under Research. Aquarium and Cell & I
-          can be added when you upload them or share Vimeo links.
+          Research and living systems sit under Research. Cell & I can be added
+          when you share a Vimeo/YouTube link or upload the file.
         </p>
         <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
           <Link to="/media">Media →</Link>
