@@ -1,107 +1,26 @@
 import {motion} from 'framer-motion';
 import {Link} from 'react-router';
+import {
+  getLabsCapabilities,
+  getLabsPageContent,
+  getLabsProjects,
+} from '~/lib/labs/content';
 
 /**
- * Labs — Speculative Futures Lab
- * Volvox Labs-inspired: dark immersive, monospace utility type,
- * full-bleed sections, cockpit-style metadata bar.
+ * Labs — Interactive design studio
+ * Dark immersive studio page: mapping, interactive, displays, fabrication, live.
  *
  * @type {Route.MetaFunction}
  */
 export const meta = () => {
   return [
-    {title: 'Labs — Speculative Futures | Sotabosc'},
+    {title: 'Labs — Interactive Studio | Sotabosc'},
     {
       name: 'description',
       content:
-        'Research and practice exploring speculative design, embodied interaction, and emergent systems at the intersection of nature and technology.',
+        'Interactive design studio practice: projection mapping, displays, fabrication, and live making at Sotabosc Labs in Barcelona.',
     },
   ];
-};
-
-/* ── Data ─────────────────────────────────────────────── */
-
-const RESEARCH_AREAS = [
-  {
-    id: 'speculative-design',
-    index: '01',
-    title: 'Speculative Design',
-    subtitle: 'Possible futures through design fiction',
-    description:
-      'We explore alternative presents and plausible futures through design fiction, world-building, and critical making. Our practice investigates how speculative narratives can reshape our relationship with technology, ecology, and each other.',
-    tags: ['Design Fiction', 'World-Building', 'Critical Making', 'Futures'],
-    status: 'active',
-  },
-  {
-    id: 'embodied-interaction',
-    index: '02',
-    title: 'Embodied Interaction',
-    subtitle: 'Body, technology, and space',
-    description:
-      'Investigating the relationship between human bodies, computational systems, and physical space. We create installations and interfaces that respond to gesture, breath, proximity, and presence — moving beyond screens toward spatial computing.',
-    tags: [
-      'Spatial Computing',
-      'Gesture',
-      'Installation',
-      'Projection Mapping',
-    ],
-    status: 'active',
-  },
-  {
-    id: 'emergent-systems',
-    index: '03',
-    title: 'Emergent Systems',
-    subtitle: 'Complex adaptive behaviors',
-    description:
-      'Studying complex adaptive systems and their emergent behaviors — from mycelial networks to urban ecosystems. We build simulations and generative tools that model how order arises from simple rules and local interactions.',
-    tags: ['Complexity', 'Generative', 'Simulation', 'Networks'],
-    status: 'active',
-  },
-  {
-    id: 'biomimetic-interfaces',
-    index: '04',
-    title: 'Biomimetic Interfaces',
-    subtitle: 'Nature-informed digital design',
-    description:
-      'Drawing from biological patterns, growth algorithms, and ecological principles to inform digital interface design. We believe the most intuitive interfaces mirror the systems humans evolved within.',
-    tags: ['Biomimicry', 'Growth Algorithms', 'Organic UI', 'Ecology'],
-    status: 'exploring',
-  },
-];
-
-const EXPERIMENTS = [
-  {
-    title: 'Organism Lab',
-    description:
-      'Parametric generative life — 50+ presets across animals, plants, fungi, minerals, and cosmic forms.',
-    href: '/tools/organism-lab',
-    tech: 'p5.js',
-  },
-  {
-    title: 'Projection Mapping',
-    description:
-      'Real-time depth-sensing projection onto physical objects using Kinect + TouchDesigner.',
-    href: null,
-    tech: 'TouchDesigner',
-  },
-  {
-    title: 'Scroll Ecosystem',
-    description:
-      'Six-layer vertical cross-section of a forest ecosystem — a living interface metaphor.',
-    href: '/',
-    tech: 'React + GSAP',
-  },
-];
-
-/* ── Variants ─────────────────────────────────────────── */
-
-const fadeIn = {
-  hidden: {opacity: 0, y: 30},
-  visible: (i = 0) => ({
-    opacity: 1,
-    y: 0,
-    transition: {duration: 0.6, delay: i * 0.1, ease: [0.22, 1, 0.36, 1]},
-  }),
 };
 
 const lineReveal = {
@@ -112,9 +31,12 @@ const lineReveal = {
   },
 };
 
-/* ── Component ────────────────────────────────────────── */
-
 export default function Labs() {
+  const page = getLabsPageContent();
+  const capabilities = getLabsCapabilities();
+  const projects = getLabsProjects();
+  const [titleLead, titleMid, titleTrail] = page.hero.titleLines;
+
   return (
     <div className="labs-page mag">
       <style>{`
@@ -135,7 +57,6 @@ export default function Labs() {
           overflow-x: hidden;
         }
 
-        /* ── Hero ─────────────────────── */
         .lab-hero {
           min-height: 100vh;
           display: flex;
@@ -149,6 +70,15 @@ export default function Labs() {
           position: absolute;
           inset: 0;
           overflow: hidden;
+        }
+        .lab-hero-image {
+          position: absolute;
+          inset: 0;
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0.28;
+          filter: saturate(0.85) contrast(1.05);
         }
         .lab-hero-grid {
           position: absolute;
@@ -200,7 +130,6 @@ export default function Labs() {
           margin: 0;
         }
 
-        /* ── Divider line ─────────────── */
         .lab-divider {
           height: 1px;
           background: var(--lab-border);
@@ -208,15 +137,40 @@ export default function Labs() {
           transform-origin: left;
         }
 
-        /* ── Research Areas ───────────── */
-        .lab-research {
+        .lab-mq {
+          overflow: hidden;
+          border-block: 1px solid var(--lab-border);
+          padding: 18px 0;
+          margin: 0;
+        }
+        .lab-mq-inner {
+          display: flex;
+          width: max-content;
+          animation: lab-marquee 40s linear infinite;
+        }
+        .lab-mq-item {
+          font-family: var(--lab-mono);
+          font-size: 11px;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--lab-dim);
+          white-space: nowrap;
+          padding: 0 28px;
+        }
+        @keyframes lab-marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+
+        .lab-section {
           padding: 80px 32px;
         }
         .lab-section-header {
           display: flex;
           align-items: baseline;
           justify-content: space-between;
-          margin-bottom: 56px;
+          gap: 16px;
+          margin-bottom: 24px;
         }
         .lab-section-label {
           font-size: 10px;
@@ -232,71 +186,42 @@ export default function Labs() {
           color: var(--lab-dim);
           font-family: var(--lab-mono);
         }
+        .lab-section-intro {
+          font-size: 15px;
+          color: var(--lab-muted);
+          line-height: 1.65;
+          max-width: 640px;
+          margin: 0 0 40px;
+        }
 
-        .lab-area {
+        .lab-cap-grid {
           display: grid;
-          grid-template-columns: 80px 1fr;
-          gap: 0 32px;
-          padding: 40px 0;
-          border-top: 1px solid var(--lab-border);
+          grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+          gap: 14px;
         }
-        .lab-area:last-child {
-          border-bottom: 1px solid var(--lab-border);
-        }
-        .lab-area-index {
-          font-size: 48px;
-          font-weight: 800;
-          letter-spacing: -0.04em;
-          color: var(--lab-dim);
-          line-height: 1;
-          font-family: var(--lab-mono);
-        }
-        .lab-area-content {}
-        .lab-area-header {
+        .lab-cap-card {
+          background: var(--lab-surface);
+          border: 1px solid var(--lab-border);
+          border-radius: 10px;
+          padding: 24px;
+          min-height: 180px;
           display: flex;
-          align-items: center;
-          gap: 12px;
-          margin-bottom: 4px;
+          flex-direction: column;
         }
-        .lab-area-title {
-          font-size: clamp(24px, 3vw, 34px);
+        .lab-cap-title {
+          font-size: 18px;
           font-weight: 700;
           letter-spacing: -0.02em;
-          margin: 0;
+          margin: 0 0 10px;
         }
-        .lab-area-status {
-          font-size: 8px;
-          letter-spacing: 0.15em;
-          text-transform: uppercase;
-          padding: 2px 8px;
-          border-radius: 100px;
-          font-family: var(--lab-mono);
-          font-weight: 600;
-        }
-        .lab-area-status--active {
-          color: var(--lab-accent);
-          background: var(--lab-accent-dim);
-          border: 1px solid rgba(0,0,0,0.1);
-        }
-        .lab-area-status--exploring {
-          color: #fbbf24;
-          background: rgba(251,191,36,0.08);
-          border: 1px solid rgba(251,191,36,0.12);
-        }
-        .lab-area-subtitle {
-          font-size: 12px;
+        .lab-cap-desc {
+          font-size: 13px;
           color: var(--lab-muted);
-          letter-spacing: 0.04em;
+          line-height: 1.6;
           margin: 0 0 16px;
+          flex: 1;
         }
-        .lab-area-desc {
-          font-size: 14px;
-          color: var(--lab-muted);
-          line-height: 1.7;
-          margin: 0 0 20px;
-          max-width: 600px;
-        }
-        .lab-area-tags {
+        .lab-cap-tags {
           display: flex;
           gap: 6px;
           flex-wrap: wrap;
@@ -313,44 +238,60 @@ export default function Labs() {
           font-weight: 500;
         }
 
-        /* ── Experiments ──────────────── */
-        .lab-experiments {
-          padding: 80px 32px;
-        }
-        .lab-exp-grid {
+        .lab-project-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 14px;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          gap: 18px;
         }
-        .lab-exp-card {
-          background: var(--lab-surface);
-          border: 1px solid var(--lab-border);
-          border-radius: 10px;
-          padding: 28px;
+        .lab-project-card {
+          position: relative;
+          display: block;
           text-decoration: none;
           color: inherit;
-          transition: border-color 0.2s, transform 0.2s;
-          display: flex;
-          flex-direction: column;
-          min-height: 180px;
+          border: 1px solid var(--lab-border);
+          border-radius: 12px;
+          overflow: hidden;
+          background: var(--lab-surface);
+          transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
         }
-        .lab-exp-card:hover {
-          border-color: rgba(0,0,0,0.15);
-          transform: translateY(-2px);
-          box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        .lab-project-card:hover {
+          transform: translateY(-3px);
+          border-color: rgba(0,0,0,0.16);
+          box-shadow: 0 10px 28px rgba(0,0,0,0.08);
         }
-        .lab-exp-card-head {
+        .lab-project-media {
+          aspect-ratio: 16 / 10;
+          overflow: hidden;
+          background: #111;
+        }
+        .lab-project-media img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.5s ease;
+        }
+        .lab-project-card:hover .lab-project-media img {
+          transform: scale(1.04);
+        }
+        .lab-project-body {
+          padding: 22px 22px 24px;
+        }
+        .lab-project-meta {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-bottom: 14px;
+          gap: 12px;
+          margin-bottom: 10px;
         }
-        .lab-exp-card-title {
-          font-size: 17px;
-          font-weight: 600;
-          margin: 0;
+        .lab-project-category {
+          font-size: 9px;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: var(--lab-accent);
+          font-family: var(--lab-mono);
         }
-        .lab-exp-card-tech {
+        .lab-project-tech {
           font-size: 9px;
           letter-spacing: 0.12em;
           text-transform: uppercase;
@@ -361,22 +302,55 @@ export default function Labs() {
           border-radius: 4px;
           background: var(--lab-accent-dim);
         }
-        .lab-exp-card-desc {
+        .lab-project-title {
+          font-size: clamp(22px, 3vw, 28px);
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          margin: 0 0 8px;
+        }
+        .lab-project-summary {
           font-size: 13px;
           color: var(--lab-muted);
           line-height: 1.6;
-          margin: 0;
-          flex: 1;
+          margin: 0 0 14px;
         }
-        .lab-exp-card-link {
+        .lab-project-link {
           font-size: 10px;
           color: var(--lab-accent);
-          margin-top: 16px;
           font-family: var(--lab-mono);
           letter-spacing: 0.08em;
         }
 
-        /* ── Utility bar ─────────────── */
+        .lab-crosslink {
+          margin: 0 32px 80px;
+          padding: 28px;
+          border: 1px solid var(--lab-border);
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          flex-wrap: wrap;
+          background: var(--lab-surface);
+        }
+        .lab-crosslink p {
+          margin: 0;
+          font-size: 14px;
+          color: var(--lab-muted);
+          max-width: 520px;
+          line-height: 1.6;
+        }
+        .lab-crosslink a {
+          font-family: var(--lab-mono);
+          font-size: 11px;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: var(--lab-text);
+          text-decoration: none;
+          border-bottom: 1px solid var(--lab-border);
+          padding-bottom: 2px;
+        }
+
         .lab-utility {
           position: fixed;
           bottom: 0;
@@ -414,7 +388,6 @@ export default function Labs() {
           50% { opacity: 0.3; }
         }
 
-        /* ── Footer ───────────────────── */
         .lab-footer {
           border-top: 1px solid var(--lab-border);
           padding: 40px 32px 80px;
@@ -434,26 +407,24 @@ export default function Labs() {
         }
         .lab-footer a:hover { color: var(--lab-text); }
 
-        /* ── Responsive ───────────────── */
         @media (max-width: 768px) {
           .lab-hero { padding: 0 20px 60px; }
-          .lab-research { padding: 60px 20px; }
-          .lab-area {
-            grid-template-columns: 1fr;
-            gap: 8px;
-          }
-          .lab-area-index {
-            font-size: 28px;
-          }
-          .lab-experiments { padding: 60px 20px; }
+          .lab-section { padding: 60px 20px; }
+          .lab-project-grid { grid-template-columns: 1fr; }
           .lab-utility { padding: 8px 16px; font-size: 8px; }
           .lab-footer { padding: 32px 20px 80px; }
+          .lab-crosslink { margin: 0 20px 80px; }
         }
       `}</style>
 
-      {/* ── Hero ────────────────────────────────────────────── */}
       <section className="lab-hero">
         <div className="lab-hero-canvas">
+          <img
+            className="lab-hero-image"
+            src="/images/labs/jakub-zerdzicki-oG3rjdcSnEU-unsplash.jpg"
+            alt=""
+            aria-hidden="true"
+          />
           <div className="lab-hero-grid" />
           <div className="lab-hero-glow" />
         </div>
@@ -465,7 +436,7 @@ export default function Labs() {
             animate={{opacity: 1}}
             transition={{duration: 0.8}}
           >
-            Sotabosc · Research & Practice
+            {page.hero.meta}
           </motion.div>
 
           <motion.h1
@@ -474,11 +445,11 @@ export default function Labs() {
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1]}}
           >
-            Speculative
+            {titleLead}
             <br />
-            <span className="lab-hero-title-dim">Futures</span>
+            <span className="lab-hero-title-dim">{titleMid}</span>
             <br />
-            Lab
+            {titleTrail}
           </motion.h1>
 
           <motion.p
@@ -487,14 +458,25 @@ export default function Labs() {
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1]}}
           >
-            Research and practice at the intersection of nature, technology, and
-            culture. We explore speculative futures, embodied interaction, and
-            emergent systems to reimagine how we inhabit digital and physical space.
+            {page.hero.description}
           </motion.p>
         </div>
       </section>
 
-      {/* ── Divider ─────────────────────────────────────────── */}
+      <div className="lab-mq" aria-hidden="true">
+        <div className="lab-mq-inner">
+          {[0, 1].map((row) => (
+            <span key={row} style={{display: 'flex'}}>
+              {page.marquee.map((item) => (
+                <span key={`${row}-${item}`} className="lab-mq-item">
+                  {item} ·
+                </span>
+              ))}
+            </span>
+          ))}
+        </div>
+      </div>
+
       <motion.div
         className="lab-divider"
         initial="hidden"
@@ -503,53 +485,42 @@ export default function Labs() {
         variants={lineReveal}
       />
 
-      {/* ── Research Areas ──────────────────────────────────── */}
-      <section className="lab-research">
+      <section className="lab-section">
         <div className="lab-section-header">
-          <h2 className="lab-section-label">Research Areas</h2>
+          <h2 className="lab-section-label">Capabilities</h2>
           <span className="lab-section-count">
-            {RESEARCH_AREAS.length} areas
+            {capabilities.length} specialties
           </span>
         </div>
-
-        {RESEARCH_AREAS.map((area, i) => (
-          <motion.div
-            key={area.id}
-            className="lab-area"
-            initial={{opacity: 0, y: 20}}
-            whileInView={{opacity: 1, y: 0}}
-            viewport={{once: true, margin: '-60px'}}
-            transition={{
-              duration: 0.5,
-              delay: i * 0.08,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-          >
-            <span className="lab-area-index">{area.index}</span>
-            <div className="lab-area-content">
-              <div className="lab-area-header">
-                <h3 className="lab-area-title">{area.title}</h3>
-                <span
-                  className={`lab-area-status lab-area-status--${area.status}`}
-                >
-                  {area.status}
-                </span>
-              </div>
-              <p className="lab-area-subtitle">{area.subtitle}</p>
-              <p className="lab-area-desc">{area.description}</p>
-              <div className="lab-area-tags">
-                {area.tags.map((tag) => (
+        <p className="lab-section-intro">{page.capabilitiesIntro}</p>
+        <div className="lab-cap-grid">
+          {capabilities.map((cap, i) => (
+            <motion.div
+              key={cap.id}
+              className="lab-cap-card"
+              initial={{opacity: 0, y: 20}}
+              whileInView={{opacity: 1, y: 0}}
+              viewport={{once: true}}
+              transition={{
+                duration: 0.5,
+                delay: i * 0.06,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <h3 className="lab-cap-title">{cap.title}</h3>
+              <p className="lab-cap-desc">{cap.description}</p>
+              <div className="lab-cap-tags">
+                {cap.tags.map((tag) => (
                   <span key={tag} className="lab-tag">
                     {tag}
                   </span>
                 ))}
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          ))}
+        </div>
       </section>
 
-      {/* ── Divider ─────────────────────────────────────────── */}
       <motion.div
         className="lab-divider"
         initial="hidden"
@@ -558,22 +529,44 @@ export default function Labs() {
         variants={lineReveal}
       />
 
-      {/* ── Experiments ─────────────────────────────────────── */}
-      <section className="lab-experiments">
+      <section className="lab-section">
         <div className="lab-section-header">
-          <h2 className="lab-section-label">Experiments</h2>
-          <span className="lab-section-count">
-            {EXPERIMENTS.length} projects
-          </span>
+          <h2 className="lab-section-label">Selected Work</h2>
+          <span className="lab-section-count">{projects.length} projects</span>
         </div>
+        <p className="lab-section-intro">{page.projectsIntro}</p>
+        <div className="lab-project-grid">
+          {projects.map((project, i) => {
+            const isExternal = Boolean(project.external && project.href);
+            const isInternal = Boolean(project.href && !project.external);
+            const cardInner = (
+              <>
+                <div className="lab-project-media">
+                  <img src={project.image} alt={project.title} />
+                </div>
+                <div className="lab-project-body">
+                  <div className="lab-project-meta">
+                    <span className="lab-project-category">
+                      {project.category}
+                    </span>
+                    {project.tech ? (
+                      <span className="lab-project-tech">{project.tech}</span>
+                    ) : null}
+                  </div>
+                  <h3 className="lab-project-title">{project.title}</h3>
+                  <p className="lab-project-summary">{project.summary}</p>
+                  {project.href ? (
+                    <span className="lab-project-link">
+                      {isExternal ? 'Case study →' : 'Inquire →'}
+                    </span>
+                  ) : null}
+                </div>
+              </>
+            );
 
-        <div className="lab-exp-grid">
-          {EXPERIMENTS.map((exp, i) => {
-            const Tag = exp.href ? Link : 'div';
-            const linkProps = exp.href ? {to: exp.href} : {};
             return (
               <motion.div
-                key={exp.title}
+                key={project.id}
                 initial={{opacity: 0, y: 20}}
                 whileInView={{opacity: 1, y: 0}}
                 viewport={{once: true}}
@@ -583,27 +576,43 @@ export default function Labs() {
                   ease: [0.22, 1, 0.36, 1],
                 }}
               >
-                <Tag className="lab-exp-card" {...linkProps}>
-                  <div className="lab-exp-card-head">
-                    <h3 className="lab-exp-card-title">{exp.title}</h3>
-                    <span className="lab-exp-card-tech">{exp.tech}</span>
-                  </div>
-                  <p className="lab-exp-card-desc">{exp.description}</p>
-                  {exp.href && (
-                    <span className="lab-exp-card-link">View →</span>
-                  )}
-                </Tag>
+                {isExternal ? (
+                  <a
+                    className="lab-project-card"
+                    href={project.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {cardInner}
+                  </a>
+                ) : isInternal ? (
+                  <Link className="lab-project-card" to={project.href}>
+                    {cardInner}
+                  </Link>
+                ) : (
+                  <div className="lab-project-card">{cardInner}</div>
+                )}
               </motion.div>
             );
           })}
         </div>
       </section>
 
-      {/* ── Utility bar (Volvox-style) ──────────────────────── */}
+      <div className="lab-crosslink">
+        <p>
+          Looking for film and motion work? Mapping and animation videos live on
+          Media. Research and living systems sit under Research.
+        </p>
+        <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
+          <Link to="/media">Media →</Link>
+          <Link to="/research">Research →</Link>
+        </div>
+      </div>
+
       <div className="lab-utility">
         <div className="lab-utility-item">
           <span className="lab-utility-dot" />
-          <span>Active research</span>
+          <span>{page.utilityLabel}</span>
         </div>
         <div className="lab-utility-item">BCN · 41.3874° N, 2.1686° E</div>
         <div className="lab-utility-item">
@@ -614,18 +623,18 @@ export default function Labs() {
         </div>
       </div>
 
-      {/* ── Footer ──────────────────────────────────────────── */}
       <footer className="lab-footer">
         <div style={{display: 'flex', gap: '20px'}}>
           <Link to="/">Home</Link>
           <Link to="/tools">Tools</Link>
-          <Link to="/work">Work</Link>
+          <Link to="/research">Research</Link>
+          <Link to="/media">Media</Link>
           <Link to="/contact">Contact</Link>
         </div>
         <span
           style={{
             fontSize: '9px',
-            letterSpacing: '0.3em',
+            letter-spacing: '0.3em',
             textTransform: 'uppercase',
             color: 'var(--lab-dim)',
             fontFamily: 'var(--lab-mono)',

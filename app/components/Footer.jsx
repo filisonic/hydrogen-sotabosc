@@ -47,7 +47,7 @@ export function Footer({footer: footerPromise, header, publicStoreDomain, direct
                 </div>
                 <div className="site-footer-col">
                   <h3>Studio</h3>
-                  <Link to="/work">Work</Link>
+                  <Link to="/research">Research</Link>
                   <Link to="/media">Media</Link>
                   <Link to="/contact">Contact</Link>
                 </div>

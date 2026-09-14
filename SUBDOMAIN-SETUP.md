@@ -12,7 +12,7 @@ All subdomains point to the **same Shopify Oxygen deployment**. The `server.js` 
 | `city.sotabosc.world` | `/` | Living map (same as homepage) |
 | `directory.sotabosc.world` | `/city/*` | Barcelona directory (places, events, creators, hikes) |
 | `tools.sotabosc.world` | `/tools/*` | Creative tools hub |
-| `labs.sotabosc.world` | `/labs/*` | Speculative Futures Lab / Research |
+| `labs.sotabosc.world` | `/labs/*` | Interactive studio — mapping, displays, fabrication |
 
 ## How It Works
 
@@ -68,7 +68,7 @@ After DNS propagation (up to 24 hours, usually faster):
 - Visit `directory.sotabosc.world` → should show the Barcelona directory
 - Visit `tools.sotabosc.world` → should show the tools index
 - Visit `tools.sotabosc.world/organism-lab` → should show the organism lab
-- Visit `labs.sotabosc.world` → should show the Speculative Futures Lab
+- Visit `labs.sotabosc.world` → should show the Labs interactive studio
 - Visit `sotabosc.world` → should show the magazine portal
 
 ## Fallback URLs

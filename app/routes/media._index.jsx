@@ -18,11 +18,11 @@ export const meta = ({data}) => {
     ? `${origin.replace(/\/$/, '')}/images/media/posters/ouroboros-projection-mapping.jpg`
     : null;
   return [
-    {title: 'Media — Brand & Creative Studio | Sotabosc'},
+    {title: 'Media — Film & Motion | Sotabosc'},
     {
       name: 'description',
       content:
-        'Brand direction, creative strategy, and media production for founders and teams building something real. Films, campaigns, installations, and creative systems.',
+        'Film, animation, trailers, and mapping videos — brand direction and motion production from Sotabosc Media. Interactive studio practice lives on Labs.',
     },
     ...(ogImage
       ? [
@@ -438,6 +438,31 @@ export default function MediaPage() {
         ))}
       </div>
 
+      {/* Labs cross-link */}
+      <div className="mag-feat" style={{paddingBottom: '16px'}}>
+        <Link
+          to="/labs"
+          className="mag-feat-main"
+          style={{
+            minHeight: 'auto',
+            padding: '48px',
+            gridColumn: '1 / -1',
+            backgroundImage:
+              'linear-gradient(rgba(20,16,8,0.55), rgba(20,16,8,0.85)), url(/images/labs/labs-image.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+          }}
+        >
+          <span className="mag-feat-main-tag">Interactive & mapping practice</span>
+          <h3 style={{marginTop: '12px', marginBottom: '12px'}}>
+            Looking for installation, displays, or live making?
+          </h3>
+          <p style={{marginBottom: 0}}>
+            Mapping-as-practice, interactive work, fabrication, and live caricature live on Labs →
+          </p>
+        </Link>
+      </div>
+
       {/* CTA */}
       <div className="mag-sec">
         <div className="mag-sec-head">
@@ -467,7 +492,8 @@ export default function MediaPage() {
         <div className="mag-footer-links">
           <Link to="/about">About</Link>
           <Link to="/media">Media</Link>
-          <Link to="/work">Work</Link>
+          <Link to="/labs">Labs</Link>
+          <Link to="/research">Research</Link>
           <Link to="/contact">Contact</Link>
           <Link to="/feedback">Feedback</Link>
         </div>
