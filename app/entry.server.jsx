@@ -30,8 +30,19 @@ export default async function handleRequest(
       'https://cdn.shopify.com',
       'https://shopify.com',
       'https://images.unsplash.com',
+      'https://i.vimeocdn.com',
+      'https://i.ytimg.com',
     ],
-    frameSrc: ["'self'", 'https://api.leadconnectorhq.com'],
+    // Labs lightbox embeds (Vimeo + YouTube) + existing lead form iframe.
+    frameSrc: [
+      "'self'",
+      'https://api.leadconnectorhq.com',
+      'https://player.vimeo.com',
+      'https://www.youtube.com',
+      'https://www.youtube-nocookie.com',
+    ],
+    // Plotter / CDN mp4 playback in Labs lightbox.
+    mediaSrc: ["'self'", 'https://philipcp.netlify.app', 'blob:'],
   });
 
   const body = await renderToReadableStream(
