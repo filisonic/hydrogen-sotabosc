@@ -634,7 +634,7 @@ export default function Labs() {
         <span
           style={{
             fontSize: '9px',
-            letter-spacing: '0.3em',
+            letterSpacing: '0.3em',
             textTransform: 'uppercase',
             color: 'var(--lab-dim)',
             fontFamily: 'var(--lab-mono)',
