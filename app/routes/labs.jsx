@@ -766,8 +766,7 @@ export default function Labs() {
       <div className="lab-crosslink">
         <p>
           Looking for film and animation deliverables? Those live on Media.
-          Research and living systems sit under Research. Cell & I can be added
-          when you share a Vimeo/YouTube link or upload the file.
+          Research and living systems sit under Research.
         </p>
         <div style={{display: 'flex', gap: '20px', flexWrap: 'wrap'}}>
           <Link to="/media">Media →</Link>
