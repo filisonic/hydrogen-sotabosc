@@ -2,9 +2,8 @@ import {redirect} from 'react-router';
 
 /**
  * Legacy /work → /research
- * @param {Route.LoaderArgs} _args
  */
-export async function loader(_args) {
+export async function loader() {
   throw redirect('/research');
 }
 
