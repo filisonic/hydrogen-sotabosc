@@ -33,15 +33,16 @@ export const meta = ({ data }) => {
   ];
 };
 
-export async function loader({ request }) {
-  const { SEED_PLACES, SEED_CREATORS, searchPlaces, getPlacesByDomain, getUpcomingEvents } =
-    await import('~/lib/directory/seed.server');
+export async function loader({ request, context }) {
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
   const { getCatalunyaHikes } = await import('~/lib/hiking/hiking.server');
+  const { places: allPlaces, creators, searchPlaces, getPlacesByDomain, getUpcomingEvents } =
+    await getCityDirectory(context);
   const url = new URL(request.url);
   const q = url.searchParams.get('q') || '';
   const domain = url.searchParams.get('domain') || '';
 
-  let places = SEED_PLACES;
+  let places = allPlaces;
   if (q) {
     places = searchPlaces(q);
   } else if (domain) {
@@ -54,9 +55,9 @@ export async function loader({ request }) {
     origin: new URL(request.url).origin,
     places,
     upcomingEvents: upcomingEvents.slice(0, 6),
-    featuredCreators: SEED_CREATORS.slice(0, 4),
+    featuredCreators: creators.slice(0, 4),
     featuredHikes: getCatalunyaHikes().slice(0, 3),
-    neighborhoodIndex: getNeighborhoodIndex(),
+    neighborhoodIndex: getNeighborhoodIndex(allPlaces),
     q,
     domain,
   };

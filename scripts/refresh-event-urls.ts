@@ -12,21 +12,22 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
+import { canonicalizeEventUrl } from './lib/event-queue';
 import { firecrawlSearch } from './lib/firecrawl-search';
 import { firecrawlApiKeyFromEnv, loadDotEnvFromRoot, PROJECT_ROOT } from './lib/project-env';
 
 const OUT_FILE = path.join(PROJECT_ROOT, 'reports', 'event-urls-queue.txt');
 
-/** Editorial search set — Catalunya / Spain, not Barcelona-only */
+/** Editorial search set — real upcoming nights, October 2026 first */
 const DEFAULT_QUERIES = [
-  'site:eventbrite.es Catalunya taller workshop',
-  'site:eventbrite.es Barcelona yoga meditation retreat',
-  'site:eventbrite.es Girona wellness nature event',
-  'site:eventbrite.es Tarragona cultura taller',
-  'agenda sostenible Barcelona actividad taller',
-  'retiro yoga naturaleza Catalunya',
-  'taller cerámica Barcelona evento',
-  'festival arte contemporáneo Catalunya',
+  'site:eventbrite.es Barcelona octubre 2026',
+  'site:eventbrite.es Barcelona concert jazz octubre 2026',
+  'site:eventbrite.es Barcelona yoga meditation octubre 2026',
+  'site:eventbrite.es Barcelona taller workshop octubre 2026',
+  'Heliogàbal Barcelona octubre 2026 concierto',
+  'Hangar Barcelona open studios octubre 2026',
+  'agenda cultural Barcelona octubre 2026 evento',
+  'Load Gallery Barcelona exhibition 2026',
 ];
 
 const BLOCKED_HOST_FRAGMENTS = [
@@ -86,13 +87,7 @@ function isLikelyEventUrl(url: string): boolean {
 }
 
 function normalizeUrl(url: string): string {
-  try {
-    const u = new URL(url);
-    u.hash = '';
-    return u.href.replace(/\/$/, '');
-  } catch {
-    return url.trim();
-  }
+  return canonicalizeEventUrl(url) ?? url.trim();
 }
 
 async function readExistingQueue(): Promise<{ manual: string[]; auto: string[] }> {
@@ -103,7 +98,7 @@ async function readExistingQueue(): Promise<{ manual: string[]; auto: string[] }
     for (const line of text.split(/\r?\n/)) {
       const t = line.trim();
       if (!t || t.startsWith('#')) continue;
-      const url = t.split('#')[0]!.trim();
+      const url = canonicalizeEventUrl(t);
       if (!url) continue;
       if (/# auto:/i.test(line)) auto.push(url);
       else manual.push(url);
@@ -142,9 +137,12 @@ async function main() {
 
   const { manual, auto: prevAuto } = await readExistingQueue();
   const manualSet = new Set(manual);
-  const merged = replace
+  const mergedRaw = replace
     ? [...new Set([...manual, ...discovered])]
     : [...new Set([...manual, ...prevAuto, ...discovered])];
+  const ticketScore = (u: string) =>
+    u.includes('eventbrite.') && (u.includes('/e/') || u.includes('-tickets-')) ? 0 : 1;
+  const merged = [...mergedRaw].sort((a, b) => ticketScore(a) - ticketScore(b)).slice(0, 60);
 
   const header = [
     '# Sotabosc event URL queue — used by npm run pipeline:auto-events',

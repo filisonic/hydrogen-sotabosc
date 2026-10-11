@@ -34,8 +34,9 @@ export const meta = ({ data, params }) => {
   ];
 };
 
-export async function loader({ params, request }) {
-  const { getPlacesByCategory } = await import('~/lib/directory/seed.server');
+export async function loader({ params, request, context }) {
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
+  const { getPlacesByCategory } = await getCityDirectory(context);
   const category = params.category;
   const catMeta = getListingCategory(category);
   if (!catMeta) {

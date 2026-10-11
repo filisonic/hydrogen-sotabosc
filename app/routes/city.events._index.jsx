@@ -5,6 +5,7 @@ import { DirectorySurface } from '~/components/directory/DirectorySurface';
 import { ContributionActions } from '~/components/directory/ContributionActions';
 import { DOMAINS } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
+import { listEventMonths, monthLabel } from '~/lib/directory/eventMonths';
 import { openGraphImageMeta } from '~/lib/seo/siteImagery';
 import { canonicalLinkMeta } from '~/lib/seo/metaHelpers';
 
@@ -18,9 +19,9 @@ export const meta = ({ data }) => [
   ...openGraphImageMeta(data?.origin),
 ];
 
-export async function loader({ request }) {
-  const { getActiveEvents, getEventsByDomain, isEventExpired } =
-    await import('~/lib/directory/seed.server');
+export async function loader({ request, context }) {
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
+  const { getActiveEvents, getEventsByDomain, isEventExpired } = await getCityDirectory(context);
   const url = new URL(request.url);
   const domain = url.searchParams.get('domain') || '';
 
@@ -33,11 +34,16 @@ export async function loader({ request }) {
     events = getActiveEvents();
   }
 
-  return { events, domain, origin: new URL(request.url).origin };
+  return {
+    events,
+    domain,
+    months: listEventMonths(getActiveEvents()),
+    origin: new URL(request.url).origin,
+  };
 }
 
 export default function EventsFeed() {
-  const { events, domain } = useLoaderData();
+  const { events, domain, months } = useLoaderData();
 
   return (
     <DirectorySurface>
@@ -57,6 +63,23 @@ export default function EventsFeed() {
             {events.length} event{events.length !== 1 ? 's' : ''} coming up
           </p>
           <DomainPills activeDomain={domain} />
+          {months?.length ? (
+            <nav className="flex flex-wrap gap-2 mt-4" aria-label="Browse by month">
+              {months.map((key) => (
+                <Link
+                  key={key}
+                  to={directoryRoutes.eventsMonth(key)}
+                  className="text-xs font-bold px-3 py-1 rounded-full"
+                  style={{
+                    backgroundColor: 'var(--sotabosc-surface-muted)',
+                    color: 'var(--sotabosc-muted)',
+                  }}
+                >
+                  {monthLabel(key)}
+                </Link>
+              ))}
+            </nav>
+          ) : null}
         </div>
       </section>
 

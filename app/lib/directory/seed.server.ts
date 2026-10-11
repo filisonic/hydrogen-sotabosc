@@ -1,5 +1,5 @@
 import type { Place, CityEvent, Creator, Review } from './types';
-import { normalizeDomain } from './domains';
+import { createDirectoryQueries, isEventExpired, type DirectorySnapshot } from './queries';
 import autoImportEvents from './auto-import.events.json';
 import autoImportPlaces from './auto-import.places.json';
 import { PLACE_LISTING_EXTRAS } from './placeListingExtras';
@@ -159,30 +159,30 @@ export const SEED_PLACES = attachVenueImages([
 // ─── EVENTS (24) — Real & realistic Barcelona events ───────────────
 
 const _SEED_EVENTS_CORE: CityEvent[] = [
-  { id: 'e01', slug: 'offf-barcelona-2026', title: 'OFFF Barcelona 2026', summary: 'International festival of creativity and design. 50+ international studios, masterclasses, workshops, and closing AV show.', startsAt: '2026-04-16T09:00', endsAt: '2026-04-18T23:00', placeId: 'p20', placeName: 'Disseny Hub Barcelona', primaryDomain: 'fungi', tags: ['design', 'creativity', 'festival'] },
-  { id: 'e02', slug: 'bcn-jazz-day-2026', title: 'Barcelona International Jazz Day', summary: 'Free outdoor festival on Passeig de Gràcia celebrating 60 years of Barcelona jazz. Six bands, 12:00–20:45.', startsAt: '2026-04-26T12:00', endsAt: '2026-04-26T20:45', placeId: 'p10', placeName: 'El Molino', primaryDomain: 'animals', tags: ['jazz', 'free', 'outdoor'] },
-  { id: 'e03', slug: 'vicky-usle-exhibition', title: 'Vicky Uslé — "Untitled"', summary: 'Solo exhibition at House of Chappaz. Abstract painting exploring form and light.', startsAt: '2026-04-17T18:00', endsAt: '2026-06-12T20:00', placeId: 'p05', placeName: 'House of Chappaz', primaryDomain: 'plants', tags: ['exhibition', 'painting', 'solo-show'] },
-  { id: 'e04', slug: 'desilence-paramnésico', title: '"Desilence" by Paramnésico', summary: 'Digital art exhibition at Load Gallery exploring sound, silence, and generative visuals.', startsAt: '2026-03-05T11:00', endsAt: '2026-04-25T19:00', placeId: 'p06', placeName: 'Load Gallery', primaryDomain: 'fungi', tags: ['digital-art', 'generative', 'exhibition'] },
-  { id: 'e05', slug: 'zazenkai-may-retreat', title: 'Zazenkai May Retreat', summary: 'Intensive Zen meditation day with zazen, kinhin, koan workshops, and dharma talks. Open to beginners.', startsAt: '2026-05-02T08:00', endsAt: '2026-05-02T18:00', placeId: 'p18', placeName: 'Zen Kannon Barcelona', primaryDomain: 'algae', tags: ['meditation', 'zen', 'retreat'] },
-  { id: 'e06', slug: 'samuel-salcedo-3punts', title: 'Samuel Salcedo — Solo Show', summary: 'New works by sculptor Samuel Salcedo at Tres Punts Gallery, opening April 22.', startsAt: '2026-04-22T19:00', endsAt: '2026-06-15T20:00', placeId: 'p04', placeName: 'Tres Punts Gallery', primaryDomain: 'earth', tags: ['sculpture', 'exhibition', 'opening'] },
-  { id: 'e07', slug: 'sunrise-yoga-moonlight', title: 'Sunrise Slow Flow', summary: 'Weekly Sunday morning slow-flow yoga class in English. All levels welcome.', startsAt: '2026-04-05T07:30', placeId: 'p17', placeName: 'Moonlight Studio Barcelona', primaryDomain: 'algae', tags: ['yoga', 'english', 'weekly'] },
-  { id: 'e08', slug: 'raval-market-weekend', title: 'Raval Market Weekend', summary: 'Every Saturday and Sunday — recycled fashion, handmade ceramics, photography, and local food.', startsAt: '2026-04-04T10:00', endsAt: '2026-04-05T15:00', placeId: 'p25', placeName: 'Raval Market', primaryDomain: 'plants', tags: ['market', 'weekend', 'recycled'] },
-  { id: 'e09', slug: 'heliogabal-open-mic', title: 'Heliogàbal Open Night', summary: 'Poetry, live music, and visual art in Gràcia\'s legendary independent space. Rotating artists weekly.', startsAt: '2026-04-03T20:30', placeId: 'p08', placeName: 'Heliogàbal', primaryDomain: 'animals', tags: ['open-mic', 'poetry', 'live-music'] },
-  { id: 'e10', slug: 'fab-lab-open-day', title: 'Fab Lab Open Day', summary: 'Tour the fabrication facilities, meet the ENSEMBLE network, and try hands-on biotech demos.', startsAt: '2026-04-12T10:00', endsAt: '2026-04-12T17:00', placeId: 'p19', placeName: 'Fab Lab Barcelona', primaryDomain: 'fungi', tags: ['makerspace', 'open-day', 'biotech'] },
-  { id: 'e11', slug: 'frizzant-brunch-yoga', title: 'Brunch & Yoga Saturday', summary: 'Combined yoga flow and healthy brunch at Frizzant. Reservations required.', startsAt: '2026-04-05T10:00', placeId: 'p15', placeName: 'Frizzant', primaryDomain: 'algae', tags: ['yoga', 'brunch', 'wellness'] },
-  { id: 'e12', slug: 'roast-club-cupping', title: 'Coffee Cupping Session', summary: 'Taste four new seasonal single-origins with the Roast Club head roaster. €15 per person.', startsAt: '2026-04-10T11:00', placeId: 'p11', placeName: 'Roast Club Cafe', primaryDomain: 'earth', tags: ['coffee', 'tasting', 'workshop'] },
-  { id: 'e13', slug: 'espronceda-craftwork', title: 'CRAFTWORK 4.0 — Wood, Paint & Living Forms', summary: 'Free one-day craft workshop exploring balance and material intelligence with natural and recycled materials.', startsAt: '2026-04-20T10:00', endsAt: '2026-04-20T18:00', placeId: 'p07', placeName: 'ESPRONCEDA Institute', primaryDomain: 'earth', tags: ['workshop', 'craft', 'free'] },
-  { id: 'e14', slug: 'transfolab-biomaterials', title: 'Biomaterial Fabrication Workshop', summary: 'Hands-on workshop making bioplastics and mycelium composites at TransfoLAB. Limited to 12 participants.', startsAt: '2026-04-19T10:00', endsAt: '2026-04-19T16:00', placeId: 'p03', placeName: 'TransfoLAB BCN', primaryDomain: 'fungi', tags: ['biomaterials', 'mycelium', 'workshop'] },
-  { id: 'e15', slug: 'sangha-outdoor-yoga', title: 'Outdoor Yoga in the Garden', summary: 'Jivamukti practice surrounded by vegetation at Sangha Studio\'s outdoor space in Sarrià.', startsAt: '2026-04-06T09:00', placeId: 'p16', placeName: 'Sangha Studio', primaryDomain: 'plants', tags: ['yoga', 'outdoor', 'jivamukti'] },
-  { id: 'e16', slug: 'ona-seasonal-menu-launch', title: 'Ona Spring Menu Launch', summary: 'New 18-course spring degustation featuring foraged Mediterranean ingredients. Reservation only.', startsAt: '2026-04-08T20:00', placeId: 'p21', placeName: 'Ona', primaryDomain: 'earth', tags: ['fine-dining', 'seasonal', 'launch'] },
-  { id: 'e17', slug: 'les-enfants-electronica', title: 'Les Enfants: Subterranean Frequencies', summary: 'All-night electronic session in the underground club. Experimental and ambient sets.', startsAt: '2026-04-11T23:00', endsAt: '2026-04-12T06:00', placeId: 'p09', placeName: 'Les Enfants Brillants', primaryDomain: 'animals', tags: ['electronic', 'ambient', 'nightlife'] },
-  { id: 'e18', slug: 'faire-cooking-workshop', title: 'Seasonal Plant Cooking Workshop', summary: 'Learn plant-forward Catalan recipes with Faire\'s head chef. Includes lunch. €45.', startsAt: '2026-04-13T11:00', endsAt: '2026-04-13T15:00', placeId: 'p22', placeName: 'Faire Barcelona', primaryDomain: 'plants', tags: ['cooking', 'vegetarian', 'workshop'] },
-  { id: 'e19', slug: 'terra-i-pell-open-studio', title: 'Terra i Pell Open Studio Day', summary: 'Watch ceramicists and leather workers in action. Try your hand at the wheel. Free entry.', startsAt: '2026-04-14T10:00', endsAt: '2026-04-14T18:00', placeId: 'p27', placeName: 'Terra i Pell', primaryDomain: 'earth', tags: ['ceramics', 'open-studio', 'free'] },
-  { id: 'e20', slug: 'escat-gallery-talk', title: 'Artist Talk: Materiality and Process', summary: 'Gallery talk with represented artists discussing their practice. Wine reception included.', startsAt: '2026-04-09T19:00', placeId: 'p29', placeName: 'Escat Gallery', primaryDomain: 'earth', tags: ['artist-talk', 'gallery', 'wine'] },
-  { id: 'e21', slug: 'blueproject-spring-residency', title: 'Blueproject — Open Studios Spring', summary: 'Residents open their studios: painting, sound, and ecological installation works in progress. Free, drop in afternoon.', startsAt: '2026-04-18T16:00', endsAt: '2026-04-18T20:00', placeId: 'p32', placeName: 'Blueproject Foundation', primaryDomain: 'algae', tags: ['open-studio', 'residency', 'free'] },
-  { id: 'e22', slug: 'hangar-winter-open', title: 'Hangar — Winter Programme Preview', summary: 'Guided walk through production spaces, short artist talks, and a peek at new lab projects.', startsAt: '2026-04-24T11:00', endsAt: '2026-04-24T14:00', placeId: 'p35', placeName: 'Hangar', primaryDomain: 'fungi', tags: ['open-day', 'poblenou', 'labs'] },
-  { id: 'e23', slug: 'projectesd-opening-may', title: 'ProjecteSD — New Solo Opening', summary: 'Opening reception for a mid-career European painter; catalogue launch with the artist in conversation.', startsAt: '2026-05-09T19:00', placeId: 'p34', placeName: 'ProjecteSD', primaryDomain: 'earth', tags: ['opening', 'painting', 'talk'] },
-  { id: 'e24', slug: 'make-it-saturday-wheel', title: 'Make It — Saturday Wheel Taster', summary: 'Two-hour intro to throwing on the wheel; pieces fired and ready for pickup within ten days.', startsAt: '2026-04-26T11:00', endsAt: '2026-04-26T13:00', placeId: 'p37', placeName: 'Make It Barcelona', primaryDomain: 'earth', tags: ['ceramics', 'workshop', 'beginners'] },
+  { id: 'e01', slug: 'offf-barcelona-2027', title: 'OFFF Barcelona 2027', summary: 'International festival of creativity and design. 50+ international studios, masterclasses, workshops, and closing AV show.', startsAt: '2027-04-15T09:00', endsAt: '2027-04-17T23:00', placeId: 'p20', placeName: 'Disseny Hub Barcelona', primaryDomain: 'fungi', tags: ['design', 'creativity', 'festival'] },
+  { id: 'e02', slug: 'bcn-jazz-day-2027', title: 'Barcelona International Jazz Day', summary: 'Free outdoor festival on Passeig de Gràcia celebrating Barcelona jazz. Six bands, 12:00–20:45.', startsAt: '2027-04-30T12:00', endsAt: '2027-04-30T20:45', placeId: 'p10', placeName: 'El Molino', primaryDomain: 'animals', tags: ['jazz', 'free', 'outdoor'] },
+  { id: 'e03', slug: 'vicky-usle-exhibition', title: 'Vicky Uslé — "Untitled"', summary: 'Solo exhibition at House of Chappaz. Abstract painting exploring form and light.', startsAt: '2026-10-02T18:00', endsAt: '2026-12-12T20:00', placeId: 'p05', placeName: 'House of Chappaz', primaryDomain: 'plants', tags: ['exhibition', 'painting', 'solo-show'] },
+  { id: 'e04', slug: 'desilence-paramnésico', title: '"Desilence" by Paramnésico', summary: 'Digital art exhibition at Load Gallery exploring sound, silence, and generative visuals.', startsAt: '2026-10-08T11:00', endsAt: '2026-11-22T19:00', placeId: 'p06', placeName: 'Load Gallery', primaryDomain: 'fungi', tags: ['digital-art', 'generative', 'exhibition'] },
+  { id: 'e05', slug: 'zazenkai-october-retreat', title: 'Zazenkai October Retreat', summary: 'Intensive Zen meditation day with zazen, kinhin, koan workshops, and dharma talks. Open to beginners.', startsAt: '2026-10-25T08:00', endsAt: '2026-10-25T18:00', placeId: 'p18', placeName: 'Zen Kannon Barcelona', primaryDomain: 'algae', tags: ['meditation', 'zen', 'retreat'] },
+  { id: 'e06', slug: 'samuel-salcedo-3punts', title: 'Samuel Salcedo — Solo Show', summary: 'New works by sculptor Samuel Salcedo at Tres Punts Gallery, opening 15 October.', startsAt: '2026-10-15T19:00', endsAt: '2026-12-20T20:00', placeId: 'p04', placeName: 'Tres Punts Gallery', primaryDomain: 'earth', tags: ['sculpture', 'exhibition', 'opening'] },
+  { id: 'e07', slug: 'sunrise-yoga-moonlight', title: 'Sunrise Slow Flow', summary: 'Weekly Sunday morning slow-flow yoga class in English. All levels welcome.', startsAt: '2026-10-04T07:30', placeId: 'p17', placeName: 'Moonlight Studio Barcelona', primaryDomain: 'algae', tags: ['yoga', 'english', 'weekly'] },
+  { id: 'e08', slug: 'raval-market-weekend', title: 'Raval Market Weekend', summary: 'Every Saturday and Sunday — recycled fashion, handmade ceramics, photography, and local food.', startsAt: '2026-10-03T10:00', endsAt: '2026-10-04T15:00', placeId: 'p25', placeName: 'Raval Market', primaryDomain: 'plants', tags: ['market', 'weekend', 'recycled'] },
+  { id: 'e09', slug: 'heliogabal-open-mic', title: 'Heliogàbal Open Night', summary: 'Poetry, live music, and visual art in Gràcia\'s legendary independent space. Rotating artists weekly.', startsAt: '2026-10-02T20:30', placeId: 'p08', placeName: 'Heliogàbal', primaryDomain: 'animals', tags: ['open-mic', 'poetry', 'live-music'] },
+  { id: 'e10', slug: 'fab-lab-open-day', title: 'Fab Lab Open Day', summary: 'Tour the fabrication facilities, meet the ENSEMBLE network, and try hands-on biotech demos.', startsAt: '2026-10-18T10:00', endsAt: '2026-10-18T17:00', placeId: 'p19', placeName: 'Fab Lab Barcelona', primaryDomain: 'fungi', tags: ['makerspace', 'open-day', 'biotech'] },
+  { id: 'e11', slug: 'frizzant-brunch-yoga', title: 'Brunch & Yoga Saturday', summary: 'Combined yoga flow and healthy brunch at Frizzant. Reservations required.', startsAt: '2026-10-10T10:00', placeId: 'p15', placeName: 'Frizzant', primaryDomain: 'algae', tags: ['yoga', 'brunch', 'wellness'] },
+  { id: 'e12', slug: 'roast-club-cupping', title: 'Coffee Cupping Session', summary: 'Taste four new seasonal single-origins with the Roast Club head roaster. €15 per person.', startsAt: '2026-10-09T11:00', placeId: 'p11', placeName: 'Roast Club Cafe', primaryDomain: 'earth', tags: ['coffee', 'tasting', 'workshop'] },
+  { id: 'e13', slug: 'espronceda-craftwork', title: 'CRAFTWORK 4.0 — Wood, Paint & Living Forms', summary: 'Free one-day craft workshop exploring balance and material intelligence with natural and recycled materials.', startsAt: '2026-10-24T10:00', endsAt: '2026-10-24T18:00', placeId: 'p07', placeName: 'ESPRONCEDA Institute', primaryDomain: 'earth', tags: ['workshop', 'craft', 'free'] },
+  { id: 'e14', slug: 'transfolab-biomaterials', title: 'Biomaterial Fabrication Workshop', summary: 'Hands-on workshop making bioplastics and mycelium composites at TransfoLAB. Limited to 12 participants.', startsAt: '2026-11-01T10:00', endsAt: '2026-11-01T16:00', placeId: 'p03', placeName: 'TransfoLAB BCN', primaryDomain: 'fungi', tags: ['biomaterials', 'mycelium', 'workshop'] },
+  { id: 'e15', slug: 'sangha-outdoor-yoga', title: 'Outdoor Yoga in the Garden', summary: 'Jivamukti practice surrounded by vegetation at Sangha Studio\'s outdoor space in Sarrià.', startsAt: '2026-10-11T09:00', placeId: 'p16', placeName: 'Sangha Studio', primaryDomain: 'plants', tags: ['yoga', 'outdoor', 'jivamukti'] },
+  { id: 'e16', slug: 'ona-seasonal-menu-launch', title: 'Ona Autumn Menu Launch', summary: 'New 18-course autumn degustation featuring foraged Mediterranean ingredients. Reservation only.', startsAt: '2026-10-08T20:00', placeId: 'p21', placeName: 'Ona', primaryDomain: 'earth', tags: ['fine-dining', 'seasonal', 'launch'] },
+  { id: 'e17', slug: 'les-enfants-electronica', title: 'Les Enfants: Subterranean Frequencies', summary: 'All-night electronic session in the underground club. Experimental and ambient sets.', startsAt: '2026-10-10T23:00', endsAt: '2026-10-11T06:00', placeId: 'p09', placeName: 'Les Enfants Brillants', primaryDomain: 'animals', tags: ['electronic', 'ambient', 'nightlife'] },
+  { id: 'e18', slug: 'faire-cooking-workshop', title: 'Seasonal Plant Cooking Workshop', summary: 'Learn plant-forward Catalan recipes with Faire\'s head chef. Includes lunch. €45.', startsAt: '2026-10-17T11:00', endsAt: '2026-10-17T15:00', placeId: 'p22', placeName: 'Faire Barcelona', primaryDomain: 'plants', tags: ['cooking', 'vegetarian', 'workshop'] },
+  { id: 'e19', slug: 'terra-i-pell-open-studio', title: 'Terra i Pell Open Studio Day', summary: 'Watch ceramicists and leather workers in action. Try your hand at the wheel. Free entry.', startsAt: '2026-11-08T10:00', endsAt: '2026-11-08T18:00', placeId: 'p27', placeName: 'Terra i Pell', primaryDomain: 'earth', tags: ['ceramics', 'open-studio', 'free'] },
+  { id: 'e20', slug: 'escat-gallery-talk', title: 'Artist Talk: Materiality and Process', summary: 'Gallery talk with represented artists discussing their practice. Wine reception included.', startsAt: '2026-10-16T19:00', placeId: 'p29', placeName: 'Escat Gallery', primaryDomain: 'earth', tags: ['artist-talk', 'gallery', 'wine'] },
+  { id: 'e21', slug: 'blueproject-autumn-residency', title: 'Blueproject — Open Studios Autumn', summary: 'Residents open their studios: painting, sound, and ecological installation works in progress. Free, drop in afternoon.', startsAt: '2026-11-15T16:00', endsAt: '2026-11-15T20:00', placeId: 'p32', placeName: 'Blueproject Foundation', primaryDomain: 'algae', tags: ['open-studio', 'residency', 'free'] },
+  { id: 'e22', slug: 'hangar-autumn-open', title: 'Hangar — Autumn Programme Preview', summary: 'Guided walk through production spaces, short artist talks, and a peek at new lab projects.', startsAt: '2026-10-31T11:00', endsAt: '2026-10-31T14:00', placeId: 'p35', placeName: 'Hangar', primaryDomain: 'fungi', tags: ['open-day', 'poblenou', 'labs'] },
+  { id: 'e23', slug: 'projectesd-opening-november', title: 'ProjecteSD — New Solo Opening', summary: 'Opening reception for a mid-career European painter; catalogue launch with the artist in conversation.', startsAt: '2026-11-07T19:00', placeId: 'p34', placeName: 'ProjecteSD', primaryDomain: 'earth', tags: ['opening', 'painting', 'talk'] },
+  { id: 'e24', slug: 'make-it-saturday-wheel', title: 'Make It — Saturday Wheel Taster', summary: 'Two-hour intro to throwing on the wheel; pieces fired and ready for pickup within ten days.', startsAt: '2026-10-17T11:00', endsAt: '2026-10-17T13:00', placeId: 'p37', placeName: 'Make It Barcelona', primaryDomain: 'earth', tags: ['ceramics', 'workshop', 'beginners'] },
 ];
 
 export const SEED_EVENTS: CityEvent[] = [
@@ -226,101 +226,34 @@ export const SEED_REVIEWS: Review[] = [
 ];
 
 // ─── LOOKUP HELPERS ─────────────────────────────────────────────────
+// Routes read through getCityDirectory() (Supabase, seed fallback); these bind the seed for scripts.
 
-export function getPlaceBySlug(slug: string): Place | undefined {
-  return SEED_PLACES.find((p) => p.slug === slug);
-}
+export const SEED_SNAPSHOT: DirectorySnapshot = {
+  places: SEED_PLACES,
+  events: SEED_EVENTS,
+  creators: SEED_CREATORS,
+  reviews: SEED_REVIEWS,
+  source: 'seed',
+};
 
-export function getPlaceById(id: string): Place | undefined {
-  return SEED_PLACES.find((p) => p.id === id);
-}
+const seed = createDirectoryQueries(SEED_SNAPSHOT);
 
-export function getEventBySlug(slug: string): CityEvent | undefined {
-  return SEED_EVENTS.find((e) => e.slug === slug);
-}
+export const {
+  getPlaceBySlug,
+  getPlaceById,
+  getEventBySlug,
+  getCreatorBySlug,
+  getEventsForPlace,
+  getReviewsForPlace,
+  getPlacesByCategory,
+  getPlacesByDomain,
+  getEventsByDomain,
+  getCreatorsByDomain,
+  searchPlaces,
+  searchEvents,
+  getUpcomingEvents,
+  getActiveEvents,
+} = seed;
 
-export function getCreatorBySlug(slug: string): Creator | undefined {
-  return SEED_CREATORS.find((c) => c.slug === slug);
-}
+export { isEventExpired };
 
-export function getEventsForPlace(placeId: string): CityEvent[] {
-  return SEED_EVENTS.filter((e) => e.placeId === placeId);
-}
-
-export function getReviewsForPlace(placeId: string): Review[] {
-  return SEED_REVIEWS.filter((r) => r.placeId === placeId);
-}
-
-export function getPlacesByCategory(cat: string): Place[] {
-  return SEED_PLACES.filter((p) => p.categories.includes(cat as any));
-}
-
-function matchesDomain(
-  primary: string,
-  secondary: string[] | undefined,
-  domain: string,
-): boolean {
-  const needle = normalizeDomain(domain);
-  if (!needle) return false;
-  if (normalizeDomain(primary) === needle) return true;
-  return secondary?.some((s) => normalizeDomain(s) === needle) ?? false;
-}
-
-export function getPlacesByDomain(domain: string): Place[] {
-  return SEED_PLACES.filter((p) =>
-    matchesDomain(p.primaryDomain, p.secondaryDomains, domain),
-  );
-}
-
-export function getEventsByDomain(domain: string): CityEvent[] {
-  return SEED_EVENTS.filter((e) =>
-    matchesDomain(e.primaryDomain, e.secondaryDomains, domain),
-  );
-}
-
-export function getCreatorsByDomain(domain: string): Creator[] {
-  return SEED_CREATORS.filter((c) =>
-    matchesDomain(c.primaryDomain, c.secondaryDomains, domain),
-  );
-}
-
-export function searchPlaces(query: string): Place[] {
-  const q = query.toLowerCase();
-  return SEED_PLACES.filter(
-    (p) =>
-      p.name.toLowerCase().includes(q) ||
-      p.summary.toLowerCase().includes(q) ||
-      p.neighborhood.toLowerCase().includes(q) ||
-      p.tags?.some((t) => t.includes(q)),
-  );
-}
-
-export function searchEvents(query: string): CityEvent[] {
-  const q = query.toLowerCase();
-  return SEED_EVENTS.filter(
-    (e) =>
-      e.title.toLowerCase().includes(q) ||
-      e.summary.toLowerCase().includes(q) ||
-      e.placeName?.toLowerCase().includes(q) ||
-      e.tags?.some((t) => t.includes(q)),
-  );
-}
-
-export function getUpcomingEvents(fromISO?: string): CityEvent[] {
-  return getActiveEvents(fromISO);
-}
-
-export function isEventExpired(event: CityEvent, fromISO?: string): boolean {
-  const now = fromISO ? new Date(fromISO).getTime() : Date.now();
-  const endMs = new Date(event.endsAt ?? event.startsAt).getTime();
-  return endMs < now;
-}
-
-/**
- * Active = upcoming OR currently running; expired events are excluded.
- */
-export function getActiveEvents(fromISO?: string): CityEvent[] {
-  return SEED_EVENTS
-    .filter((e) => !isEventExpired(e, fromISO))
-    .sort((a, b) => new Date(a.startsAt).getTime() - new Date(b.startsAt).getTime());
-}

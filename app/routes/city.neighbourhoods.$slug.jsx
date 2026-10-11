@@ -24,8 +24,10 @@ export const meta = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request }) {
-  const hood = getPlacesByNeighborhoodSlug(params.slug);
+export async function loader({ params, request, context }) {
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
+  const { places } = await getCityDirectory(context);
+  const hood = getPlacesByNeighborhoodSlug(params.slug, places);
   if (!hood) throw new Response('Neighbourhood not found', { status: 404 });
   const origin = new URL(request.url).origin;
   const canonicalPath = directoryRoutes.neighborhood(params.slug);

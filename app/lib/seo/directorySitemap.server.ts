@@ -1,13 +1,18 @@
 import { LISTING_CATEGORY_KEYS } from '../directory/domains';
 import { getNeighborhoodSitemapSlugs } from '../directory/neighborhoods.server';
 import { directoryRoutes } from '../directory/routes';
-import { SEED_CREATORS, SEED_PLACES, getActiveEvents } from '../directory/seed.server';
+import { listEventMonths } from '../directory/eventMonths';
+import { createDirectoryQueries, type DirectoryQueries } from '../directory/queries';
+import { SEED_SNAPSHOT } from '../directory/seed.server';
 import type { ListingCategory } from '../directory/types';
 import { CATALUNYA_HIKES } from '../hiking/catalunya.seed';
 import { getGuideSitemapSlugs } from './guidesContent';
 
 /** Stable pathnames for the Barcelona directory (no origin). */
-export function getDirectorySitemapPathnames(): string[] {
+export function getDirectorySitemapPathnames(
+  directory: DirectoryQueries = createDirectoryQueries(SEED_SNAPSHOT),
+): string[] {
+  const { places, creators, getActiveEvents } = directory;
   const paths: string[] = [directoryRoutes.city()];
 
   paths.push(directoryRoutes.guides());
@@ -15,7 +20,7 @@ export function getDirectorySitemapPathnames(): string[] {
     paths.push(directoryRoutes.guide(slug));
   }
 
-  for (const slug of getNeighborhoodSitemapSlugs()) {
+  for (const slug of getNeighborhoodSitemapSlugs(places)) {
     paths.push(directoryRoutes.neighborhood(slug));
   }
 
@@ -23,17 +28,20 @@ export function getDirectorySitemapPathnames(): string[] {
     paths.push(directoryRoutes.category(cat as ListingCategory));
   }
 
-  for (const p of SEED_PLACES) {
+  for (const p of places) {
     paths.push(directoryRoutes.place(p.slug));
   }
 
   paths.push(directoryRoutes.events());
+  for (const yyyyMm of listEventMonths(getActiveEvents())) {
+    paths.push(directoryRoutes.eventsMonth(yyyyMm));
+  }
   for (const e of getActiveEvents()) {
     paths.push(directoryRoutes.event(e.slug));
   }
 
   paths.push(directoryRoutes.creators());
-  for (const c of SEED_CREATORS) {
+  for (const c of creators) {
     paths.push(directoryRoutes.creator(c.slug));
   }
 
@@ -45,9 +53,9 @@ export function getDirectorySitemapPathnames(): string[] {
   return paths;
 }
 
-export function buildDirectorySitemapXml(origin: string): string {
+export function buildDirectorySitemapXml(origin: string, directory?: DirectoryQueries): string {
   const base = origin.replace(/\/$/, '');
-  const paths = getDirectorySitemapPathnames();
+  const paths = getDirectorySitemapPathnames(directory);
   const city = directoryRoutes.city();
 
   const urls = paths

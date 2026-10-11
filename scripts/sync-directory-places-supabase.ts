@@ -1,13 +1,20 @@
 /**
- * Upsert all directory places (name, slug, URLs, etc.) into Supabase for OpenClaw / GHL workflows.
+ * Upsert the city directory (places, events, creators) into Supabase for Living Wall screens,
+ * OpenClaw / GHL workflows and anything else that reads the persistent city.
  *
  * Prereqs:
- *   - Migration applied: supabase/migrations/20260603120000_directory_places.sql
- *   - .env: PUBLIC_SUPABASE_URL (or SUPABASE_URL) + SUPABASE_SERVICE_ROLE_KEY
+ *   - Migrations applied (npx supabase db push): directory_places, directory_events, directory_creators
+ *   - Either the linked Supabase CLI (default when no key), or
+ *     .env: PUBLIC_SUPABASE_URL (or SUPABASE_URL) + SUPABASE_SERVICE_ROLE_KEY
+ *
+ * Consent (wall_opt_in*, creator works/rightsGranted) is never written here; set it by hand
+ * once the signed agreement is filed. See docs/supabase-city-directory.md.
  *
  * Usage:
  *   npm run directory:sync-supabase
  *   npm run directory:sync-supabase -- --dry-run
+ *   npm run directory:sync-supabase -- --sql-only
+ *   npm run directory:sync-supabase -- --use-cli
  */
 
 import { writeFile } from 'node:fs/promises';
@@ -16,13 +23,25 @@ import { execSync } from 'node:child_process';
 import { createClient } from '@supabase/supabase-js';
 
 import {
+  buildDirectoryCreatorRows,
+  buildDirectoryEventRows,
   buildDirectoryPlaceRows,
+  creatorRowsToUpsertSql,
+  eventRowsToUpsertSql,
   rowsToUpsertSql,
 } from './lib/directory-place-rows';
 import { loadDotEnvFromRoot, PROJECT_ROOT } from './lib/project-env';
 
 const BATCH = 100;
-const SQL_SEED = path.join(PROJECT_ROOT, 'reports', 'directory-places-supabase-seed.sql');
+const REPORTS = path.join(PROJECT_ROOT, 'reports');
+
+type Table = {
+  table: 'directory_places' | 'directory_events' | 'directory_creators';
+  conflict: 'slug' | 'id';
+  rows: Record<string, unknown>[];
+  sql: string;
+  sqlPath: string;
+};
 
 function parseArgs(argv: string[]) {
   return {
@@ -40,8 +59,8 @@ function supabaseConfig() {
   return { url, key };
 }
 
-async function syncViaCli(sqlPath: string) {
-  const file = sqlPath.replace(/\\/g, '/');
+function syncViaCli(sqlPath: string) {
+  const file = path.relative(PROJECT_ROOT, sqlPath).replace(/\\/g, '/');
   console.log(`Running: npx supabase db query --linked -f ${file}`);
   execSync(`npx supabase db query --linked -f "${file}"`, {
     cwd: PROJECT_ROOT,
@@ -49,48 +68,78 @@ async function syncViaCli(sqlPath: string) {
   });
 }
 
+async function buildTables(): Promise<Table[]> {
+  const places = await buildDirectoryPlaceRows();
+  const events = await buildDirectoryEventRows();
+  const creators = buildDirectoryCreatorRows();
+
+  const curated = places.filter((r) => r.source === 'curated').length;
+  console.log(
+    `Places: ${places.length} (${curated} curated, ${places.length - curated} auto-import) · events: ${events.length} · creators: ${creators.length}`,
+  );
+
+  return [
+    {
+      table: 'directory_places',
+      conflict: 'slug',
+      // Claim status is owned by the database once a row exists; the SQL path only sets it on insert.
+      rows: places.map(({ is_claimed: _claimed, ...row }) => row),
+      sql: rowsToUpsertSql(places),
+      sqlPath: path.join(REPORTS, 'directory-places-supabase-seed.sql'),
+    },
+    {
+      table: 'directory_events',
+      conflict: 'id',
+      rows: events,
+      sql: eventRowsToUpsertSql(events),
+      sqlPath: path.join(REPORTS, 'directory-events-supabase-seed.sql'),
+    },
+    {
+      table: 'directory_creators',
+      conflict: 'id',
+      rows: creators,
+      sql: creatorRowsToUpsertSql(creators),
+      sqlPath: path.join(REPORTS, 'directory-creators-supabase-seed.sql'),
+    },
+  ];
+}
+
 async function main() {
   await loadDotEnvFromRoot();
   const { dryRun, sqlOnly, useCli } = parseArgs(process.argv.slice(2));
   const { url, key } = supabaseConfig();
 
-  const rows = await buildDirectoryPlaceRows();
-  const curated = rows.filter((r) => r.source === 'curated').length;
-  const auto = rows.length - curated;
-
-  console.log(`Places to sync: ${rows.length} (${curated} curated, ${auto} auto-import)`);
+  const tables = await buildTables();
 
   if (dryRun) {
-    console.log('Sample rows:');
-    for (const r of rows.slice(0, 5)) {
-      console.log(`  ${r.slug} | ${r.name} | ${r.source}`);
-    }
-    console.log('…');
-    for (const r of rows.slice(-3)) {
-      console.log(`  ${r.slug} | ${r.name} | ${r.source}`);
+    for (const t of tables) {
+      console.log(`\n${t.table} sample:`);
+      for (const r of t.rows.slice(0, 3)) {
+        console.log(`  ${String(r.slug)} | ${String(r.name ?? r.title ?? r.display_name)}`);
+      }
     }
     return;
   }
 
-  const sql = rowsToUpsertSql(rows);
-  await writeFile(SQL_SEED, sql, 'utf8');
-  console.log(`Wrote ${SQL_SEED}`);
+  // Places first: events reference directory_places.slug.
+  for (const t of tables) {
+    await writeFile(t.sqlPath, t.sql, 'utf8');
+    console.log(`Wrote ${path.relative(PROJECT_ROOT, t.sqlPath)}`);
+  }
 
   if (sqlOnly) {
-    console.log('SQL only — run: npx supabase db query --linked -f reports/directory-places-supabase-seed.sql');
+    console.log('SQL only — run each file with: npx supabase db query --linked -f <file>');
     return;
   }
 
   if (useCli || !url || !key) {
     if (!url || !key) {
-      console.log(
-        'No SUPABASE_SERVICE_ROLE_KEY — using linked Supabase CLI (db execute).',
-      );
+      console.log('No SUPABASE_SERVICE_ROLE_KEY — using linked Supabase CLI.');
     }
-    await syncViaCli(SQL_SEED);
-    console.log(
-      '\nOpenClaw can query: directory_places, directory_places_with_booking, place_booking_calendars',
-    );
+    for (const t of tables) {
+      if (t.rows.length) syncViaCli(t.sqlPath);
+    }
+    console.log('\nSynced: directory_places, directory_events, directory_creators');
     return;
   }
 
@@ -98,38 +147,28 @@ async function main() {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 
-  let upserted = 0;
-  for (let i = 0; i < rows.length; i += BATCH) {
-    const chunk = rows.slice(i, i + BATCH);
-    const { error } = await supabase.from('directory_places').upsert(chunk, {
-      onConflict: 'slug',
-    });
-    if (error) {
-      console.error(`Upsert failed at batch ${i / BATCH + 1}:`, error.message);
-      if (error.message.includes('directory_places')) {
-        console.error(
-          '\nApply migration first: supabase db push  (or run SQL in Supabase dashboard)',
-        );
+  for (const t of tables) {
+    let upserted = 0;
+    for (let i = 0; i < t.rows.length; i += BATCH) {
+      const chunk = t.rows.slice(i, i + BATCH);
+      const { error } = await supabase.from(t.table).upsert(chunk, {
+        onConflict: t.conflict,
+      });
+      if (error) {
+        console.error(`${t.table} upsert failed at batch ${i / BATCH + 1}:`, error.message);
+        console.error('\nApply migrations first: npx supabase db push');
+        process.exit(1);
       }
-      process.exit(1);
+      upserted += chunk.length;
     }
-    upserted += chunk.length;
-    console.log(`Upserted ${upserted}/${rows.length}`);
+
+    const { count, error: countErr } = await supabase
+      .from(t.table)
+      .select('*', { count: 'exact', head: true });
+    console.log(
+      `${t.table}: upserted ${upserted}, row count ${countErr ? `unknown (${countErr.message})` : count}`,
+    );
   }
-
-  const { count, error: countErr } = await supabase
-    .from('directory_places')
-    .select('*', { count: 'exact', head: true });
-
-  if (countErr) {
-    console.warn('Could not verify row count:', countErr.message);
-  } else {
-    console.log(`Supabase directory_places row count: ${count ?? 'unknown'}`);
-  }
-
-  console.log(
-    '\nOpenClaw can query: directory_places, directory_places_with_booking, place_booking_calendars',
-  );
 }
 
 main().catch((e) => {

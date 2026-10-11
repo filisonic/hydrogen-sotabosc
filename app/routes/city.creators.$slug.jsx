@@ -20,8 +20,9 @@ export const meta = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request }) {
-  const { getCreatorBySlug } = await import('~/lib/directory/seed.server');
+export async function loader({ params, request, context }) {
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
+  const { getCreatorBySlug } = await getCityDirectory(context);
   const creator = getCreatorBySlug(params.slug);
   if (!creator) throw new Response('Creator not found', { status: 404 });
   return { creator, origin: new URL(request.url).origin };

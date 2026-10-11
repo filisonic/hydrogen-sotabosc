@@ -4,6 +4,7 @@
 @import "tailwindcss";
 @import "./aurelia-imagery.css";
 @import "./living-map-hero.css";
+@import "./city.css";
 
 @theme {
   --color-dark-bg: #FFE500;

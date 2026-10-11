@@ -4,6 +4,17 @@ import {renderToReadableStream} from 'react-dom/server';
 import {createContentSecurityPolicy} from '@shopify/hydrogen';
 
 /**
+ * Extra allowances for the `/city/window` prototype only: the splat sorts in a blob
+ * worker, face detection runs as WebAssembly, and the detector model is hotlinked. The policy belongs to the document, so link to that page with
+ * `reloadDocument`; arriving by client-side navigation keeps the previous page's policy.
+ */
+const WINDOW_PROTOTYPE_CSP = {
+  scriptSrc: ["'self'", 'https://cdn.shopify.com', 'https://shopify.com', "'wasm-unsafe-eval'"],
+  workerSrc: ["'self'", 'blob:'],
+  connectSrc: ['https://storage.googleapis.com'],
+};
+
+/**
  * @param {Request} request
  * @param {number} responseStatusCode
  * @param {Headers} responseHeaders
@@ -43,6 +54,7 @@ export default async function handleRequest(
     ],
     // Plotter / CDN mp4 playback in Labs lightbox.
     mediaSrc: ["'self'", 'https://philipcp.netlify.app', 'blob:'],
+    ...(new URL(request.url).pathname === '/city/window' ? WINDOW_PROTOTYPE_CSP : {}),
   });
 
   const body = await renderToReadableStream(

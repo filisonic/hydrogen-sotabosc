@@ -1,9 +1,7 @@
 /**
  * Auto-sync events from URL list into `auto-import.events.json`.
- * - Fetches structured data (JSON-LD Event) via Firecrawl HTML scrape
- * - Scores alignment with Sotabosc checklist
- * - Upserts events by stable ID
- * - Prunes expired events on every run
+ * Eventbrite and other SPAs rarely ship JSON-LD, so Firecrawl also returns
+ * JSON extract + markdown. Dated Barcelona listings can pass with --allow-review.
  *
  * Usage:
  *   npx tsx scripts/sync-auto-events.ts --file=reports/bulk-urls.txt
@@ -12,6 +10,7 @@
  * Flags:
  *   --min-score=68    Minimum alignment score
  *   --allow-review    Include verdict=review entries
+ *   --max=40          Cap how many queue URLs to scrape
  *   --dry-run         Log decisions without writing file
  */
 
@@ -21,6 +20,7 @@ import path from 'node:path';
 
 import type { CityEvent, Place } from '../app/lib/directory/types';
 import { SEED_PLACES } from '../app/lib/directory/seed.server';
+import { canonicalizeEventUrl, urlsFromQueueText } from './lib/event-queue';
 import { firecrawlApiKeyFromEnv, loadDotEnvFromRoot, PROJECT_ROOT } from './lib/project-env';
 import { scoreAlignment, slugifyHint } from './lib/sotabosc-alignment';
 
@@ -43,15 +43,17 @@ function parseArgs(argv: string[]) {
   let minScore = 68;
   let allowReview = false;
   let dryRun = false;
+  let maxUrls = 40;
 
   for (const a of argv) {
     if (a.startsWith('--url=')) urls.push(a.slice(6).trim());
     else if (a.startsWith('--file=')) file = a.slice(7).trim();
     else if (a.startsWith('--min-score=')) minScore = Number(a.slice(12)) || 0;
+    else if (a.startsWith('--max=')) maxUrls = Number(a.slice(6)) || 40;
     else if (a === '--allow-review') allowReview = true;
     else if (a === '--dry-run') dryRun = true;
   }
-  return { urls, file, minScore, allowReview, dryRun };
+  return { urls, file, minScore, allowReview, dryRun, maxUrls };
 }
 
 function normalize(s: string): string {
@@ -136,7 +138,60 @@ function parseEventFromJsonLd(jsonLd: Record<string, unknown>[], sourceUrl: stri
   };
 }
 
-async function scrapeHtmlWithFirecrawl(url: string, apiKey: string): Promise<string | null> {
+function eventFromExtract(raw: Record<string, unknown> | null | undefined, sourceUrl: string): MaybeEvent | null {
+  if (!raw) return null;
+  const node =
+    raw.event && typeof raw.event === 'object'
+      ? (raw.event as Record<string, unknown>)
+      : raw;
+  const title = asString(node.title) ?? asString(node.name);
+  const startsAt = asString(node.startsAt) ?? asString(node.startDate) ?? asString(node.start);
+  if (!title || !startsAt) return null;
+  const loc = node.location;
+  const locName =
+    typeof loc === 'string'
+      ? loc
+      : loc && typeof loc === 'object'
+        ? asString((loc as Record<string, unknown>).name)
+        : undefined;
+  return {
+    title,
+    summary: (asString(node.summary) ?? asString(node.description) ?? '').slice(0, 500),
+    startsAt,
+    endsAt: asString(node.endsAt) ?? asString(node.endDate),
+    placeName: asString(node.placeName) ?? asString(node.venue) ?? locName,
+    sourceUrl,
+  };
+}
+
+function eventFromMarkdown(md: string | undefined, sourceUrl: string): MaybeEvent | null {
+  if (!md) return null;
+  const title = md.match(/^#{1,2}\s+(.+)$/m)?.[1]?.replace(/\s+/g, ' ').trim();
+  if (!title || title.length < 4) return null;
+  const iso = md.match(
+    /\b(20\d{2}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2})?(?:Z|[+-]\d{2}:\d{2})?)\b/,
+  );
+  if (iso) {
+    return { title: title.slice(0, 120), summary: '', startsAt: iso[1], sourceUrl };
+  }
+  const longDate = md.match(
+    /\b((?:January|February|March|April|May|June|July|August|September|October|November|December|enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)\s+\d{1,2},?\s+(?:de\s+)?20\d{2})\b/i,
+  );
+  const time = md.match(/\b(\d{1,2}:\d{2}\s*(?:AM|PM|h)?)\b/i);
+  if (longDate) {
+    const startsAt = `${longDate[1]} ${time?.[1] ?? '12:00 PM'}`;
+    const d = new Date(startsAt);
+    if (Number.isFinite(d.getTime())) {
+      return { title: title.slice(0, 120), summary: '', startsAt: d.toISOString(), sourceUrl };
+    }
+  }
+  return null;
+}
+
+async function scrapeEventPage(
+  url: string,
+  apiKey: string,
+): Promise<{ html: string | null; markdown: string | null; extracted: MaybeEvent | null }> {
   const res = await fetch(FIRECRAWL_SCRAPE, {
     method: 'POST',
     headers: {
@@ -145,15 +200,42 @@ async function scrapeHtmlWithFirecrawl(url: string, apiKey: string): Promise<str
     },
     body: JSON.stringify({
       url,
-      formats: ['html', 'markdown'],
+      formats: ['html', 'markdown', 'json'],
       onlyMainContent: false,
+      waitFor: 2500,
+      jsonOptions: {
+        prompt:
+          'Extract one public event: title, start datetime (ISO 8601), optional end datetime, venue name, and a short summary.',
+        schema: {
+          type: 'object',
+          properties: {
+            title: { type: 'string' },
+            startsAt: { type: 'string' },
+            endsAt: { type: 'string' },
+            placeName: { type: 'string' },
+            summary: { type: 'string' },
+          },
+          required: ['title', 'startsAt'],
+        },
+      },
     }),
   });
   const text = await res.text();
+  if (res.status === 429) throw new Error(`Firecrawl HTTP 429: ${text.slice(0, 200)}`);
   if (!res.ok) throw new Error(`Firecrawl HTTP ${res.status}: ${text.slice(0, 300)}`);
-  const json = parseJsonMaybe(text) as { data?: { html?: string; markdown?: string } } | null;
-  if (!json?.data) return null;
-  return json.data.html ?? null;
+  const json = parseJsonMaybe(text) as {
+    data?: {
+      html?: string;
+      markdown?: string;
+      json?: Record<string, unknown>;
+      extract?: Record<string, unknown>;
+    };
+  } | null;
+  const extracted =
+    eventFromExtract(json?.data?.json, url) ??
+    eventFromExtract(json?.data?.extract, url) ??
+    eventFromMarkdown(json?.data?.markdown, url);
+  return { html: json?.data?.html ?? null, markdown: json?.data?.markdown ?? null, extracted };
 }
 
 function placeHostIndex(places: Place[]): Map<string, Place> {
@@ -182,12 +264,25 @@ function resolvePlace(placeName: string | undefined, sourceUrl: string, places: 
 
   if (!placeName) return null;
   const q = normalize(placeName);
-  if (!q) return null;
+  if (!q || q.length < 4) return null;
   const byName = places.find((p) => {
     const n = normalize(p.name);
+    if (n === q) return true;
+    if (n.length < 6 || q.length < 6) return false;
     return n.includes(q) || q.includes(n);
   });
   return byName ?? null;
+}
+
+function inBarcelonaCity(text: string): boolean {
+  return /barcelona|barceloneta|poblenou|gr[aà]cia|eixample|raval|sants|el born|montju|poble[- ]?sec|sarri[aà]|horta|poble nou/i.test(
+    text,
+  );
+}
+
+function outsideBarcelona(text: string, url = ''): boolean {
+  if (/costa[- ]brava|besal[uú]|writing-in-sitges/i.test(url)) return true;
+  return /costa brava|besal[uú]|sitges/i.test(text) && !inBarcelonaCity(text);
 }
 
 function isExpired(event: Pick<CityEvent, 'startsAt' | 'endsAt'>, nowMs = Date.now()): boolean {
@@ -216,25 +311,30 @@ function sortByStart(events: CityEvent[]): CityEvent[] {
 function toIsoLocalish(input: string): string {
   const d = new Date(input);
   if (!Number.isFinite(d.getTime())) return input;
-  return d.toISOString().slice(0, 16);
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'Europe/Madrid',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(d);
+  const g = (type: Intl.DateTimeFormatPartTypes) => parts.find((p) => p.type === type)?.value;
+  const hour = g('hour') === '24' ? '00' : g('hour');
+  return `${g('year')}-${g('month')}-${g('day')}T${hour}:${g('minute')}`;
 }
 
 async function main() {
   await loadDotEnvFromRoot();
-  const { urls: argUrls, file, minScore, allowReview, dryRun } = parseArgs(process.argv.slice(2));
+  const { urls: argUrls, file, minScore, allowReview, dryRun, maxUrls } = parseArgs(process.argv.slice(2));
 
-  let urls = [...argUrls];
+  let urls = argUrls.map((u) => canonicalizeEventUrl(u)).filter((u): u is string => Boolean(u));
   if (file) {
     const text = await readFile(path.resolve(PROJECT_ROOT, file), 'utf8');
-    urls.push(
-      ...text
-        .split(/\r?\n/)
-        .map((l) => l.trim())
-        .filter(Boolean)
-        .filter((l) => !l.startsWith('#')),
-    );
+    urls.push(...urlsFromQueueText(text));
   }
-  urls = [...new Set(urls)];
+  urls = [...new Set(urls)].slice(0, maxUrls);
 
   const apiKey = firecrawlApiKeyFromEnv();
   if (!apiKey) {
@@ -257,35 +357,63 @@ async function main() {
     return;
   }
 
+  const pauseMs = 7500;
+
   for (const url of urls) {
     let html: string | null = null;
-    try {
-      html = await scrapeHtmlWithFirecrawl(url, apiKey);
-    } catch (e) {
-      console.log(`SKIP ${url} scrape_error=${e instanceof Error ? e.message : String(e)}`);
-      continue;
+    let markdown: string | null = null;
+    let extracted: MaybeEvent | null = null;
+    let scrapeError: string | null = null;
+    for (let attempt = 0; attempt < 3; attempt += 1) {
+      try {
+        const page = await scrapeEventPage(url, apiKey);
+        html = page.html;
+        markdown = page.markdown;
+        extracted = page.extracted;
+        scrapeError = null;
+        break;
+      } catch (e) {
+        scrapeError = e instanceof Error ? e.message : String(e);
+        if (scrapeError.includes('429') && attempt < 2) {
+          console.log(`WAIT ${url} rate_limited retry=${attempt + 1}`);
+          await new Promise((r) => setTimeout(r, 20_000));
+          continue;
+        }
+        break;
+      }
     }
-    if (!html) {
-      console.log(`SKIP ${url} no_html`);
+    if (scrapeError) {
+      console.log(`SKIP ${url} scrape_error=${scrapeError}`);
+      await new Promise((r) => setTimeout(r, pauseMs));
       continue;
     }
 
-    const jsonLd = extractJsonLdObjects(html);
-    const parsed = parseEventFromJsonLd(jsonLd, url);
+    const jsonLd = html ? extractJsonLdObjects(html) : [];
+    const parsed = parseEventFromJsonLd(jsonLd, url) ?? extracted;
     if (!parsed) {
-      console.log(`SKIP ${url} no_event_jsonld`);
+      console.log(`SKIP ${url} no_event_data`);
+      await new Promise((r) => setTimeout(r, pauseMs));
       continue;
     }
 
-    const alignment = scoreAlignment(
-      `${parsed.title}\n${parsed.summary}\n${parsed.placeName ?? ''}\n${url}`,
-    );
+    const scoreText = `${parsed.title}\n${parsed.summary}\n${parsed.placeName ?? ''}\n${markdown ?? ''}\n${url}`;
+    if (outsideBarcelona(scoreText, url)) {
+      console.log(`SKIP ${url} outside_barcelona`);
+      await new Promise((r) => setTimeout(r, pauseMs));
+      continue;
+    }
+
+    const alignment = scoreAlignment(scoreText);
+    const barcelonaEvent = inBarcelonaCity(scoreText) && Boolean(parsed.startsAt);
     const allowedVerdict =
-      alignment.verdict === 'recommend_seed' || (allowReview && alignment.verdict === 'review');
-    if (!allowedVerdict || alignment.score < minScore || alignment.cautionFlags.length) {
+      alignment.verdict === 'recommend_seed' ||
+      (allowReview && alignment.verdict === 'review') ||
+      (allowReview && barcelonaEvent && alignment.cautionFlags.length === 0);
+    if (!allowedVerdict || alignment.cautionFlags.length || (!barcelonaEvent && alignment.score < minScore)) {
       console.log(
         `REJECT ${url} score=${alignment.score} verdict=${alignment.verdict} cautions=${alignment.cautionFlags.join(',') || 'none'}`,
       );
+      await new Promise((r) => setTimeout(r, pauseMs));
       continue;
     }
 
@@ -305,15 +433,18 @@ async function main() {
       placeName: place?.name ?? parsed.placeName ?? 'TBA',
       primaryDomain: alignment.suggestedPrimaryDomain,
       tags: ['auto-imported', ...alignment.suggestedCategories],
+      sourceUrl: url,
     };
 
     if (isExpired(event)) {
-      console.log(`SKIP ${url} already_expired`);
+      console.log(`SKIP ${url} already_expired startsAt=${event.startsAt}`);
+      await new Promise((r) => setTimeout(r, pauseMs));
       continue;
     }
 
     byId.set(id, event);
     console.log(`UPSERT ${event.slug} score=${alignment.score} place=${event.placeName}`);
+    await new Promise((r) => setTimeout(r, pauseMs));
   }
 
   const finalEvents = sortByStart([...byId.values()]).filter((e) => !isExpired(e));

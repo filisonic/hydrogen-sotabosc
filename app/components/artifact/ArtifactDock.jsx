@@ -41,7 +41,7 @@ export function ArtifactDock() {
             color: 'var(--sotabosc-text)',
           }}
         >
-          Tap a domain above to spawn your artifact — then collect specimens on the trail.
+          Tap a domain above to spawn your artifact — then collect specimens on the trail and on the city map.
         </Link>
       </div>
     );
