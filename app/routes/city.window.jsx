@@ -12,7 +12,8 @@ const SCENE = {
   title: 'Coffee shop',
   headline: 'We’re open',
   blurb: 'This is not a photo. The room starts where your screen ends: lean left, lean right, come closer.',
-  src: '/splats/coffee-shop.splat',
+  // In two halves because Oxygen refuses any single file over 20 MB; the page joins them.
+  parts: ['/splats/coffee-shop.0.splat', '/splats/coffee-shop.1.splat'],
   credit: '“Coffee shop” by ethan3111 on SuperSplat, CC BY 4.0, thinned for the web.',
   // Looking down the length of the room, with the glass 4 units in from the back wall.
   rotation: [0, Math.PI / 2, 0],

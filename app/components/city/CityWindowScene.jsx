@@ -109,6 +109,37 @@ function StatsReadout({ trackCountRef }) {
 const PIXEL_BUDGETS = [1.6e6, 1e6, 0.6e6];
 const DPR_SHARPEST = 1.5;
 
+/**
+ * Downloads the scan's parts and joins them into one local file for the splat loader.
+ * Joining here also guarantees the loader the exact byte count it needs, which a
+ * compressing CDN does not always report.
+ */
+function useJoinedSplat(parts) {
+  const [url, setUrl] = useState(null);
+  useEffect(() => {
+    let joined;
+    let cancelled = false;
+    Promise.all(
+      parts.map(async (part) => {
+        const response = await fetch(part);
+        if (!response.ok) throw new Error(`${part} answered ${response.status}`);
+        return response.blob();
+      }),
+    )
+      .then((blobs) => {
+        if (cancelled) return;
+        joined = URL.createObjectURL(new Blob(blobs));
+        setUrl(joined);
+      })
+      .catch((error) => console.error('The scan failed to load', error));
+    return () => {
+      cancelled = true;
+      if (joined) URL.revokeObjectURL(joined);
+    };
+  }, [parts]);
+  return url;
+}
+
 /** Sets the drawing resolution so the canvas stays within `budget` pixels at any size. */
 function PixelBudget({ budget }) {
   const size = useThree((state) => state.size);
@@ -131,6 +162,7 @@ export default function CityWindowScene({ scene, eyeRef, screenRef, depthRef, tr
   // Step down the pixel budget when frames drop, and back up when there is room.
   const [step, setStep] = useState(0);
   const lower = () => setStep((now) => Math.min(now + 1, PIXEL_BUDGETS.length - 1));
+  const src = useJoinedSplat(scene.parts);
 
   return (
     <Canvas
@@ -148,9 +180,11 @@ export default function CityWindowScene({ scene, eyeRef, screenRef, depthRef, tr
       />
       {stats ? <StatsReadout trackCountRef={trackCountRef} /> : null}
       <WindowCamera scene={scene} eyeRef={eyeRef} screenRef={screenRef} depthRef={depthRef} />
-      <FittedRoom scene={scene} screenRef={screenRef}>
-        <Splat src={scene.src} alphaTest={0.1} />
-      </FittedRoom>
+      {src ? (
+        <FittedRoom scene={scene} screenRef={screenRef}>
+          <Splat src={src} alphaTest={0.1} />
+        </FittedRoom>
+      ) : null}
     </Canvas>
   );
 }

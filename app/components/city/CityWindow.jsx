@@ -22,7 +22,7 @@ const STATUS = {
  * the viewer's head. Head tracking is opt-in; until then (and without a camera) the
  * pointer or the phone's tilt moves the eye.
  *
- * @param {{scene: {src: string, title: string, headline: string, blurb: string, credit: string, rotation: number[], anchor: number[], frame: {width: number, height: number}, textDepth: number}}} props
+ * @param {{scene: {parts: string[], title: string, headline: string, blurb: string, credit: string, rotation: number[], anchor: number[], frame: {width: number, height: number}, textDepth: number}}} props
  */
 export function CityWindow({ scene }) {
   const stageRef = useRef(null);
