@@ -18,14 +18,15 @@ export const meta = () => [
   {name: 'twitter:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research."},
 ];
 
-export async function loader() {
+export async function loader({context}) {
   try {
-    const {SEED_PLACES, SEED_EVENTS, SEED_CREATORS, SEED_REVIEWS, getUpcomingEvents} = await import('~/lib/directory/seed.server');
+    const {getCityDirectory} = await import('~/lib/directory/source.server');
+    const {places, events, creators, reviews, getUpcomingEvents} = await getCityDirectory(context);
     const upcoming = getUpcomingEvents();
-    const placesById = new Map(SEED_PLACES.map((place) => [place.id, place]));
+    const placesById = new Map(places.map((place) => [place.id, place]));
     const eventImageByPlaceSlug = new Map();
 
-    for (const ev of SEED_EVENTS) {
+    for (const ev of events) {
       const eventPlace = ev.placeId ? placesById.get(ev.placeId) : null;
       if (!eventPlace || eventImageByPlaceSlug.has(eventPlace.slug)) continue;
       const resolvedEventImage = resolveEventImageUrl(ev, eventPlace);
@@ -42,11 +43,11 @@ export async function loader() {
           null,
       };
     };
-    const galleries = SEED_PLACES.filter(p => p.categories.includes('art-gallery')).slice(0, 4).map(addImg);
-    const coffee = SEED_PLACES.filter(p => p.categories.includes('specialty-coffee')).slice(0, 3).map(addImg);
-    const music = SEED_PLACES.filter(p => p.categories.includes('music-venue')).slice(0, 3).map(addImg);
-    const workshops = SEED_PLACES.filter(p => p.categories.includes('workshop')).slice(0, 3).map(addImg);
-    const restaurants = SEED_PLACES.filter(p => p.categories.includes('restaurant')).slice(0, 3).map(addImg);
+    const galleries = places.filter(p => p.categories.includes('art-gallery')).slice(0, 4).map(addImg);
+    const coffee = places.filter(p => p.categories.includes('specialty-coffee')).slice(0, 3).map(addImg);
+    const music = places.filter(p => p.categories.includes('music-venue')).slice(0, 3).map(addImg);
+    const workshops = places.filter(p => p.categories.includes('workshop')).slice(0, 3).map(addImg);
+    const restaurants = places.filter(p => p.categories.includes('restaurant')).slice(0, 3).map(addImg);
     const featuredImage =
       upcoming
         .map((ev) => resolveEventImageUrl(ev, ev.placeId ? placesById.get(ev.placeId) : null))
@@ -60,12 +61,12 @@ export async function loader() {
     return {
       upcomingEvents: upcoming.slice(0, 6),
       galleries, coffee, music, workshops, restaurants,
-      creators: SEED_CREATORS.slice(0, 6),
-      reviews: SEED_REVIEWS.slice(0, 4),
+      creators: creators.slice(0, 6),
+      reviews: reviews.slice(0, 4),
       featuredImage,
-      totalPlaces: SEED_PLACES.length,
-      totalEvents: SEED_EVENTS.length,
-      totalCreators: SEED_CREATORS.length,
+      totalPlaces: places.length,
+      totalEvents: events.length,
+      totalCreators: creators.length,
     };
   } catch (e) {
     return {upcomingEvents:[], galleries:[], coffee:[], music:[], workshops:[], restaurants:[], creators:[], reviews:[], featuredImage:null, totalPlaces:0, totalEvents:0, totalCreators:0};

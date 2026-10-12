@@ -61,6 +61,7 @@ async function main() {
   ];
   if (allowReview) syncArgs.push('--allow-review');
   if (dryRun) syncArgs.push('--dry-run');
+  syncArgs.push('--max=40');
 
   const syncCode = runStep('Sync events', syncArgs);
   if (syncCode !== 0) process.exit(syncCode);

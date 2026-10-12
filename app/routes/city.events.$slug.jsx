@@ -1,4 +1,4 @@
-import { useLoaderData, Link } from 'react-router';
+import { useLoaderData, Link, redirect } from 'react-router';
 import { useEffect } from 'react';
 import { ContributionActions } from '~/components/directory/ContributionActions';
 import { DirectorySurface } from '~/components/directory/DirectorySurface';
@@ -10,6 +10,16 @@ import { openGraphImageMeta } from '~/lib/seo/siteImagery';
 import { canonicalLinkMeta } from '~/lib/seo/metaHelpers';
 import { JsonLd } from '~/components/seo/JsonLd';
 import { buildBreadcrumbListJsonLd, buildEventJsonLd } from '~/lib/seo/jsonLd';
+import { eventPulse } from '~/lib/directory/eventWhen';
+
+const LEGACY_EVENT_SLUGS = {
+  'offf-barcelona-2026': 'offf-barcelona-2027',
+  'bcn-jazz-day-2026': 'bcn-jazz-day-2027',
+  'zazenkai-may-retreat': 'zazenkai-october-retreat',
+  'blueproject-spring-residency': 'blueproject-autumn-residency',
+  'hangar-winter-open': 'hangar-autumn-open',
+  'projectesd-opening-may': 'projectesd-opening-november',
+};
 
 export const meta = ({ data }) => {
   if (!data?.event) return [{ title: 'Event Not Found — Sotabosc City' }];
@@ -24,14 +34,18 @@ export const meta = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request }) {
-  const { getEventBySlug, getPlaceById } = await import('~/lib/directory/seed.server');
+export async function loader({ params, request, context }) {
+  const legacy = LEGACY_EVENT_SLUGS[params.slug];
+  if (legacy) throw redirect(directoryRoutes.event(legacy), 301);
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
+  const { getEventBySlug, getPlaceById } = await getCityDirectory(context);
   const event = getEventBySlug(params.slug);
   if (!event) throw new Response('Event not found', { status: 404 });
   const place = getPlaceById(event.placeId);
   const endMs = new Date(event.endsAt ?? event.startsAt).getTime();
   const eventEnded = endMs < Date.now();
-  return { event, place: place || null, origin: new URL(request.url).origin, eventEnded };
+  const liveNow = eventPulse(event) === 'now';
+  return { event, place: place || null, origin: new URL(request.url).origin, eventEnded, liveNow };
 }
 
 function formatFullDate(isoStr) {
@@ -48,7 +62,7 @@ function formatTime(isoStr) {
 }
 
 export default function EventDetail() {
-  const { event, place, origin } = useLoaderData();
+  const { event, place, origin, eventEnded, liveNow } = useLoaderData();
   const eventPageUrl = `${origin}${directoryRoutes.event(event.slug)}`;
   const eventLd = buildEventJsonLd(event, eventPageUrl, place);
   const breadcrumbLd = buildBreadcrumbListJsonLd([
@@ -155,6 +169,46 @@ export default function EventDetail() {
                 </span>
               ))}
             </div>
+          )}
+
+          {!eventEnded ? (
+            <div className="rounded-2xl border p-6 mb-8 space-y-4" style={{ borderColor: 'var(--sotabosc-border)' }}>
+              <h2 className="font-bold">In the city</h2>
+              <p className="text-sm" style={{ color: 'var(--sotabosc-muted)' }}>
+                {liveNow
+                  ? 'This gathering is on right now. Tickets stay on the venue site — here you can step into the room as a silhouette. No chat yet.'
+                  : 'The virtual room only opens while this gathering is actually happening. Until then, zoom the plot on the city map, or take a ticket on the venue site.'}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                {liveNow ? (
+                  <Link to={directoryRoutes.gathering(event.slug)} className="mag-btn">
+                    Enter gathering
+                  </Link>
+                ) : (
+                  <Link to={`/?event=${encodeURIComponent(event.slug)}`} className="mag-btn-o">
+                    See the plot on the map
+                  </Link>
+                )}
+                {event.sourceUrl || place?.website ? (
+                  <a
+                    href={event.sourceUrl || place.website}
+                    className="mag-btn-o"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {event.sourceUrl ? 'Tickets / event page' : 'Venue page'}
+                  </a>
+                ) : null}
+              </div>
+            </div>
+          ) : (
+            <p className="text-sm mb-8" style={{ color: 'var(--sotabosc-muted)' }}>
+              This gathering has ended. See what&apos;s next on the{' '}
+              <Link to={directoryRoutes.events()} className="underline">
+                events board
+              </Link>
+              .
+            </p>
           )}
         </div>
       </section>

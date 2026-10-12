@@ -1,4 +1,4 @@
-import {createHydrogenContext} from '@shopify/hydrogen';
+import {createHydrogenContext, createWithCache} from '@shopify/hydrogen';
 import {AppSession} from '~/lib/session';
 import {CART_QUERY_FRAGMENT} from '~/lib/fragments';
 import {getBuyerIdentity, getStoreLocale} from '~/lib/i18n';
@@ -39,6 +39,9 @@ export async function createHydrogenRouterContext(
 
   const locale = getStoreLocale(env);
 
+  // Caches non-Shopify data (e.g. the Supabase city directory) in the same worker cache.
+  const withCache = createWithCache({cache, waitUntil, request});
+
   const hydrogenContext = createHydrogenContext(
     {
       env,
@@ -52,7 +55,7 @@ export async function createHydrogenRouterContext(
         queryFragment: CART_QUERY_FRAGMENT,
       },
     },
-    additionalContext,
+    {...additionalContext, withCache},
   );
 
   return hydrogenContext;

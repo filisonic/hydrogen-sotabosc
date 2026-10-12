@@ -15,9 +15,10 @@ export const meta = ({ data }) => [
   ...openGraphImageMeta(data?.origin),
 ];
 
-export async function loader({ request }) {
-  const { SEED_CREATORS } = await import('~/lib/directory/seed.server');
-  return { creators: SEED_CREATORS, origin: new URL(request.url).origin };
+export async function loader({ request, context }) {
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
+  const { creators } = await getCityDirectory(context);
+  return { creators, origin: new URL(request.url).origin };
 }
 
 function CreatorCard({ creator }) {

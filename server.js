@@ -20,28 +20,32 @@ export default {
       // serves city.sotabosc.world, directory.sotabosc.world, etc.
       const url = new URL(request.url);
       const hostname = url.hostname;
-      let rewritten = false;
 
-      if (hostname.startsWith('city.')) {
-        // city.sotabosc.world — living map is the homepage at /
-        url.pathname = url.pathname === '/' ? '/' : url.pathname;
-        rewritten = false;
-      } else if (hostname.startsWith('directory.')) {
-        // directory.sotabosc.world/foo → /city/foo
-        url.pathname = '/city' + (url.pathname === '/' ? '' : url.pathname);
-        rewritten = true;
+      if (hostname.startsWith('directory.')) {
+        if (url.pathname === '/' || url.pathname === '') {
+          const target = new URL('/city' + url.search, url);
+          return Response.redirect(target.toString(), 302);
+        }
+        if (!url.pathname.startsWith('/city')) {
+          const target = new URL('/city' + url.pathname + url.search, url);
+          return Response.redirect(target.toString(), 301);
+        }
       } else if (hostname.startsWith('tools.')) {
-        // tools.sotabosc.world/foo → /tools/foo
-        url.pathname = '/tools' + (url.pathname === '/' ? '' : url.pathname);
-        rewritten = true;
+        if (!url.pathname.startsWith('/tools')) {
+          const target = new URL(
+            '/tools' + (url.pathname === '/' ? '' : url.pathname) + url.search,
+            url,
+          );
+          return Response.redirect(target.toString(), 301);
+        }
       } else if (hostname.startsWith('labs.')) {
-        // labs.sotabosc.world/foo → /labs/foo
-        url.pathname = '/labs' + (url.pathname === '/' ? '' : url.pathname);
-        rewritten = true;
-      }
-
-      if (rewritten) {
-        request = new Request(url.toString(), request);
+        if (!url.pathname.startsWith('/labs')) {
+          const target = new URL(
+            '/labs' + (url.pathname === '/' ? '' : url.pathname) + url.search,
+            url,
+          );
+          return Response.redirect(target.toString(), 301);
+        }
       }
       // ─────────────────────────────────────────────────────────
 

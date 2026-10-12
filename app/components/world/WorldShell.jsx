@@ -7,7 +7,7 @@ import { AtmosphericLayer } from './AtmosphericLayer';
  * WorldShell — themed page wrapper. No welcome gate: content starts immediately.
  * Theme (solarpunk palette) follows the user's chosen domain.
  */
-export function WorldShell({ children }) {
+export function WorldShell({ children, atmosphere = true }) {
   const [isHydrated, setIsHydrated] = useState(false);
   const organism = useOrganismStore((state) => state.organism);
   const theme = getDomainTheme(organism?.domain);
@@ -42,11 +42,14 @@ export function WorldShell({ children }) {
         color: 'var(--sotabosc-text)',
       }}
     >
-      <AtmosphericLayer 
-        domain={organism?.domain} 
-        enableAudio={false} 
-        enableParticles={true}
-      />
+      {/* The homepage city draws its own weather and light; drifting particles over WebGL only cost frames. */}
+      {atmosphere ? (
+        <AtmosphericLayer
+          domain={organism?.domain}
+          enableAudio={false}
+          enableParticles={true}
+        />
+      ) : null}
       {children}
     </div>
   );

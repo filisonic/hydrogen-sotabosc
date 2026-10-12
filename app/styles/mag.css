@@ -773,6 +773,12 @@ main.mag-nav-main-offset {
 }
 
 /* ── Responsive ─── */
+@media (min-width: 901px) and (max-width: 1200px) {
+  .mag-nav { padding-inline: 18px; }
+  .mag-links { gap: 14px 11px; }
+  .mag-links a { font-size: 10px; letter-spacing: .05em; }
+  .mag-links .mag-pill { padding: 7px 12px; font-size: 10px; }
+}
 @media (max-width: 900px) {
   .mag-links {
     display: none;

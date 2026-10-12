@@ -62,6 +62,8 @@ export interface CityEvent {
   secondaryDomains?: DomainCategory[];
   tags?: string[];
   imageUrl?: string;
+  /** Venue or ticket page; tickets stay off Sotabosc. */
+  sourceUrl?: string;
 }
 
 export interface Creator {

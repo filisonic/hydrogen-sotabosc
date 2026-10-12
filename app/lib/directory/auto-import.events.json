@@ -1,1 +1,118 @@
-[]
+[
+  {
+    "id": "e_ai_c7c7f3adaac4",
+    "slug": "fiesta-mayor-de-les-corts",
+    "title": "Fiesta Mayor de Les Corts",
+    "summary": "Una fiesta con centenares de actividades de cultura popular, música, deportes, animación y comercio.",
+    "startsAt": "2026-10-02T02:00",
+    "endsAt": "2026-10-13T01:59",
+    "placeId": "p_auto_unknown",
+    "placeName": "Diferents carrers de Les Corts",
+    "primaryDomain": "plants",
+    "tags": [
+      "auto-imported",
+      "art-gallery"
+    ],
+    "sourceUrl": "https://agenda500.barcelona.cat/es"
+  },
+  {
+    "id": "e_ai_2b867d1e2e83",
+    "slug": "trueno",
+    "title": "Trueno",
+    "summary": "Trueno, a popular musical artist, will perform live at the Palau Sant Jordi.",
+    "startsAt": "2026-10-13T02:00",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau Sant Jordi",
+    "primaryDomain": "plants",
+    "tags": [
+      "auto-imported",
+      "workshop"
+    ],
+    "sourceUrl": "https://palausantjordi.barcelona/es/agenda"
+  },
+  {
+    "id": "e_ai_9dd6a39d451f",
+    "slug": "the-wedding-market-barcelona-2026",
+    "title": "THE WEDDING MARKET BARCELONA 2026",
+    "summary": "El market de bodas más inspirador vuelve a Barcelona, celebrando su 10º aniversario con una selección de más de 60 proveedores y en un entorno espectacular.",
+    "startsAt": "2026-10-17T10:00",
+    "endsAt": "2026-10-18T18:00",
+    "placeId": "p_auto_unknown",
+    "placeName": "Torre Bellesguard, Barcelona",
+    "primaryDomain": "fungi",
+    "tags": [
+      "auto-imported",
+      "retreat",
+      "coworking",
+      "music-venue",
+      "specialty-coffee"
+    ],
+    "sourceUrl": "https://www.eventbrite.es/e/the-wedding-market-barcelona-2026-tickets-1995681887247"
+  },
+  {
+    "id": "e_ai_5ef6ae390175",
+    "slug": "happy-techno-at-la-terrrazza-barcelona-open-air-daytime",
+    "title": "Happy Techno at La Terrrazza Barcelona - Open Air / Daytime",
+    "summary": "HAPPY TECHNO returns to La Terrrazza Barcelona for an extended open-air daytime edition, featuring the best House, Tech House, and Funky sounds in a celebrated venue. Expect a joyful atmosphere and a night of dancing with limited capacity.",
+    "startsAt": "2026-10-17T21:00",
+    "endsAt": "2026-10-18T01:30",
+    "placeId": "p_gmap_ed38a22ef9ea",
+    "placeName": "La Terrrazza Barcelona",
+    "primaryDomain": "animals",
+    "tags": [
+      "auto-imported",
+      "retreat",
+      "music-venue"
+    ],
+    "sourceUrl": "https://www.eventbrite.es/e/happy-techno-at-la-terrrazza-barcelona-open-air-daytime-tickets-1985805281052"
+  },
+  {
+    "id": "e_ai_1b98161e851c",
+    "slug": "womenhack-barcelona",
+    "title": "WomenHack - Barcelona",
+    "summary": "You're invited to WomenHack, an invite-only recruiting event for developers, technical designers, and product owners. Connect with talented professionals and great companies through rapid-interviews and networking.",
+    "startsAt": "2026-10-22T18:00",
+    "endsAt": "2026-10-22T21:00",
+    "placeId": "p_auto_unknown",
+    "placeName": "To be announced, 08029 Barcelona",
+    "primaryDomain": "plants",
+    "tags": [
+      "auto-imported",
+      "retreat",
+      "music-venue"
+    ],
+    "sourceUrl": "https://www.eventbrite.es/e/entradas-womenhack-barcelona-october-22-2026-1986544185134"
+  },
+  {
+    "id": "e_ai_7691632d3d1c",
+    "slug": "simple-plan-en-barcelona",
+    "title": "Simple Plan en Barcelona",
+    "summary": "Concierto de la famosa banda de pop-punk, Simple Plan, en Barcelona.",
+    "startsAt": "2026-10-26T01:00",
+    "placeId": "p17",
+    "placeName": "Moonlight Studio Barcelona",
+    "primaryDomain": "plants",
+    "tags": [
+      "auto-imported",
+      "music-venue"
+    ],
+    "sourceUrl": "https://www.tomaticket.es/agenda/2026/10/?SemanaMes=5&IdLugar=9"
+  },
+  {
+    "id": "e_ai_a7c91ebf455b",
+    "slug": "blend-d-0-una-introducci-n-al-dise-o-y-modelado-3d",
+    "title": "\u0001Blend\u000ed\u00020: Una introducci\u0000 n al dise\u0000o y modelado 3D",
+    "summary": "El proyecto en residencia Blend\u0001 presenta Una introducci\u0000 n al dise\u0000o y modelado 3D, el primero de la serie.",
+    "startsAt": "2026-11-05T20:00",
+    "endsAt": "2026-11-26T20:00",
+    "placeId": "p35",
+    "placeName": "Hangar",
+    "primaryDomain": "fungi",
+    "tags": [
+      "auto-imported",
+      "coworking",
+      "art-gallery"
+    ],
+    "sourceUrl": "https://hangar.org/es/category/agenda-hangar"
+  }
+]

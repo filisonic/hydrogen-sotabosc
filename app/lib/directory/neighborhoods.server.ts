@@ -21,9 +21,9 @@ export type NeighborhoodIndexEntry = {
   placeCount: number;
 };
 
-export function getNeighborhoodIndex(): NeighborhoodIndexEntry[] {
+export function getNeighborhoodIndex(places: readonly Place[] = SEED_PLACES): NeighborhoodIndexEntry[] {
   const byLabel = new Map<string, Place[]>();
-  for (const p of SEED_PLACES) {
+  for (const p of places) {
     const key = p.neighborhood.trim();
     if (!key) continue;
     const list = byLabel.get(key) ?? [];
@@ -43,13 +43,16 @@ export function getNeighborhoodIndex(): NeighborhoodIndexEntry[] {
   return out.sort((a, b) => a.label.localeCompare(b.label));
 }
 
-export function getNeighborhoodSitemapSlugs(): string[] {
-  return getNeighborhoodIndex().map((n) => n.slug);
+export function getNeighborhoodSitemapSlugs(places: readonly Place[] = SEED_PLACES): string[] {
+  return getNeighborhoodIndex(places).map((n) => n.slug);
 }
 
-export function getPlacesByNeighborhoodSlug(slug: string): { label: string; places: Place[] } | null {
+export function getPlacesByNeighborhoodSlug(
+  slug: string,
+  places: readonly Place[] = SEED_PLACES,
+): { label: string; places: Place[] } | null {
   const byLabel = new Map<string, Place[]>();
-  for (const p of SEED_PLACES) {
+  for (const p of places) {
     const key = p.neighborhood.trim();
     if (!key) continue;
     const list = byLabel.get(key) ?? [];

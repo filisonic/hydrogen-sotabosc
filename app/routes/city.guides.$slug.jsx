@@ -21,10 +21,11 @@ export const meta = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request }) {
+export async function loader({ params, request, context }) {
   const guide = getGuideBySlug(params.slug);
   if (!guide) throw new Response('Guide not found', { status: 404 });
-  const { getPlaceBySlug } = await import('~/lib/directory/seed.server');
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
+  const { getPlaceBySlug } = await getCityDirectory(context);
   const origin = new URL(request.url).origin;
   const canonicalPath = directoryRoutes.guide(params.slug);
   const relatedPlaces = guide.relatedPlaceSlugs

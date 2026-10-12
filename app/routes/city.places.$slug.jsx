@@ -28,9 +28,9 @@ export const meta = ({ data }) => {
   ];
 };
 
-export async function loader({ params, request }) {
-  const { getPlaceBySlug, getEventsForPlace, getReviewsForPlace } =
-    await import('~/lib/directory/seed.server');
+export async function loader({ params, request, context }) {
+  const { getCityDirectory } = await import('~/lib/directory/source.server');
+  const { getPlaceBySlug, getEventsForPlace, getReviewsForPlace } = await getCityDirectory(context);
   const place = getPlaceBySlug(params.slug);
   if (!place) throw new Response('Place not found', { status: 404 });
   const events = getEventsForPlace(place.id);
