@@ -1,4 +1,8 @@
 import { CityWindow } from '~/components/city/CityWindow';
+// Imported rather than kept in `public/`: on Oxygen these are served from the asset CDN,
+// not from the site's own address, and the import resolves to wherever that is.
+import splatPart0 from '~/assets/splats/coffee-shop.0.splat?url';
+import splatPart1 from '~/assets/splats/coffee-shop.1.splat?url';
 
 /**
  * Prototype: the screen as a window into a scanned place (gaussian splat + head tracking).
@@ -13,7 +17,7 @@ const SCENE = {
   headline: 'We’re open',
   blurb: 'This is not a photo. The room starts where your screen ends: lean left, lean right, come closer.',
   // In two halves because Oxygen refuses any single file over 20 MB; the page joins them.
-  parts: ['/splats/coffee-shop.0.splat', '/splats/coffee-shop.1.splat'],
+  parts: [splatPart0, splatPart1],
   credit: '“Coffee shop” by ethan3111 on SuperSplat, CC BY 4.0, thinned for the web.',
   // Looking down the length of the room, with the glass 4 units in from the back wall.
   rotation: [0, Math.PI / 2, 0],
