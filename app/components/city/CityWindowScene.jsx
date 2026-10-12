@@ -113,30 +113,58 @@ const DPR_SHARPEST = 1.5;
  * Downloads the scan's parts and joins them into one local file for the splat loader.
  * Joining here also guarantees the loader the exact byte count it needs, which a
  * compressing CDN does not always report.
+ *
+ * `onProgress` hears how much has arrived, as a fraction from 0 to 1 in whole percents;
+ * `null` when the server gives no sizes, and -1 if the download fails.
  */
-function useJoinedSplat(parts) {
+function useJoinedSplat(parts, onProgress) {
   const [url, setUrl] = useState(null);
   useEffect(() => {
     let joined;
     let cancelled = false;
+    let received = 0;
+    let lastReported;
+    const sizes = parts.map(() => 0);
+    const report = () => {
+      if (cancelled) return;
+      const total = sizes.reduce((sum, size) => sum + size, 0);
+      // Until every part has said how big it is, the total would be an underestimate.
+      const fraction = sizes.every(Boolean) ? Math.min(Math.floor((received / total) * 100) / 100, 0.99) : null;
+      if (fraction !== lastReported) onProgress((lastReported = fraction));
+    };
+
     Promise.all(
-      parts.map(async (part) => {
+      parts.map(async (part, index) => {
         const response = await fetch(part);
-        if (!response.ok) throw new Error(`${part} answered ${response.status}`);
-        return response.blob();
+        if (!response.ok || !response.body) throw new Error(`${part} answered ${response.status}`);
+        sizes[index] = Number(response.headers.get('Content-Length')) || 0;
+        const reader = response.body.getReader();
+        const chunks = [];
+        for (;;) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          chunks.push(value);
+          received += value.length;
+          report();
+        }
+        return new Blob(chunks);
       }),
     )
       .then((blobs) => {
         if (cancelled) return;
         joined = URL.createObjectURL(new Blob(blobs));
         setUrl(joined);
+        onProgress(1);
       })
-      .catch((error) => console.error('The scan failed to load', error));
+      .catch((error) => {
+        console.error('The scan failed to load', error);
+        if (!cancelled) onProgress(-1);
+      });
     return () => {
       cancelled = true;
       if (joined) URL.revokeObjectURL(joined);
     };
-  }, [parts]);
+  }, [parts, onProgress]);
   return url;
 }
 
@@ -158,11 +186,11 @@ function PixelBudget({ budget }) {
  * scan that sits at the centre of the glass, and `scene.frame` is the size of the room's
  * cross-section there, all in the scan's own units.
  */
-export default function CityWindowScene({ scene, eyeRef, screenRef, depthRef, trackCountRef, stats }) {
+export default function CityWindowScene({ scene, eyeRef, screenRef, depthRef, trackCountRef, stats, onProgress }) {
   // Step down the pixel budget when frames drop, and back up when there is room.
   const [step, setStep] = useState(0);
   const lower = () => setStep((now) => Math.min(now + 1, PIXEL_BUDGETS.length - 1));
-  const src = useJoinedSplat(scene.parts);
+  const src = useJoinedSplat(scene.parts, onProgress);
 
   return (
     <Canvas

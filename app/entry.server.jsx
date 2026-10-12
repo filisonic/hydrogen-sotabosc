@@ -29,6 +29,7 @@ export default async function handleRequest(
   reactRouterContext,
   context,
 ) {
+  const isWindowPrototype = new URL(request.url).pathname === '/city/window';
   const {nonce, header, NonceProvider} = createContentSecurityPolicy({
     shop: {
       checkoutDomain:
@@ -55,7 +56,12 @@ export default async function handleRequest(
     ],
     // Plotter / CDN mp4 playback in Labs lightbox.
     mediaSrc: ["'self'", 'https://philipcp.netlify.app', 'blob:'],
-    ...(new URL(request.url).pathname === '/city/window' ? WINDOW_PROTOTYPE_CSP : {}),
+    // The stylesheets @import Google Fonts: the CSS comes from googleapis, the files from gstatic.
+    styleSrc: ['https://fonts.googleapis.com'],
+    fontSrc: ["'self'", 'https://cdn.shopify.com', 'https://fonts.gstatic.com', 'data:'],
+    ...(isWindowPrototype ? WINDOW_PROTOTYPE_CSP : {}),
+    // Plausible page views and events (`app/lib/analytics.ts`) post here.
+    connectSrc: ['https://plausible.io', ...(isWindowPrototype ? WINDOW_PROTOTYPE_CSP.connectSrc : [])],
   });
 
   const body = await renderToReadableStream(

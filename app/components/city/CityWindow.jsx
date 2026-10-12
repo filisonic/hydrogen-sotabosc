@@ -35,6 +35,8 @@ export function CityWindow({ scene }) {
   const stats = useSearchParams()[0].has('stats');
   const [mode, setMode] = useState('pointer');
   const [mounted, setMounted] = useState(false);
+  // How much of the scan has arrived: 0 to 1, `null` when the size is unknown, -1 if it failed.
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => setMounted(true), []);
 
@@ -115,7 +117,7 @@ export function CityWindow({ scene }) {
   return (
     <section className="city-window" ref={stageRef} aria-label={`${scene.title}, seen through the screen`}>
       {mounted ? (
-        <Suspense fallback={<p className="city-stage__loading">Opening the window…</p>}>
+        <Suspense fallback={null}>
           <CityWindowScene
             scene={scene}
             eyeRef={eyeRef}
@@ -123,11 +125,23 @@ export function CityWindow({ scene }) {
             depthRef={depthRef}
             trackCountRef={trackCountRef}
             stats={stats}
+            onProgress={setProgress}
           />
         </Suspense>
-      ) : (
-        <p className="city-stage__loading">Opening the window…</p>
-      )}
+      ) : null}
+
+      {progress === -1 ? (
+        <p className="city-window__loading" role="alert">
+          The room could not be loaded. Reload the page to try again.
+        </p>
+      ) : progress !== 1 ? (
+        <div className="city-window__loading">
+          <p id="window-loading-label">
+            Opening the window…{progress ? ` ${Math.round(progress * 100)}%` : ''}
+          </p>
+          <progress aria-labelledby="window-loading-label" max={1} value={progress ?? undefined} />
+        </div>
+      ) : null}
 
       {/* Lettering on a pane of glass just inside the room: it drifts slightly against the screen's edge. */}
       <div className="city-window__depth" ref={depthRef}>

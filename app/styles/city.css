@@ -1823,6 +1823,49 @@ body:has(.city-window) .mag-nav .mag-pill {
   border-color: currentColor;
 }
 
+.city-window__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.9rem;
+  margin: 0;
+  padding: 1rem;
+  text-align: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+.city-window__loading p {
+  margin: 0;
+}
+
+.city-window__loading progress {
+  width: min(16rem, 60vw);
+  height: 3px;
+  border: 0;
+  appearance: none;
+  background: rgba(244, 234, 216, 0.2);
+  accent-color: #f4ead8;
+}
+
+.city-window__loading progress::-webkit-progress-bar {
+  background: rgba(244, 234, 216, 0.2);
+}
+
+.city-window__loading progress::-webkit-progress-value {
+  background: #f4ead8;
+  transition: width 0.2s linear;
+}
+
+.city-window__loading progress::-moz-progress-bar {
+  background: #f4ead8;
+}
+
 .city-window__depth {
   position: absolute;
   inset: 0;
