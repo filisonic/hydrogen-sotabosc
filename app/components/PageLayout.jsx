@@ -24,7 +24,9 @@ export function PageLayout({
 }) {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const isCityWorld =
+  const isLivingMap =
+    location.pathname === '/map' ||
+    location.pathname.startsWith('/map/') ||
     location.pathname === '/city-world' ||
     location.pathname.startsWith('/city-world/');
   const isToolsPage =
@@ -34,6 +36,7 @@ export function PageLayout({
     location.pathname === '/labs' ||
     location.pathname.startsWith('/labs/');
   const hasOwnFooter =
+    isHomePage ||
     location.pathname === '/discover' ||
     location.pathname.startsWith('/discover/') ||
     location.pathname === '/media' ||
@@ -43,7 +46,7 @@ export function PageLayout({
     location.pathname === '/research' ||
     location.pathname.startsWith('/research/');
   const isMinimalChrome =
-    isHomePage || isCityWorld || isToolsPage || isLabsPage || hasOwnFooter;
+    isLivingMap || isToolsPage || isLabsPage || hasOwnFooter;
   const isDirectoryChrome =
     location.pathname === '/city' ||
     location.pathname.startsWith('/city/') ||

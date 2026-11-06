@@ -88,8 +88,8 @@ export default function CityClaimPage() {
   return (
     <DirectorySurface>
       <div className="max-w-xl mx-auto px-4 py-12">
-        <Link to="/" className="text-xs mb-8 inline-block opacity-70 hover:opacity-100">
-          ← Back to the city
+        <Link to="/map" className="text-xs mb-8 inline-block opacity-70 hover:opacity-100">
+          ← Living map
         </Link>
 
         <h1 className="text-3xl font-black tracking-tight mb-2 font-[family-name:var(--font-display)]">
@@ -106,8 +106,8 @@ export default function CityClaimPage() {
             <p className="text-sm text-green-700 mb-6">
               We&apos;ll be in touch about which kingdom fits and what your screen could show.
             </p>
-            <Link to="/" className="mag-btn">
-              Back to the city
+            <Link to="/map" className="mag-btn">
+              Living map
             </Link>
           </div>
         ) : (

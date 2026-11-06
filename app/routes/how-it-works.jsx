@@ -13,7 +13,7 @@ import {
 import { canonicalLinkMeta } from '~/lib/seo/metaHelpers';
 
 /**
- * Everything the homepage map does not say: what Sotabosc is, how the kingdoms
+ * What the magazine edition does not unpack: what Sotabosc is, how the kingdoms
  * feed each other, the passport, the Arena, and the directory beneath the city.
  */
 export const meta = ({ data }) => [

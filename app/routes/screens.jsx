@@ -40,8 +40,8 @@ export default function ScreensPage() {
               now.
             </p>
             <div className="city-hero__cta">
-              <Link to="/" className="mag-btn">
-                ← Back to the city
+              <Link to="/map" className="mag-btn">
+                ← Living map
               </Link>
               <Link to="/how-it-works" className="mag-btn-o">
                 How the city works

@@ -20,8 +20,9 @@ export function Footer({footer: footerPromise, header, publicStoreDomain, direct
                   Sotabosc
                 </Link>
                 <p className="site-footer-tagline">
-                  Barcelona’s living creative map — a directory, journal, and
-                  toolkit for culture, ecology, and the creative city.
+                  Culture, art and creative life — wherever you are. A local
+                  cultural channel with magazine sensibility: screens, digital
+                  edition, and the city directory.
                 </p>
                 <a href={`mailto:${CONTACT_EMAIL}`} className="site-footer-email">
                   {CONTACT_EMAIL}
@@ -30,25 +31,25 @@ export function Footer({footer: footerPromise, header, publicStoreDomain, direct
 
               <nav className="site-footer-cols" aria-label="Footer">
                 <div className="site-footer-col">
-                  <h3>Explore</h3>
+                  <h3>Edition</h3>
+                  <Link to="/">Magazine</Link>
                   <Link to="/city">Directory</Link>
-                  <Link to="/discover">Discover</Link>
-                  <Link to="/blogs/news">Journal</Link>
-                  <Link to="/labs">Labs</Link>
-                  <Link to="/tools">Tools</Link>
+                  <Link to="/city/events">Happening</Link>
+                  <Link to="/city/creators">Creators</Link>
                 </div>
                 <div className="site-footer-col">
-                  <h3>Shop</h3>
-                  <Link to="/collections">Store</Link>
-                  <Link to="/gallery">Gallery</Link>
+                  <h3>Channel</h3>
+                  <Link to="/screens">Screens</Link>
+                  <Link to="/how-it-works">About</Link>
+                  <Link to="/map">Living map</Link>
                   {MEMBERSHIP_PUBLIC ? (
                     <Link to="/membership">Membership</Link>
                   ) : null}
                 </div>
                 <div className="site-footer-col">
-                  <h3>Studio</h3>
-                  <Link to="/research">Research</Link>
-                  <Link to="/media">Media</Link>
+                  <h3>Shop</h3>
+                  <Link to="/collections">Store</Link>
+                  <Link to="/gallery">Gallery</Link>
                   <Link to="/contact">Contact</Link>
                 </div>
               </nav>
