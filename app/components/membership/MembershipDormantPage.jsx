@@ -44,7 +44,7 @@ export function MembershipDormantPage() {
         </p>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center' }}>
           <Link to="/" className="mag-btn">
-            Enter the living map
+            Open the edition
           </Link>
           <Link to="/city" className="mag-btn-o">
             Browse directory

@@ -60,15 +60,13 @@ export function MagNav({cart, isLoggedIn, header}) {
         Sotabosc
       </Link>
       <div className="mag-links">
-        <Link to="/how-it-works">About</Link>
+        <Link to="/city/events">Happening</Link>
         <Link to="/city">Directory</Link>
-        <Link to="/discover">Discover</Link>
-        <Link to="/tools">Tools</Link>
-        <Link to="/labs">Labs</Link>
+        <Link to="/city/creators">Creators</Link>
+        <Link to="/map">Map</Link>
+        <Link to="/screens">Screens</Link>
+        <Link to="/how-it-works">About</Link>
         <Link to="/collections">Store</Link>
-        <Link to="/gallery">Gallery</Link>
-        <Link to="/research">Research</Link>
-        <Link to="/media">Media</Link>
         {MEMBERSHIP_PUBLIC ? (
           <Link to="/membership" className="mag-pill mag-pill-primary">
             Membership

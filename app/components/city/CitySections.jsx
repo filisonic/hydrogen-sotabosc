@@ -120,8 +120,8 @@ export function CityIntro({ citizenCount, totalPlots, eventCount, context }) {
           neighbours.
         </p>
         <div className="city-hero__cta">
-          <Link to="/" className="mag-btn">
-            ← Back to the city
+          <Link to="/map" className="mag-btn">
+            ← Living map
           </Link>
           <Link to="/screens" className="mag-btn-o">
             The screens

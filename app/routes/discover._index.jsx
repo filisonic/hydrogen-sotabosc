@@ -1,21 +1,19 @@
 import {useLoaderData, Link} from 'react-router';
 import {motion} from 'framer-motion';
 import { JsonLd } from '~/components/seo/JsonLd';
-import {DOMAIN_KEYS, DOMAINS} from '~/lib/directory/domains';
-import {MagDomainGlyph} from '~/components/mag/MagEcosphereGlyphs';
 import {resolveEventImageUrl, resolvePlaceImageUrl} from '~/lib/directory/sceneVisuals';
 
 export const meta = () => [
   {title: "Discover — Sotabosc"},
-  {name: 'description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research."},
-  {property: 'og:title', content: "Sotabosc — Barcelona's Living Creative Ecosystem"},
-  {property: 'og:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research."},
+  {name: 'description', content: "Barcelona cultural directory — places, events, and creators. Companion to the Sotabosc magazine edition."},
+  {property: 'og:title', content: "Sotabosc — Discover Barcelona"},
+  {property: 'og:description', content: "Curated places, events, and creators. Culture, art and creative life."},
   {property: 'og:type', content: 'website'},
-  {property: 'og:url', content: 'https://sotabosc.org/'},
+  {property: 'og:url', content: 'https://sotabosc.world/discover'},
   {property: 'og:site_name', content: 'Sotabosc'},
   {name: 'twitter:card', content: 'summary_large_image'},
-  {name: 'twitter:title', content: "Sotabosc — Barcelona's Living Creative Ecosystem"},
-  {name: 'twitter:description', content: "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research."},
+  {name: 'twitter:title', content: "Sotabosc — Discover Barcelona"},
+  {name: 'twitter:description', content: "Curated places, events, and creators. Culture, art and creative life."},
 ];
 
 export async function loader({context}) {
@@ -74,11 +72,11 @@ export async function loader({context}) {
 }
 
 const SECTIONS = [
-  {id:'experiences', label:'Curated Experiences', desc:'Descend through sky, canopy, understory, water, and soil — Barcelona mapped as a living ecosystem.', href:'/', cta:'Begin the journey'},
-  {id:'directory', label:'Directory', desc:'100+ places — galleries, coffee, music venues, workshops, and restaurants curated by neighbourhood.', href:'/city', cta:'Browse places'},
-  {id:'tools', label:'Creative Tools', desc:'Generative instruments and parametric sketches built for experimentation.', href:'/tools', cta:'Open tools'},
-  {id:'labs', label:'Labs', desc:'Interactive studio practice — mapping, displays, fabrication, and live making.', href:'/labs', cta:'Enter labs'},
-  {id:'research', label:'Research', desc:'Speculative design, living systems, and cultural research including the Living Map.', href:'/research', cta:'Explore research'},
+  {id:'edition', label:'Magazine edition', desc:'Culture, art and creative life — the Barcelona channel edition on the web.', href:'/', cta:'Open the edition'},
+  {id:'directory', label:'Directory', desc:'Places — galleries, coffee, music venues, workshops, and restaurants curated by neighbourhood.', href:'/city', cta:'Browse places'},
+  {id:'events', label:'Happening', desc:'What’s on — last 30 days through the weeks ahead, from the city directory.', href:'/city/events', cta:'See the calendar'},
+  {id:'screens', label:'Screens', desc:'Sotabosc TV in physical space — cultural channel, not lobby signage.', href:'/screens', cta:'See the screens'},
+  {id:'creators', label:'Creators', desc:'Artists and makers in the network — short portraits, not a portfolio dump.', href:'/city/creators', cta:'Meet creators'},
 ];
 
 const PLACE_META = {
@@ -129,20 +127,20 @@ export default function DiscoverPage() {
       {
         "@type": "WebSite",
         "name": "Sotabosc",
-        "url": "https://sotabosc.org",
-        "description": "Culture, creativity, and nature in Barcelona. Curated directory, generative tools, interactive labs, and research.",
+        "url": "https://sotabosc.world",
+        "description": "Barcelona cultural directory — places, events, and creators.",
         "potentialAction": {
           "@type": "SearchAction",
-          "target": "https://sotabosc.org/search?q={search_term_string}",
+          "target": "https://sotabosc.world/search?q={search_term_string}",
           "query-input": "required name=search_term_string"
         }
       },
       {
         "@type": "Organization",
         "name": "Sotabosc",
-        "url": "https://sotabosc.org",
-        "logo": "https://sotabosc.org/favicon.svg",
-        "description": "Barcelona's Living Creative Ecosystem"
+        "url": "https://sotabosc.world",
+        "logo": "https://sotabosc.world/favicon.svg",
+        "description": "Local cultural channel with magazine sensibility"
       }
     ]
   };
@@ -172,7 +170,7 @@ export default function DiscoverPage() {
             style={{ marginBottom: '4rem' }}
           >
             <span style={{ fontSize: 'var(--step--1)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.5em', color: 'var(--ink)' }}>
-              Curated Directory & Research Lab
+              City directory · Magazine companion
             </span>
           </motion.div>
           
@@ -203,10 +201,10 @@ export default function DiscoverPage() {
               className="mag-home-hero-aside"
             >
                <p style={{ fontSize: 'var(--step-2)', fontWeight: 800, lineHeight: 1.1, color: 'var(--ink)', maxWidth: '500px' }}>
-                We map Barcelona’s creative network through places, events, and creators shaped by sustainability, community, and spirit.
+                Barcelona’s cultural network — places, events, and creators — feeding the channel edition and the screens.
               </p>
               <div className="mag-home-cta-row">
-                <Link to="/" className="mag-btn">Enter the living map</Link>
+                <Link to="/" className="mag-btn">Open the edition</Link>
                 <Link to="/city" className="mag-btn-o">Browse directory</Link>
               </div>
             </motion.div>
@@ -219,7 +217,7 @@ export default function DiscoverPage() {
         <div className="mag-mq-inner">
           {[...Array(2)].map((_, r) => (
             <span key={r} style={{ display: 'flex' }}>
-              {['Directory', 'Curated Experiences', 'Generative Tools', 'Labs', 'Research', 'Gallery', 'Community', 'Barcelona'].map((item, i) => (
+              {['Edition', 'Directory', 'Happening', 'Creators', 'Screens', 'Galleries', 'Barcelona'].map((item, i) => (
                 <span key={i} className="mag-mq-item">{item} ·</span>
               ))}
             </span>
@@ -239,9 +237,9 @@ export default function DiscoverPage() {
             backgroundPosition: 'center',
           } : undefined}
         >
-          <span className="mag-feat-main-tag">Curated Experiences</span>
-          <h3>Descend Through Barcelona's Living Layers</h3>
-          <p>Sky → canopy → understory → forest floor → water → soil. An immersive vertical journey mapping the city to the natural world.</p>
+          <span className="mag-feat-main-tag">Barcelona Edition</span>
+          <h3>Culture, art and creative life</h3>
+          <p>The magazine homepage — happenings, exhibitions, artists, and the local edit. Same spine as Sotabosc TV.</p>
         </Link>
         <div className="mag-feat-side">
           {SECTIONS.slice(1, 3).map(s => (
@@ -313,112 +311,32 @@ export default function DiscoverPage() {
         </div>
       </>)}
 
-      {/* ═══════════════ ECOSYSTEM MAP (mycelial band) ═══════════════ */}
-      <section className="mag-home-ecosphere">
-        <div className="mag-home-ecosphere-inner">
-          <motion.div
-            className="mag-home-ecosphere-copy"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <span style={{ fontSize: 'var(--step--1)', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', marginBottom: '1rem', display: 'block', opacity: 0.9 }}>
-              The Mycelial Call
-            </span>
-            <h2 style={{ fontSize: 'clamp(2.2rem, 5vw, var(--step-5))', fontWeight: 900, lineHeight: 0.9, letterSpacing: '-0.05em', textTransform: 'uppercase' }}>
-              Five leagues.
-            </h2>
-            <p className="mag-home-ecosphere-lede">
-              Five leagues — grow, connect, activate, restore, ground — so listings, trips, and trail paths match your role in the ecosystem.
-            </p>
-            <div className="mag-home-ecosphere-cta">
-              <Link to="/" className="mag-pill mag-pill-primary">
-                Enter the living map
-              </Link>
-              <Link to="/city">Browse all places →</Link>
-            </div>
-          </motion.div>
-
-          <motion.div
-            className="mag-home-stack"
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: '-40px' }}
-            variants={{
-              hidden: {},
-              visible: { transition: { staggerChildren: 0.06, delayChildren: 0.05 } },
-            }}
-          >
-            <h3 className="mag-home-stack-label">Domains — how you enter</h3>
-            <div className="mag-home-domains">
-              {DOMAIN_KEYS.map((domainKey, idx) => {
-                const domain = DOMAINS[domainKey];
-                return (
-                  <motion.div
-                    key={domainKey}
-                    variants={{
-                      hidden: { opacity: 0, y: 14 },
-                      visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
-                    }}
-                  >
-                    <Link
-                      to="/"
-                      className="mag-home-domain"
-                      style={{ borderLeft: `3px solid ${domain.color}` }}
-                    >
-                      <div className="mag-home-card-head">
-                        <span className="mag-home-icon-slot mag-home-icon-slot--domain">
-                          <MagDomainGlyph
-                            domainKey={domainKey}
-                            size={14}
-                            color={domain.color}
-                          />
-                        </span>
-                        <div className="mag-home-card-head-text">
-                          <span className="mag-home-domain-index">
-                            {domain.role ?? `Domain ${(idx + 1).toString().padStart(2, '0')}`}
-                          </span>
-                          <span className="mag-home-domain-title">{domain.label}</span>
-                        </div>
-                      </div>
-                      <p className="mag-home-domain-blurb">{domain.description}</p>
-                    </Link>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ═══════════════ EXPLORE MORE ═══════════════ */}
-      <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Explore More</h2></div></div>
+      {/* ═══════════════ CHANNEL + MAP ═══════════════ */}
+      <div className="mag-sec"><div className="mag-sec-head"><h2 className="mag-sec-label">Channel & map</h2></div></div>
       <div className="mag-feat">
         <Link
-          to="/labs"
+          to="/screens"
           className="mag-feat-main"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(20,16,8,0.52), rgba(20,16,8,0.82)), url(/images/labs/labs-image.jpg)',
+          style={d.featuredImage ? {
+            backgroundImage: `linear-gradient(rgba(20,16,8,0.52), rgba(20,16,8,0.82)), url(${d.featuredImage})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-          }}
+          } : undefined}
         >
-          <span className="mag-feat-main-tag">Labs</span>
-          <h3>Interactive Studio Practice</h3>
-          <p>Projection mapping, displays, fabrication, and live making — light, space, and physical form.</p>
+          <span className="mag-feat-main-tag">Screens</span>
+          <h3>Sotabosc TV in physical space</h3>
+          <p>A cultural channel for boutique venues — atmosphere first, host as setting, not a brochure loop.</p>
         </Link>
         <div className="mag-feat-side">
-          <Link to="/research" className="mag-feat-card">
-            <span className="mag-feat-card-tag">Research</span>
-            <h4>Living Map, speculative design, and cultural systems</h4>
-            <p>Explore research →</p>
+          <Link to="/map" className="mag-feat-card">
+            <span className="mag-feat-card-tag">Living map</span>
+            <h4>Spatial view of the network — optional, not the homepage</h4>
+            <p>Open the map →</p>
           </Link>
-          <Link to="/tools" className="mag-feat-card">
-            <span className="mag-feat-card-tag">Creative Tools</span>
-            <h4>Generative instruments and parametric sketches</h4>
-            <p>Open tools →</p>
+          <Link to="/city/creators" className="mag-feat-card">
+            <span className="mag-feat-card-tag">Creators</span>
+            <h4>Artists and makers in the Barcelona edition</h4>
+            <p>Meet creators →</p>
           </Link>
         </div>
       </div>
@@ -454,7 +372,7 @@ export default function DiscoverPage() {
       {/* ═══════════════ FOOTER ═══════════════ */}
       <footer className="mag-footer">
         <div className="mag-footer-links">
-          <Link to="/about">About</Link><Link to="/research">Research</Link><Link to="/labs">Labs</Link><Link to="/contact">Contact</Link><Link to="/feedback">Feedback</Link>
+          <Link to="/">Edition</Link><Link to="/how-it-works">About</Link><Link to="/screens">Screens</Link><Link to="/map">Map</Link><Link to="/contact">Contact</Link>
         </div>
         <span className="mag-footer-brand">Sotabosc · Barcelona</span>
       </footer>
