@@ -75,7 +75,7 @@ const SECTIONS = [
   {id:'edition', label:'Magazine edition', desc:'Culture, art and creative life — the Barcelona channel edition on the web.', href:'/', cta:'Open the edition'},
   {id:'directory', label:'Directory', desc:'Places — galleries, coffee, music venues, workshops, and restaurants curated by neighbourhood.', href:'/city', cta:'Browse places'},
   {id:'events', label:'Happening', desc:'What’s on — last 30 days through the weeks ahead, from the city directory.', href:'/city/events', cta:'See the calendar'},
-  {id:'screens', label:'Screens', desc:'Sotabosc TV in physical space — cultural channel, not lobby signage.', href:'/screens', cta:'See the screens'},
+  {id:'screens', label:'Screens', desc:'Sotabosc in physical space — cultural channel, not lobby signage.', href:'/screens', cta:'See the screens'},
   {id:'creators', label:'Creators', desc:'Artists and makers in the network — short portraits, not a portfolio dump.', href:'/city/creators', cta:'Meet creators'},
 ];
 
@@ -239,7 +239,7 @@ export default function DiscoverPage() {
         >
           <span className="mag-feat-main-tag">Barcelona Edition</span>
           <h3>Culture, art and creative life</h3>
-          <p>The magazine homepage — happenings, exhibitions, artists, and the local edit. Same spine as Sotabosc TV.</p>
+          <p>The magazine homepage — happenings, exhibitions, artists, and the local edit. Same spine as the channel.</p>
         </Link>
         <div className="mag-feat-side">
           {SECTIONS.slice(1, 3).map(s => (
@@ -324,7 +324,7 @@ export default function DiscoverPage() {
           } : undefined}
         >
           <span className="mag-feat-main-tag">Screens</span>
-          <h3>Sotabosc TV in physical space</h3>
+          <h3>Sotabosc in physical space</h3>
           <p>A cultural channel for boutique venues — atmosphere first, host as setting, not a brochure loop.</p>
         </Link>
         <div className="mag-feat-side">

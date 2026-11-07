@@ -113,6 +113,7 @@ describe('buildEditionWindow', () => {
     assert.equal(edition.artists[0]?.slug, 'irmi-salleras');
     assert.equal(edition.localEdit[0]?.slug, 'tres-punts-gallery');
     assert.ok(edition.localEdit.length >= 1);
+    assert.ok(Array.isArray(edition.inTheNews));
     assert.equal(edition.totals.places, 4);
   });
 });
