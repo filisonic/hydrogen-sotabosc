@@ -5,9 +5,20 @@ import {JsonLd} from '~/components/seo/JsonLd';
  * Sotabosc digital magazine / channel edition homepage.
  * Modern hybrid: Fashion Front masthead + Broadsheet Lite front page.
  * Living map lives on `/map`.
- * @param {{ edition: import('~/lib/directory/editionWindow').EditionWindow }} props
+ * @param {{
+ *   edition: import('~/lib/directory/editionWindow').EditionWindow;
+ *   journalArticles?: Array<{
+ *     id: string;
+ *     title: string;
+ *     handle: string;
+ *     blogHandle: string;
+ *     excerpt?: string;
+ *     publishedAt?: string;
+ *     imageUrl?: string | null;
+ *   }>;
+ * }} props
  */
-export function EditionHome({edition}) {
+export function EditionHome({edition, journalArticles = []}) {
   const featured = edition.featured;
   const isEventFeatured = featured && 'startsAt' in featured;
   const leadHref = featured
@@ -85,6 +96,7 @@ export function EditionHome({edition}) {
       <nav className="edition-rail" aria-label="Edition rubriques">
         <a href="#front">Front</a>
         <a href="#in-the-news">In the News</a>
+        <a href="#journal">Journal</a>
         <a href="#exhibition">The Exhibition</a>
         <a href="#artist">The Artist</a>
         <a href="#local-edit">The Local Edit</a>
@@ -219,6 +231,63 @@ export function EditionHome({edition}) {
                   </p>
                 </div>
               </a>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      {journalArticles.length > 0 ? (
+        <section className="edition-sec" id="journal">
+          <div className="edition-sec-head">
+            <h2 className="edition-sec-label">
+              From the <span>Journal</span>
+            </h2>
+            <Link to="/blogs/news" className="edition-sec-link">
+              All reports →
+            </Link>
+          </div>
+          <p className="edition-sec-note">
+            Field notes from the Sotabosc desk — festivals, residencies, and
+            city culture. Tech dispatches stay off this page.
+          </p>
+          <div className="edition-journal">
+            {journalArticles.map((article, index) => (
+              <Link
+                key={article.id}
+                to={`/blogs/${article.blogHandle}/${article.handle}`}
+                className={
+                  index === 0
+                    ? 'edition-journal-card edition-journal-card--lead'
+                    : 'edition-journal-card'
+                }
+                prefetch="intent"
+              >
+                <div
+                  className={
+                    article.imageUrl
+                      ? 'edition-journal-fig'
+                      : 'edition-journal-fig edition-journal-fig--empty'
+                  }
+                >
+                  {article.imageUrl ? (
+                    <img src={article.imageUrl} alt="" loading="lazy" />
+                  ) : (
+                    <span aria-hidden="true">S</span>
+                  )}
+                </div>
+                <div className="edition-journal-body">
+                  <span className="edition-news-rubrique">Journal</span>
+                  <h3 className="edition-journal-title">{article.title}</h3>
+                  {article.excerpt ? (
+                    <p className="edition-journal-excerpt">{article.excerpt}</p>
+                  ) : null}
+                  <p className="edition-news-meta">
+                    {article.publishedAt
+                      ? formatEditionDate(article.publishedAt)
+                      : 'Sotabosc Editorial'}
+                  </p>
+                </div>
+              </Link>
             ))}
           </div>
         </section>

@@ -19,6 +19,7 @@ export async function tinyfishSearch(
     domainType?: 'web' | 'news';
     location?: string;
     language?: string;
+    afterDate?: string;
     apiKey?: string;
   } = {},
 ): Promise<TinyFishSearchHit[]> {
@@ -37,6 +38,7 @@ export async function tinyfishSearch(
     include_thumbnail: 'true',
   });
   if (opts.purpose) params.set('purpose', opts.purpose);
+  if (opts.afterDate) params.set('after_date', opts.afterDate);
 
   const res = await fetch(`${SEARCH_URL}?${params}`, {
     headers: {'X-API-Key': apiKey},

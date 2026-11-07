@@ -58,6 +58,9 @@ export function scoreEditionStoryAlignment(input: {
   if (/\bbarcelona\b/i.test(blob)) {
     score += 15;
     reasons.push('barcelona');
+  } else if (/\bmadrid\b/i.test(blob)) {
+    // Desk is Barcelona-first; Madrid-only roundups stay out of the edition.
+    return {score: 0, rubrique: null, reasons: ['rejected: madrid-only']};
   }
   if (/\b(luxury|vogue|hotel|boutique)\b/i.test(blob)) {
     score += 5;
@@ -107,23 +110,27 @@ function inferRubrique(blob: string): EditionStoryRubrique {
 
 export const EDITION_STORY_QUERIES = [
   {
-    query: 'Barcelona contemporary art exhibition gallery museum',
+    query: 'Barcelona art exhibition gallery opening this week',
     rubriqueHint: 'art' as const,
   },
   {
-    query: 'Barcelona music concert festival jazz classical Palau',
+    query: 'Barcelona jazz concert festival Palau music agenda',
     rubriqueHint: 'music' as const,
   },
   {
-    query: 'Barcelona film cinema festival Spain culture',
+    query: 'Barcelona film festival cinema In-Edit Goya culture',
     rubriqueHint: 'film' as const,
   },
   {
-    query: 'Barcelona design fashion luxury hotels culture Spain',
-    rubriqueHint: 'luxury' as const,
+    query: 'Barcelona design fashion boutique culture editorial',
+    rubriqueHint: 'fashion' as const,
   },
   {
-    query: 'Barcelona MACBA CCCB MNAC architecture design exhibition',
+    query: 'Barcelona MACBA CCCB MNAC museum exhibition architecture',
     rubriqueHint: 'architecture' as const,
+  },
+  {
+    query: 'The New Barcelona Post art music cinema design exhibition',
+    rubriqueHint: 'culture' as const,
   },
 ] as const;
