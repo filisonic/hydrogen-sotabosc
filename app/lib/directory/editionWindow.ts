@@ -1,4 +1,9 @@
 import type { CityEvent, Creator, Place } from './types';
+import {
+  loadEditionStories,
+  pickEditionStories,
+  type EditionStory,
+} from './editionStories';
 import { resolveEventImageUrl, resolvePlaceImageUrl } from './sceneVisuals';
 
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -42,6 +47,8 @@ export type EditionWindow = {
   exhibitions: EditionEventCard[];
   artists: Creator[];
   localEdit: EditionPlaceCard[];
+  /** TinyFish culture desk — art / music / film / luxury aligned stories. */
+  inTheNews: EditionStory[];
   featured: EditionEventCard | EditionPlaceCard | null;
   totals: { places: number; events: number; creators: number };
 };
@@ -219,6 +226,8 @@ export function buildEditionWindow(
     timeZone: 'Europe/Madrid',
   });
 
+  const inTheNews = pickEditionStories(loadEditionStories(), 8);
+
   return {
     editionLabel: `${city} Edition · ${month} ${year}`,
     editionCity: city,
@@ -228,6 +237,7 @@ export function buildEditionWindow(
     exhibitions,
     artists,
     localEdit,
+    inTheNews,
     featured,
     totals: {
       places: places.length,

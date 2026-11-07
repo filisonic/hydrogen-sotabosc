@@ -37,3 +37,10 @@ export function firecrawlApiKeyFromEnv(): string | undefined {
     process.env.FIRECRAWL_SECRET?.trim();
   return k || undefined;
 }
+
+export function tinyfishApiKeyFromEnv(): string | undefined {
+  const k =
+    process.env.TINYFISH_API_KEY?.trim() ||
+    process.env.TINY_FISH_API_KEY?.trim();
+  return k || undefined;
+}

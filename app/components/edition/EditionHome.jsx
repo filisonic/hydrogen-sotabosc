@@ -2,7 +2,7 @@ import {Link} from 'react-router';
 import {JsonLd} from '~/components/seo/JsonLd';
 
 /**
- * Sotabosc TV digital magazine / channel edition homepage.
+ * Sotabosc digital magazine / channel edition homepage.
  * Modern hybrid: Fashion Front masthead + Broadsheet Lite front page.
  * Living map lives on `/map`.
  * @param {{ edition: import('~/lib/directory/editionWindow').EditionWindow }} props
@@ -67,9 +67,7 @@ export function EditionHome({edition}) {
           <span aria-hidden="true">·</span>
           <span>Cultural window · {edition.windowDays}d</span>
         </p>
-        <h1 className="edition-brand">
-          Sotabosc<em>TV</em>
-        </h1>
+        <h1 className="edition-brand">Sotabosc</h1>
         <p className="edition-dek">
           Culture, art and creative life — wherever you are. An intelligent local
           cultural channel with the visual language of a magazine.
@@ -86,6 +84,7 @@ export function EditionHome({edition}) {
 
       <nav className="edition-rail" aria-label="Edition rubriques">
         <a href="#front">Front</a>
+        <a href="#in-the-news">In the News</a>
         <a href="#exhibition">The Exhibition</a>
         <a href="#artist">The Artist</a>
         <a href="#local-edit">The Local Edit</a>
@@ -174,6 +173,56 @@ export function EditionHome({edition}) {
           </Link>
         </div>
       </section>
+
+      {edition.inTheNews?.length > 0 ? (
+        <section className="edition-sec" id="in-the-news">
+          <div className="edition-sec-head">
+            <h2 className="edition-sec-label">
+              In the <span>News</span>
+            </h2>
+            <span className="edition-sec-link">Culture desk</span>
+          </div>
+          <p className="edition-sec-note">
+            Art, music, film, design and luxury — Barcelona and Spain, filtered
+            for the channel. Not a tech feed.
+          </p>
+          <div className="edition-news">
+            {edition.inTheNews.map((story) => (
+              <a
+                key={story.id}
+                href={story.url}
+                className="edition-news-row"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div
+                  className={
+                    story.imageUrl
+                      ? 'edition-news-fig'
+                      : 'edition-news-fig edition-news-fig--empty'
+                  }
+                >
+                  {story.imageUrl ? (
+                    <img src={story.imageUrl} alt="" loading="lazy" />
+                  ) : (
+                    story.rubrique?.slice(0, 1)?.toUpperCase() || '·'
+                  )}
+                </div>
+                <div>
+                  <span className="edition-news-rubrique">{story.rubrique}</span>
+                  <h3 className="edition-news-title">{story.title}</h3>
+                  <p className="edition-news-meta">
+                    {story.publisher}
+                    {story.publishedAt
+                      ? ` · ${formatEditionDate(story.publishedAt)}`
+                      : ''}
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      ) : null}
 
       {edition.exhibitions.length > 0 ? (
         <section className="edition-sec" id="exhibition">
@@ -308,7 +357,7 @@ export function EditionHome({edition}) {
           <div className="edition-delivery-item">
             <h3>Screens</h3>
             <p>
-              Sotabosc TV in boutique hotels, galleries, cafés — culture as
+              Sotabosc screens in boutique hotels, galleries, cafés — culture as
               atmosphere, host as setting.
             </p>
             <Link to="/screens">See the screens</Link>
