@@ -30,7 +30,11 @@ export function ArticleCard({article, featured = false, loading = 'lazy'}) {
               sizes={featured ? '(min-width: 900px) 50vw, 100vw' : '(min-width: 900px) 33vw, 100vw'}
             />
           </div>
-        ) : null}
+        ) : (
+          <div className="journal-card-image journal-card-image--empty" aria-hidden="true">
+            <span>S</span>
+          </div>
+        )}
         <div>
           <div className="journal-card-meta">
             <time dateTime={article.publishedAt}>{publishedAt}</time>

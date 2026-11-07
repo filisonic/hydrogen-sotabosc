@@ -2,10 +2,15 @@ import {Link, useLoaderData} from 'react-router';
 import {Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {JsonLd} from '~/components/seo/JsonLd';
-import {formatJournalDate, readingTimeFromHtml} from '~/components/journal/formatDate';
+import {
+  formatJournalDate,
+  readingTimeFromHtml,
+  excerptFromHtml,
+} from '~/components/journal/formatDate';
 import {pageTitle} from '~/lib/seo/siteMeta';
 import {openGraphImageMeta} from '~/lib/seo/siteImagery';
 import {canonicalLinkMeta} from '~/lib/seo/metaHelpers';
+import {isCultureJournalArticle} from '~/lib/journal/cultureArticles';
 
 /**
  * @type {Route.MetaFunction}
@@ -87,21 +92,42 @@ async function loadCriticalData({context, request, params}) {
     },
   );
 
+  const related = (blog.articles?.nodes || [])
+    .filter((node) => node.handle !== articleHandle)
+    .filter((node) =>
+      isCultureJournalArticle({
+        title: node.title,
+        excerpt: excerptFromHtml(node.contentHtml, 120),
+        tags: node.tags,
+      }),
+    )
+    .slice(0, 3)
+    .map((node) => ({
+      id: node.id,
+      title: node.title,
+      handle: node.handle,
+      publishedAt: node.publishedAt,
+      excerpt: excerptFromHtml(node.contentHtml, 140),
+      imageUrl: node.image?.url || null,
+    }));
+
   return {
     article: blog.articleByHandle,
     blogHandle: blog.handle,
+    blogTitle: blog.title,
+    related,
     origin: new URL(request.url).origin,
   };
 }
 
 export default function Article() {
   /** @type {LoaderReturnData} */
-  const {article, blogHandle} = useLoaderData();
+  const {article, blogHandle, blogTitle, related} = useLoaderData();
   const {title, image, contentHtml, author} = article;
   const publishedDate = formatJournalDate(article.publishedAt);
   const readingTime = readingTimeFromHtml(contentHtml);
   const authorName = author?.name || 'Sotabosc Editorial';
-  const sectionName = blogHandle.replace(/-/g, ' ');
+  const sectionName = blogTitle || blogHandle.replace(/-/g, ' ');
 
   const articleLd = {
     '@context': 'https://schema.org',
@@ -121,10 +147,10 @@ export default function Article() {
     <div className="journal mag">
       <JsonLd data={articleLd} />
 
-      <header className="journal-masthead">
+      <header className="journal-masthead journal-masthead--article">
         <div className="journal-masthead-inner">
           <Link to={`/blogs/${blogHandle}`} className="journal-back">
-            ← {blogHandle.replace(/-/g, ' ')}
+            ← {sectionName}
           </Link>
         </div>
       </header>
@@ -136,7 +162,9 @@ export default function Article() {
           <div className="journal-article-byline">
             <time dateTime={article.publishedAt}>{publishedDate}</time>
             <span aria-hidden="true">·</span>
-            <span>By <address>{authorName}</address></span>
+            <span>
+              By <address>{authorName}</address>
+            </span>
             {readingTime ? (
               <>
                 <span aria-hidden="true">·</span>
@@ -155,13 +183,70 @@ export default function Article() {
               alt={image.altText || title}
             />
           </figure>
-        ) : null}
+        ) : (
+          <div className="journal-article-hero journal-article-hero--mark" aria-hidden="true">
+            <span>Sotabosc</span>
+          </div>
+        )}
 
         <div
           className="journal-article-body"
           dangerouslySetInnerHTML={{__html: contentHtml}}
         />
+
+        <p className="journal-article-endmark" aria-hidden="true">
+          ◆
+        </p>
+
+        <footer className="journal-article-foot">
+          <p className="journal-article-foot-note">
+            Part of the Sotabosc Journal — culture from Barcelona and the creative city.
+          </p>
+          <nav className="journal-article-foot-links" aria-label="Continue reading">
+            <Link to={`/blogs/${blogHandle}`}>More in {sectionName}</Link>
+            <Link to="/blogs">All journal sections</Link>
+            <Link to="/">Edition</Link>
+            <Link to="/city/events">Happening</Link>
+          </nav>
+        </footer>
       </article>
+
+      {related?.length > 0 ? (
+        <aside className="journal-related" aria-label="More from the Journal">
+          <p className="journal-section-label">Keep reading</p>
+          <div className="journal-related-grid">
+            {related.map((item) => (
+              <Link
+                key={item.id}
+                to={`/blogs/${blogHandle}/${item.handle}`}
+                className="journal-related-card"
+                prefetch="intent"
+              >
+                <div
+                  className={
+                    item.imageUrl
+                      ? 'journal-related-fig'
+                      : 'journal-related-fig journal-related-fig--empty'
+                  }
+                >
+                  {item.imageUrl ? (
+                    <img src={item.imageUrl} alt="" loading="lazy" />
+                  ) : (
+                    <span aria-hidden="true">S</span>
+                  )}
+                </div>
+                <h2 className="journal-related-title">{item.title}</h2>
+                {item.excerpt ? (
+                  <p className="journal-related-excerpt">{item.excerpt}</p>
+                ) : null}
+                <time dateTime={item.publishedAt}>
+                  {formatJournalDate(item.publishedAt)}
+                </time>
+              </Link>
+            ))}
+          </div>
+        </aside>
+      ) : null}
     </div>
   );
 }
@@ -175,6 +260,7 @@ const ARTICLE_QUERY = `#graphql
   ) @inContext(language: $language, country: $country) {
     blog(handle: $blogHandle) {
       handle
+      title
       articleByHandle(handle: $articleHandle) {
         handle
         title
@@ -193,6 +279,20 @@ const ARTICLE_QUERY = `#graphql
         seo {
           description
           title
+        }
+      }
+      articles(first: 12, sortKey: PUBLISHED_AT, reverse: true) {
+        nodes {
+          id
+          title
+          handle
+          publishedAt
+          contentHtml
+          tags
+          image {
+            url
+            altText
+          }
         }
       }
     }

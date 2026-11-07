@@ -28,4 +28,13 @@ describe('scoreEditionStoryAlignment', () => {
     });
     assert.equal(r.score, 0);
   });
+
+  it('rejects Madrid-only roundups', () => {
+    const r = scoreEditionStoryAlignment({
+      title: 'The 18 Must-See Exhibitions in Madrid This October',
+      summary: 'Exhibitions in Madrid you cannot miss',
+      publisher: 'Madrid Secreto',
+    });
+    assert.equal(r.score, 0);
+  });
 });

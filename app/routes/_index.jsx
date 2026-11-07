@@ -1,5 +1,9 @@
 import {useLoaderData} from 'react-router';
 import {EditionHome} from '~/components/edition/EditionHome';
+import {
+  JOURNAL_CULTURE_QUERY,
+  pickCultureJournalArticles,
+} from '~/lib/journal/cultureArticles';
 import editionStyles from '~/styles/edition.css?url';
 
 /**
@@ -31,21 +35,35 @@ export const meta = () => [
  * @param {import('react-router').LoaderFunctionArgs} args
  */
 export async function loader({context}) {
+  /** @type {import('~/lib/journal/cultureArticles').JournalArticleTeaser[]} */
+  let journalArticles = [];
+
+  try {
+    const journalResult = await context.storefront.query(JOURNAL_CULTURE_QUERY);
+    const flat =
+      journalResult?.blogs?.nodes?.flatMap((blog) => blog.articles?.nodes || []) ||
+      [];
+    journalArticles = pickCultureJournalArticles(flat, 4);
+  } catch {
+    journalArticles = [];
+  }
+
   try {
     const {getCityDirectory} = await import('~/lib/directory/source.server');
     const {buildEditionWindow} = await import('~/lib/directory/editionWindow');
     const {places, events, creators} = await getCityDirectory(context);
     const edition = buildEditionWindow(places, events, creators);
-    return {edition};
+    return {edition, journalArticles};
   } catch {
     const {buildEditionWindow} = await import('~/lib/directory/editionWindow');
     return {
       edition: buildEditionWindow([], [], []),
+      journalArticles,
     };
   }
 }
 
 export default function EditionIndexPage() {
-  const {edition} = useLoaderData();
-  return <EditionHome edition={edition} />;
+  const {edition, journalArticles} = useLoaderData();
+  return <EditionHome edition={edition} journalArticles={journalArticles} />;
 }

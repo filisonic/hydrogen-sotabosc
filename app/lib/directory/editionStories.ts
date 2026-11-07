@@ -31,9 +31,15 @@ export function pickEditionStories(
   stories: EditionStory[],
   limit = 8,
 ): EditionStory[] {
+  const ranked = [...stories].sort((a, b) => {
+    if ((b.score ?? 0) !== (a.score ?? 0)) return (b.score ?? 0) - (a.score ?? 0);
+    const ta = a.publishedAt ? Date.parse(a.publishedAt) : 0;
+    const tb = b.publishedAt ? Date.parse(b.publishedAt) : 0;
+    return tb - ta;
+  });
   const seen = new Set<string>();
   const out: EditionStory[] = [];
-  for (const s of stories) {
+  for (const s of ranked) {
     const key = s.url.replace(/#.*$/, '').toLowerCase();
     if (seen.has(key)) continue;
     if ((s.score ?? 0) < 70) continue;
