@@ -1,0 +1,17 @@
+{
+  "name": "Hydrogen SOTABOSC",
+  "install": "bash .cursor/install.sh",
+  "terminals": [
+    {
+      "name": "dev",
+      "command": "npm run dev",
+      "description": "Shopify Hydrogen dev server (Vite + MiniOxygen) on http://localhost:3030"
+    }
+  ],
+  "ports": [
+    {
+      "name": "hydrogen-dev",
+      "port": 3030
+    }
+  ]
+}
