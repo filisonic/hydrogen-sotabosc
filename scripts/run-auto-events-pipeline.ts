@@ -66,6 +66,10 @@ async function main() {
   const syncCode = runStep('Sync events', syncArgs);
   if (syncCode !== 0) process.exit(syncCode);
 
+  // Barcelona's official agenda: free, daily, no keys (the search step above needs Firecrawl credits)
+  const agendaCode = runStep('Barcelona agenda', ['scripts/import-bcn-agenda.ts', ...(dryRun ? ['--dry-run'] : [])]);
+  if (agendaCode !== 0) console.error('[pipeline] Barcelona agenda failed; keeping the last list');
+
   console.log(`\n[pipeline] finished ${new Date().toISOString()}`);
 }
 

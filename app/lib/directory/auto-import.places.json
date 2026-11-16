@@ -3145,23 +3145,29 @@
     "id": "p_gmap_85c722e5414b",
     "slug": "groundinn-lab",
     "name": "GroundInn LAB",
-    "summary": "GroundInn LAB — coworking_space, event_venue, point_of_interest, association_or_organization in Barcelona. Carrer dels Flassaders, 32, Local, Ciutat Vella, 08003 Barcelona",
+    "summary": "Founder community, coworking and event space in El Born, in a stone-and-brick ground floor on Carrer dels Flassaders. Weekly gatherings, workshops, panels and founder dinners, rooms for deep focus, meetings and podcasts, and a quiet patio. Home of GroundInn, who help founders build the human layer of their business: trust, culture and community.",
     "address": "Carrer dels Flassaders, 32, Local, Ciutat Vella, 08003 Barcelona",
     "neighborhood": "Ciutat Vella",
     "city": "Barcelona",
     "categories": [
       "coworking",
-      "conference"
+      "conference",
+      "workshop"
     ],
-    "primaryDomain": "animals",
+    "primaryDomain": "fungi",
     "tags": [
       "google-places",
       "verified-import",
       "gplace:ChIJPRtfQaOjpBIRRiHai_Y6Al8",
-      "rating:4.9"
+      "rating:4.9",
+      "community",
+      "founders",
+      "events",
+      "el-born",
+      "open-days"
     ],
-    "website": "http://www.groundinn.world/",
-    "telephone": "636 68 85 05",
+    "website": "https://groundinn.com/",
+    "telephone": "+34 636 68 85 05",
     "latitude": 41.3853705,
     "longitude": 2.1820447
   },

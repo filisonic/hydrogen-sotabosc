@@ -101,6 +101,11 @@ function extractJsonLdObjects(html: string): Record<string, unknown>[] {
   return objs;
 }
 
+/** Some pages carry control characters in their text; Postgres rejects \u0000 outright */
+function plainText(s: string): string {
+  return s.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function asString(v: unknown): string | undefined {
   return typeof v === 'string' && v.trim() ? v.trim() : undefined;
 }
@@ -425,8 +430,8 @@ async function main() {
     const event: CityEvent = {
       id,
       slug,
-      title: parsed.title.slice(0, 120),
-      summary: (parsed.summary || 'Auto-imported event').slice(0, 320),
+      title: plainText(parsed.title).slice(0, 120),
+      summary: plainText(parsed.summary || 'Auto-imported event').slice(0, 320),
       startsAt: toIsoLocalish(parsed.startsAt),
       ...(parsed.endsAt ? { endsAt: toIsoLocalish(parsed.endsAt) } : {}),
       placeId: place?.id ?? UNKNOWN_PLACE_ID,
