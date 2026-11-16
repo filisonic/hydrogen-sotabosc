@@ -1,4 +1,5 @@
 import {Link, useLoaderData} from 'react-router';
+import { canonicalLinkMeta } from '~/lib/seo/metaHelpers';
 
 import {pageTitle} from '~/lib/seo/siteMeta';
 
@@ -6,13 +7,16 @@ import {pageTitle} from '~/lib/seo/siteMeta';
  * @type {Route.MetaFunction}
  */
 export const meta = ({data}) => {
-  return [{title: pageTitle(data?.policy.title ?? 'Policy')}];
+  const title = pageTitle(data?.policy?.title ?? 'Policy');
+  const origin = data?.origin;
+  const path = data?.canonicalPath;
+  return [{ title }, ...(origin && path ? canonicalLinkMeta(origin, path) : [])];
 };
 
 /**
  * @param {Route.LoaderArgs}
  */
-export async function loader({params, context}) {
+export async function loader({params, context, request}) {
   if (!params.handle) {
     throw new Response('No handle was passed in', {status: 404});
   }
@@ -53,12 +57,14 @@ export async function loader({params, context}) {
           </div>
         `,
       };
-      return {policy: fallback};
+      const origin = new URL(request.url).origin;
+      return { policy: fallback, origin, canonicalPath: `/policies/${fallback.handle}` };
     }
     throw new Response('Could not find the policy', {status: 404});
   }
 
-  return {policy};
+  const origin = new URL(request.url).origin;
+  return { policy, origin, canonicalPath: `/policies/${policy.handle}` };
 }
 
 export default function Policy() {
