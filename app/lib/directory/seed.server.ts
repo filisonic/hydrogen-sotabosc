@@ -1,6 +1,7 @@
 import type { Place, CityEvent, Creator, Review } from './types';
 import { createDirectoryQueries, isEventExpired, type DirectorySnapshot } from './queries';
 import autoImportEvents from './auto-import.events.json';
+import bcnAgendaEvents from './bcn-agenda.events.json';
 import autoImportPlaces from './auto-import.places.json';
 import { PLACE_LISTING_EXTRAS } from './placeListingExtras';
 import { VENUE_LOCAL_IMAGE_BY_SLUG } from './venueImages.generated';
@@ -188,6 +189,8 @@ const _SEED_EVENTS_CORE: CityEvent[] = [
 export const SEED_EVENTS: CityEvent[] = [
   ..._SEED_EVENTS_CORE,
   ...(autoImportEvents as CityEvent[]),
+  // Barcelona's official agenda (Open Data BCN), refreshed by scripts/import-bcn-agenda.ts
+  ...(bcnAgendaEvents as CityEvent[]),
 ];
 
 // ─── CREATORS (14) — Realistic Barcelona creative profiles ─────────

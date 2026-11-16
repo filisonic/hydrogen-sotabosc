@@ -205,7 +205,7 @@ export const VENUE_GOOGLE_ATTRIBUTIONS: Partial<
   'granja-hidden': [{"displayName":"Hidden Coffee Roasters - Granja Hidden®","uri":"https://maps.google.com/maps/contrib/115585323411077843631"}],
   'greenleka-can-valldaura': [{"displayName":"Restaurante Masia Collserola - Arrles de Can Valldaura","uri":"https://maps.google.com/maps/contrib/109171868895669976643"}],
   'grey-street-tarot': [{"displayName":"Grey Street","uri":"https://maps.google.com/maps/contrib/112822668647686406317"}],
-  'groundinn-lab': [{"displayName":"Paola Pluchino","uri":"https://maps.google.com/maps/contrib/110738901230962546480"}],
+  'groundinn-lab': [{"displayName":"GroundInn LAB","uri":"https://www.google.com/maps/place/?q=place_id:ChIJPRtfQaOjpBIRRiHai_Y6Al8"}],
   'grupo-mas-i-mas': [{"displayName":"Grupo Mas i Mas","uri":"https://maps.google.com/maps/contrib/109590269938847287057"}],
   'guzzo-restaurant-in-born-barcelona': [{"displayName":"Restaurante Guzzo | Restaurante Born","uri":"https://maps.google.com/maps/contrib/102290623051003248957"}],
   'h-ctor-fern-ndez-galeria-de-arte-barcelona': [{"displayName":"Héctor Fernández Artist. Art Gallery.","uri":"https://maps.google.com/maps/contrib/108088012922454934072"}],
