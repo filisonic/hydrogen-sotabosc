@@ -89,6 +89,7 @@ So: **Firecrawl first**, then **Google only where Firecrawl did not produce a fi
 ### Content Security Policy
 
 - Hotlinked Unsplash requires `img-src` allowance in `app/entry.server.jsx` for `https://images.unsplash.com`.
+- Agenda heroes from `estatics-nasia.dtibcn.cat` and edition culture-desk hotlinks need `https:` (or those hosts) in `imgSrc` — otherwise the browser shows broken-image icons.
 - Downloaded venue files are served from your origin (`/images/venues/...`) and stay within `'self'`.
 
 ---

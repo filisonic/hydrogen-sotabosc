@@ -1,5 +1,4 @@
 import {Link, useLoaderData} from 'react-router';
-import {Image} from '@shopify/hydrogen';
 import {redirectIfHandleIsLocalized} from '~/lib/redirect';
 import {JsonLd} from '~/components/seo/JsonLd';
 import {
@@ -7,6 +6,11 @@ import {
   readingTimeFromHtml,
   excerptFromHtml,
 } from '~/components/journal/formatDate';
+import {
+  firstImageSrcFromHtml,
+  shopifyImageSrcSet,
+  shopifyImageUrl,
+} from '~/components/journal/shopifyImageUrl';
 import {pageTitle} from '~/lib/seo/siteMeta';
 import {openGraphImageMeta} from '~/lib/seo/siteImagery';
 import {canonicalLinkMeta} from '~/lib/seo/metaHelpers';
@@ -23,7 +27,7 @@ export const meta = ({data}) => {
     (article?.contentHtml
       ? article.contentHtml.replace(/<[^>]*>?/gm, '').slice(0, 155)
       : '');
-  const image = article?.image;
+  const imageUrl = data?.heroUrl || article?.image?.url;
   const path =
     data?.blogHandle && article?.handle
       ? `/blogs/${data.blogHandle}/${article.handle}`
@@ -37,16 +41,13 @@ export const meta = ({data}) => {
     {property: 'og:description', content: description},
     {property: 'article:published_time', content: article?.publishedAt || ''},
     ...canonicalLinkMeta(data?.origin, path),
-    ...(image
+    ...(imageUrl
       ? [
-          {property: 'og:image', content: image.url},
-          ...(image.width ? [{property: 'og:image:width', content: String(image.width)}] : []),
-          ...(image.height ? [{property: 'og:image:height', content: String(image.height)}] : []),
-          {property: 'og:image:alt', content: image.altText || title},
+          {property: 'og:image', content: imageUrl},
           {name: 'twitter:card', content: 'summary_large_image'},
           {name: 'twitter:title', content: title},
           {name: 'twitter:description', content: description},
-          {name: 'twitter:image', content: image.url},
+          {name: 'twitter:image', content: imageUrl},
         ]
       : openGraphImageMeta(data?.origin)),
   ];
@@ -92,6 +93,10 @@ async function loadCriticalData({context, request, params}) {
     },
   );
 
+  const article = blog.articleByHandle;
+  const heroUrl =
+    article.image?.url || firstImageSrcFromHtml(article.contentHtml) || null;
+
   const related = (blog.articles?.nodes || [])
     .filter((node) => node.handle !== articleHandle)
     .filter((node) =>
@@ -108,13 +113,15 @@ async function loadCriticalData({context, request, params}) {
       handle: node.handle,
       publishedAt: node.publishedAt,
       excerpt: excerptFromHtml(node.contentHtml, 140),
-      imageUrl: node.image?.url || null,
+      imageUrl:
+        node.image?.url || firstImageSrcFromHtml(node.contentHtml) || null,
     }));
 
   return {
-    article: blog.articleByHandle,
+    article,
     blogHandle: blog.handle,
     blogTitle: blog.title,
+    heroUrl,
     related,
     origin: new URL(request.url).origin,
   };
@@ -122,18 +129,19 @@ async function loadCriticalData({context, request, params}) {
 
 export default function Article() {
   /** @type {LoaderReturnData} */
-  const {article, blogHandle, blogTitle, related} = useLoaderData();
-  const {title, image, contentHtml, author} = article;
+  const {article, blogHandle, blogTitle, heroUrl, related} = useLoaderData();
+  const {title, contentHtml, author} = article;
   const publishedDate = formatJournalDate(article.publishedAt);
   const readingTime = readingTimeFromHtml(contentHtml);
   const authorName = author?.name || 'Sotabosc Editorial';
   const sectionName = blogTitle || blogHandle.replace(/-/g, ' ');
+  const dek = excerptFromHtml(contentHtml, 160);
 
   const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'NewsArticle',
     headline: title,
-    image: image ? [image.url] : [],
+    image: heroUrl ? [heroUrl] : [],
     datePublished: article.publishedAt,
     author: [
       {
@@ -147,73 +155,81 @@ export default function Article() {
     <div className="journal mag">
       <JsonLd data={articleLd} />
 
-      <header className="journal-masthead journal-masthead--article">
-        <div className="journal-masthead-inner">
-          <Link to={`/blogs/${blogHandle}`} className="journal-back">
-            ← {sectionName}
-          </Link>
-        </div>
-      </header>
-
-      <article className="journal-article-wrap">
-        <header className="journal-article-header">
-          <span className="journal-kicker">{sectionName} · Barcelona</span>
-          <h1 className="journal-article-headline">{title}</h1>
-          <div className="journal-article-byline">
-            <time dateTime={article.publishedAt}>{publishedDate}</time>
-            <span aria-hidden="true">·</span>
-            <span>
-              By <address>{authorName}</address>
-            </span>
-            {readingTime ? (
-              <>
-                <span aria-hidden="true">·</span>
-                <span>{readingTime}</span>
-              </>
-            ) : null}
-          </div>
-        </header>
-
-        {image ? (
-          <figure className="journal-article-hero">
-            <Image
-              data={image}
-              sizes="(min-width: 900px) 44rem, 100vw"
+      <article className="journal-feature">
+        {heroUrl ? (
+          <figure className="journal-feature-hero">
+            <img
+              src={shopifyImageUrl(heroUrl, 1600)}
+              srcSet={shopifyImageSrcSet(heroUrl)}
+              sizes="100vw"
+              alt={article.image?.altText || title}
               loading="eager"
-              alt={image.altText || title}
+              decoding="async"
+              referrerPolicy="no-referrer"
             />
           </figure>
         ) : (
-          <div className="journal-article-hero journal-article-hero--mark" aria-hidden="true">
+          <div className="journal-feature-hero journal-feature-hero--mark" aria-hidden="true">
             <span>Sotabosc</span>
           </div>
         )}
 
-        <div
-          className="journal-article-body"
-          dangerouslySetInnerHTML={{__html: contentHtml}}
-        />
+        <div className="journal-feature-inner">
+          <Link to={`/blogs/${blogHandle}`} className="journal-back">
+            ← {sectionName}
+          </Link>
 
-        <p className="journal-article-endmark" aria-hidden="true">
-          ◆
-        </p>
+          <header className="journal-feature-header">
+            <span className="journal-kicker">{sectionName} · Barcelona</span>
+            <h1 className="journal-feature-headline">{title}</h1>
+            {dek ? <p className="journal-feature-dek">{dek}</p> : null}
+            <div className="journal-article-byline">
+              <time dateTime={article.publishedAt}>{publishedDate}</time>
+              <span aria-hidden="true">·</span>
+              <span>
+                By <address>{authorName}</address>
+              </span>
+              {readingTime ? (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>{readingTime}</span>
+                </>
+              ) : null}
+            </div>
+          </header>
 
-        <footer className="journal-article-foot">
-          <p className="journal-article-foot-note">
-            Part of the Sotabosc Journal — culture from Barcelona and the creative city.
+          <div
+            className="journal-article-body"
+            dangerouslySetInnerHTML={{__html: contentHtml}}
+          />
+
+          <p className="journal-article-endmark" aria-hidden="true">
+            ◆
           </p>
-          <nav className="journal-article-foot-links" aria-label="Continue reading">
-            <Link to={`/blogs/${blogHandle}`}>More in {sectionName}</Link>
-            <Link to="/blogs">All journal sections</Link>
-            <Link to="/">Edition</Link>
-            <Link to="/city/events">Happening</Link>
-          </nav>
-        </footer>
+
+          <footer className="journal-article-foot">
+            <p className="journal-article-foot-note">
+              Part of the Sotabosc Journal — culture from Barcelona and the
+              creative city.
+            </p>
+            <nav className="journal-article-foot-links" aria-label="Continue reading">
+              <Link to={`/blogs/${blogHandle}`}>More in {sectionName}</Link>
+              <Link to="/blogs">All journal sections</Link>
+              <Link to="/">Edition</Link>
+              <Link to="/city/events">Happening</Link>
+            </nav>
+          </footer>
+        </div>
       </article>
 
       {related?.length > 0 ? (
         <aside className="journal-related" aria-label="More from the Journal">
-          <p className="journal-section-label">Keep reading</p>
+          <div className="journal-related-head">
+            <p className="journal-section-label">Keep reading</p>
+            <Link to={`/blogs/${blogHandle}`} className="journal-related-more">
+              More in {sectionName} →
+            </Link>
+          </div>
           <div className="journal-related-grid">
             {related.map((item) => (
               <Link
@@ -230,7 +246,15 @@ export default function Article() {
                   }
                 >
                   {item.imageUrl ? (
-                    <img src={item.imageUrl} alt="" loading="lazy" />
+                    <img
+                      src={shopifyImageUrl(item.imageUrl, 800)}
+                      srcSet={shopifyImageSrcSet(item.imageUrl, [400, 800, 1200])}
+                      sizes="(min-width: 900px) 33vw, 100vw"
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                      referrerPolicy="no-referrer"
+                    />
                   ) : (
                     <span aria-hidden="true">S</span>
                   )}

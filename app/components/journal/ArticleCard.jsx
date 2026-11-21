@@ -1,6 +1,10 @@
 import {Link} from 'react-router';
-import {Image} from '@shopify/hydrogen';
 import {formatJournalDate, excerptFromHtml} from './formatDate';
+import {
+  firstImageSrcFromHtml,
+  shopifyImageSrcSet,
+  shopifyImageUrl,
+} from './shopifyImageUrl';
 
 /**
  * @param {{
@@ -13,6 +17,8 @@ export function ArticleCard({article, featured = false, loading = 'lazy'}) {
   const publishedAt = formatJournalDate(article.publishedAt);
   const excerpt = excerptFromHtml(article.contentHtml);
   const blogHandle = article.blog?.handle;
+  const imageUrl =
+    article.image?.url || firstImageSrcFromHtml(article.contentHtml) || null;
 
   return (
     <article className={`journal-card${featured ? ' journal-card-featured' : ''}`}>
@@ -21,13 +27,20 @@ export function ArticleCard({article, featured = false, loading = 'lazy'}) {
         prefetch="intent"
         className="journal-card-link"
       >
-        {article.image ? (
+        {imageUrl ? (
           <div className="journal-card-image">
-            <Image
-              alt={article.image.altText || article.title}
-              data={article.image}
+            <img
+              src={shopifyImageUrl(imageUrl, featured ? 1200 : 800)}
+              srcSet={shopifyImageSrcSet(imageUrl)}
+              sizes={
+                featured
+                  ? '(min-width: 900px) 50vw, 100vw'
+                  : '(min-width: 900px) 33vw, 100vw'
+              }
+              alt={article.image?.altText || article.title}
               loading={loading}
-              sizes={featured ? '(min-width: 900px) 50vw, 100vw' : '(min-width: 900px) 33vw, 100vw'}
+              decoding="async"
+              referrerPolicy="no-referrer"
             />
           </div>
         ) : (

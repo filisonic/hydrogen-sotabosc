@@ -1,5 +1,44 @@
+import {useState} from 'react';
 import {Link} from 'react-router';
 import {JsonLd} from '~/components/seo/JsonLd';
+
+/**
+ * Hotlinked edition figure: CSP/hotlink failures fall back to a letter mark
+ * instead of the browser’s broken-image icon.
+ * @param {{
+ *   src?: string | null;
+ *   figClass: string;
+ *   emptyClass?: string;
+ *   fallback?: import('react').ReactNode;
+ *   loading?: 'eager' | 'lazy';
+ * }} props
+ */
+function EditionFig({
+  src,
+  figClass,
+  emptyClass = `${figClass} ${figClass}--empty`,
+  fallback = 'S',
+  loading = 'lazy',
+}) {
+  const [failed, setFailed] = useState(false);
+  const showImage = Boolean(src) && !failed;
+  return (
+    <div className={showImage ? figClass : emptyClass}>
+      {showImage ? (
+        <img
+          src={src}
+          alt=""
+          loading={loading}
+          decoding="async"
+          referrerPolicy="no-referrer"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        fallback
+      )}
+    </div>
+  );
+}
 
 /**
  * Sotabosc digital magazine / channel edition homepage.
@@ -135,19 +174,12 @@ export function EditionHome({edition, journalArticles = []}) {
         </div>
 
         <Link to={leadHref} className="edition-front-lead edition-lead">
-          <div
-            className={
-              leadImage
-                ? 'edition-lead-fig'
-                : 'edition-lead-fig edition-lead-fig--empty'
-            }
-          >
-            {leadImage ? (
-              <img src={leadImage} alt="" />
-            ) : (
-              'S'
-            )}
-          </div>
+          <EditionFig
+            src={leadImage}
+            figClass="edition-lead-fig"
+            emptyClass="edition-lead-fig edition-lead-fig--empty"
+            loading="eager"
+          />
           <span className="edition-lead-kicker">
             {isEventFeatured ? 'The Exhibition' : 'Lead'}
           </span>
@@ -166,11 +198,12 @@ export function EditionHome({edition, journalArticles = []}) {
                 to={`/city/places/${p.slug}`}
                 className="edition-thumb"
               >
-                <div className="edition-thumb-fig">
-                  {p.imageUrl ? (
-                    <img src={p.imageUrl} alt="" loading="lazy" />
-                  ) : null}
-                </div>
+                <EditionFig
+                  src={p.imageUrl}
+                  figClass="edition-thumb-fig"
+                  emptyClass="edition-thumb-fig"
+                  fallback={null}
+                />
                 <div>
                   <span className="edition-thumb-hood">{p.neighborhood}</span>
                   <h3 className="edition-thumb-name">{p.name}</h3>
@@ -207,19 +240,12 @@ export function EditionHome({edition, journalArticles = []}) {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <div
-                  className={
-                    story.imageUrl
-                      ? 'edition-news-fig'
-                      : 'edition-news-fig edition-news-fig--empty'
-                  }
-                >
-                  {story.imageUrl ? (
-                    <img src={story.imageUrl} alt="" loading="lazy" />
-                  ) : (
-                    story.rubrique?.slice(0, 1)?.toUpperCase() || '·'
-                  )}
-                </div>
+                <EditionFig
+                  src={story.imageUrl}
+                  figClass="edition-news-fig"
+                  emptyClass="edition-news-fig edition-news-fig--empty"
+                  fallback={story.rubrique?.slice(0, 1)?.toUpperCase() || '·'}
+                />
                 <div>
                   <span className="edition-news-rubrique">{story.rubrique}</span>
                   <h3 className="edition-news-title">{story.title}</h3>
@@ -262,19 +288,12 @@ export function EditionHome({edition, journalArticles = []}) {
                 }
                 prefetch="intent"
               >
-                <div
-                  className={
-                    article.imageUrl
-                      ? 'edition-journal-fig'
-                      : 'edition-journal-fig edition-journal-fig--empty'
-                  }
-                >
-                  {article.imageUrl ? (
-                    <img src={article.imageUrl} alt="" loading="lazy" />
-                  ) : (
-                    <span aria-hidden="true">S</span>
-                  )}
-                </div>
+                <EditionFig
+                  src={article.imageUrl}
+                  figClass="edition-journal-fig"
+                  emptyClass="edition-journal-fig edition-journal-fig--empty"
+                  fallback={<span aria-hidden="true">S</span>}
+                />
                 <div className="edition-journal-body">
                   <span className="edition-news-rubrique">Journal</span>
                   <h3 className="edition-journal-title">{article.title}</h3>
@@ -313,19 +332,12 @@ export function EditionHome({edition, journalArticles = []}) {
                 to={`/city/events/${ev.slug}`}
                 className="edition-media-card"
               >
-                <div
-                  className={
-                    ev.imageUrl
-                      ? 'edition-media-fig'
-                      : 'edition-media-fig edition-media-fig--empty'
-                  }
-                >
-                  {ev.imageUrl ? (
-                    <img src={ev.imageUrl} alt="" loading="lazy" />
-                  ) : (
-                    'Ex'
-                  )}
-                </div>
+                <EditionFig
+                  src={ev.imageUrl}
+                  figClass="edition-media-fig"
+                  emptyClass="edition-media-fig edition-media-fig--empty"
+                  fallback="Ex"
+                />
                 <span className="edition-media-rubrique">The Exhibition</span>
                 <h3 className="edition-media-title">{ev.title}</h3>
                 <p className="edition-media-copy">
@@ -357,19 +369,12 @@ export function EditionHome({edition, journalArticles = []}) {
                 to={`/city/creators/${c.slug}`}
                 className="edition-media-card"
               >
-                <div
-                  className={
-                    c.imageUrl
-                      ? 'edition-media-fig'
-                      : 'edition-media-fig edition-media-fig--empty'
-                  }
-                >
-                  {c.imageUrl ? (
-                    <img src={c.imageUrl} alt="" loading="lazy" />
-                  ) : (
-                    c.displayName.slice(0, 1)
-                  )}
-                </div>
+                <EditionFig
+                  src={c.imageUrl}
+                  figClass="edition-media-fig"
+                  emptyClass="edition-media-fig edition-media-fig--empty"
+                  fallback={c.displayName.slice(0, 1)}
+                />
                 <span className="edition-media-rubrique">The Artist</span>
                 <h3 className="edition-media-title">{c.displayName}</h3>
                 <p className="edition-media-copy">{c.bio?.slice(0, 140)}</p>
@@ -400,11 +405,12 @@ export function EditionHome({edition, journalArticles = []}) {
                 to={`/city/places/${p.slug}`}
                 className="edition-place"
               >
-                <div className="edition-place-fig">
-                  {p.imageUrl ? (
-                    <img src={p.imageUrl} alt="" loading="lazy" />
-                  ) : null}
-                </div>
+                <EditionFig
+                  src={p.imageUrl}
+                  figClass="edition-place-fig"
+                  emptyClass="edition-place-fig"
+                  fallback={null}
+                />
                 <span className="edition-place-hood">{p.neighborhood}</span>
                 <h3 className="edition-place-name">{p.name}</h3>
                 <p className="edition-place-sum">{p.summary}</p>

@@ -1,28 +1,27 @@
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;500;600;700&family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
 
 /* ══════════════════════════════════════════════════════════
    SOTABOSC — Mag Theme System
-   Yellow editorial aesthetic, shared across all branded pages
+   Shared with the edition homepage: stone paper, charcoal, lime.
    ══════════════════════════════════════════════════════════ */
 
 /* ── Base variables ─── */
 .mag, .labs-page, .city-world-page, .sotabosc-shell {
-  /* Using OKLCH for perceptual uniformity and vibrant saturation */
-  --y: oklch(95% 0.25 100);     /* Vibrant Yellow */
-  --pink: oklch(70% 0.35 330);  /* Electric Pink */
-  --blue: oklch(85% 0.2 200);   /* Sky Blue */
-  --orange: oklch(75% 0.25 50); /* Energy Orange */
-  
-  /* Tinted Neutrals (Never pure gray) */
-  --ink: oklch(15% 0.02 100);   /* Deep Yellow-Tinted Black */
-  --ink2: oklch(25% 0.02 100);
-  --ink3: oklch(45% 0.02 100);
-  --ink4: oklch(75% 0.02 100);
-  
-  --bg: var(--y);
-  --surface: oklch(99% 0.01 100);
-  --border: oklch(0% 0 0 / 0.1);
-  
+  /* Accent: acid lime (edition kickers / dark-button type) */
+  --y: #c8ff3d;
+  --pink: #3a3a3a; /* hover ink — was electric pink */
+  --blue: #e8e6df;
+  --orange: #c8ff3d;
+
+  --ink: #121212;
+  --ink2: #3a3a3a;
+  --ink3: #727272;
+  --ink4: #a8a8a8;
+
+  --bg: #fafaf8;
+  --surface: #f0efeb;
+  --border: rgba(18, 18, 18, 0.14);
+
   /* Modular Scale (Major Third: 1.25) */
   --step--2: 0.64rem;
   --step--1: 0.8rem;
@@ -33,10 +32,10 @@
   --step-4: 2.44rem;
   --step-5: 3.05rem;
   --step-6: 3.81rem;
-  
-  --serif: 'Newsreader', Georgia, serif;
-  --sans: 'Inter', system-ui, sans-serif;
-  --display: 'Space Grotesk', 'Inter', system-ui, sans-serif;
+
+  --serif: 'Instrument Serif', 'Times New Roman', Georgia, serif;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --display: 'DM Sans', system-ui, sans-serif;
   --mono: ui-monospace, 'SF Mono', monospace;
 }
 
@@ -60,11 +59,11 @@ main.mag-nav-main-offset {
   flex-wrap: nowrap;
   gap: 12px;
   padding: 14px 28px;
-  background: oklch(99% 0.01 100 / 0.94);
+  background: rgba(250, 250, 248, 0.92);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border-bottom: 2px solid var(--ink);
-  box-shadow: 0 4px 20px oklch(15% 0.02 100 / 0.12);
+  border-bottom: 1px solid var(--border);
+  box-shadow: none;
   font-family: var(--display);
 }
 .mag-logo {
@@ -143,13 +142,14 @@ main.mag-nav-main-offset {
 }
 .mag-hero-title {
   font-size: clamp(80px, 16vw, 220px);
-  font-weight: 900;
-  letter-spacing: -.06em;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -.04em;
   line-height: .82;
   margin: 0;
   color: var(--ink);
   display: flex;
-  font-family: var(--display);
+  font-family: var(--serif);
 }
 .mag-hero-letter {
   display: inline-block;
@@ -173,28 +173,28 @@ main.mag-nav-main-offset {
 /* ── Buttons ─── */
 .mag-btn {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 18px 36px;
-  background: var(--ink); color: var(--y);
-  border-radius: 4px; /* More editorial than 100px */
-  font-size: var(--step--1); font-weight: 800;
-  letter-spacing: .1em; text-transform: uppercase;
+  padding: 16px 28px;
+  background: var(--ink); color: #fafaf8;
+  border-radius: 0;
+  font-size: var(--step--1); font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
   text-decoration: none;
-  transition: transform .25s cubic-bezier(.22,1,.36,1), box-shadow .25s;
-  box-shadow: 4px 4px 0px var(--ink3);
-  border: 2px solid var(--ink);
+  transition: background .2s ease, color .2s ease;
+  box-shadow: none;
+  border: 1px solid var(--ink);
 }
 .mag-btn:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px var(--ink3);
+  background: var(--ink2);
+  color: var(--y);
 }
 .mag-btn-o {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 18px 36px;
-  border: 2px solid var(--ink); color: var(--ink);
-  background: oklch(15% 0.02 100 / 0.06);
-  border-radius: 4px;
-  font-size: var(--step--1); font-weight: 800;
-  letter-spacing: .1em; text-transform: uppercase;
+  padding: 16px 28px;
+  border: 1px solid var(--ink); color: var(--ink);
+  background: transparent;
+  border-radius: 0;
+  font-size: var(--step--1); font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
   text-decoration: none;
   transition: all .2s;
 }
@@ -205,13 +205,13 @@ main.mag-nav-main-offset {
 
 /* Homepage — hero clears fixed nav; stack grid on narrow viewports */
 .mag-home-hero {
-  background-color: var(--y);
+  background-color: var(--bg);
   min-height: 100vh;
   padding: 3rem 2rem 5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border-bottom: 4px solid var(--ink);
+  border-bottom: 1px solid var(--border);
   position: relative;
   overflow: hidden;
 }
@@ -451,7 +451,7 @@ main.mag-nav-main-offset {
 /* Tools index — align with mag system (not all-black) */
 .tools-mag-page {
   min-height: 100vh;
-  background: var(--y);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--sans);
   padding: 0 1.25rem 4rem;
