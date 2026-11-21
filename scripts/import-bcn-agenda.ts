@@ -78,7 +78,8 @@ const slugify = (s: string) =>
 function domainOf(kinds: string[]) {
   const k = kinds.join(' ');
   if (/Concerts|Música|Rock|Jazz|Pop|Flamenc|Òpera/.test(k)) return 'animals';
-  if (/Exposicions|Art|Fotografia|Arquitectura|Disseny/.test(k)) return 'plants';
+  // Galleries / exhibitions → Fungi (Connect), not Plants
+  if (/Exposicions|Art|Fotografia|Arquitectura|Disseny/.test(k)) return 'fungi';
   if (/Cinema|Projeccions|Literatura|Lectures|Presentacions/.test(k)) return 'fungi';
   if (/Artesania|Fires i mercats/.test(k)) return 'earth';
   return 'algae';

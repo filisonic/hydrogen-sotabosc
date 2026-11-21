@@ -8,7 +8,7 @@
     "endsAt": "2027-01-31",
     "placeId": "p_auto_unknown",
     "placeName": "MOCO Museum",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -27,7 +27,7 @@
     "endsAt": "2027-01-11",
     "placeId": "p_auto_unknown",
     "placeName": "MOCO Museum",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -46,7 +46,7 @@
     "endsAt": "2027-09-30",
     "placeId": "p_auto_unknown",
     "placeName": "Centre Martorell d’Exposicions",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -65,7 +65,7 @@
     "endsAt": "2026-12-13",
     "placeId": "p_auto_unknown",
     "placeName": "Barcelona",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "exposicions",
@@ -77,25 +77,6 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
-    "id": "e_bcn_99400770866",
-    "slug": "exposicio-gotes-d-arxiu-som-les-drassanes-99400770866",
-    "title": "Exposició 'Gotes d’Arxiu. Som les Drassanes'",
-    "summary": "El Gotes d'Arxiu, ubicat al Vestíbul del Museu Marítim de Barcelona, és una petita mostra de documents de l'edifici de les Drassanes. Aquests documents formen part de l'Arxiu del Museu Marítim de Barcelona. També incloem material accessible com són alguns documents en braille i audiodescripció.",
-    "startsAt": "2026-03-20",
-    "endsAt": "2026-11-20",
-    "placeId": "p_auto_unknown",
-    "placeName": "Museu Marítim de Barcelona",
-    "primaryDomain": "plants",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "exposicions",
-      "activitats-dels-museus-i-arxius-de-barcelona"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/656463-76082_uri.5b5f3f2ab.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
     "id": "e_bcn_99400780413",
     "slug": "exposicio-els-ocells-estels-d-aurelia-munoz-99400780413",
     "title": "Exposició 'Els Ocells-estels d'Aurèlia Muñoz'",
@@ -104,7 +85,7 @@
     "endsAt": "2027-03-31",
     "placeId": "p_auto_unknown",
     "placeName": "Museu d'Art Contemporani de Barcelona",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -123,7 +104,7 @@
     "endsAt": "2027-01-11",
     "placeId": "p_auto_unknown",
     "placeName": "Museu d'Art Contemporani de Barcelona",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -142,7 +123,7 @@
     "endsAt": "2027-03-14",
     "placeId": "p_auto_unknown",
     "placeName": "Museu Marítim de Barcelona",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -161,7 +142,7 @@
     "endsAt": "2026-12-13",
     "placeId": "p_auto_unknown",
     "placeName": "Museu Etnològic i de Cultures del Món *c. Montcada",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -180,7 +161,7 @@
     "endsAt": "2027-01-11",
     "placeId": "p_auto_unknown",
     "placeName": "Museu Marítim de Barcelona",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -200,7 +181,7 @@
     "endsAt": "2026-12-08",
     "placeId": "p_auto_unknown",
     "placeName": "Museu Diocesà de Barcelona",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -219,7 +200,7 @@
     "endsAt": "2026-11-30",
     "placeId": "p_auto_unknown",
     "placeName": "El Centre de la Platja",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -238,7 +219,7 @@
     "endsAt": "2027-01-17",
     "placeId": "p_auto_unknown",
     "placeName": "Museu Marítim de Barcelona",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -257,7 +238,7 @@
     "endsAt": "2027-01-17",
     "placeId": "p_auto_unknown",
     "placeName": "La Capella",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -277,7 +258,7 @@
     "endsAt": "2026-12-11",
     "placeId": "p_auto_unknown",
     "placeName": "Sala d'Exposicions",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -297,33 +278,13 @@
     "endsAt": "2026-12-31",
     "placeId": "p_auto_unknown",
     "placeName": "Biblioteca Nacional de Catalunya",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
       "exposicions"
     ],
     "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Sense_titol.a2054831b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789441",
-    "slug": "exposicio-secrets-de-fabricacio-99400789441",
-    "title": "Exposició 'Secrets de fabricació'",
-    "summary": "Secrets de fabricació , la tercera mostra del cicle Digues, cosa. Joan Brossa i els poemes objecte s'apropa a la construcció de l'objecte, tant des del seu del vessant material, com conceptual. Producció i ideació defineixen en aquest cas concret territoris que no es poden destriar tan…",
-    "startsAt": "2026-10-28",
-    "endsAt": "2027-02-28",
-    "placeId": "p_auto_unknown",
-    "placeName": "Centre de les Arts Lliures",
-    "primaryDomain": "plants",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "exposicions",
-      "cultura-i-arts",
-      "activitats-dels-museus-i-arxius-de-barcelona"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/c99733d3-2c3e-a9df-634b-724e4662746f.00147433b.png",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
@@ -335,7 +296,7 @@
     "endsAt": "2027-01-31",
     "placeId": "p_auto_unknown",
     "placeName": "Centre d'Arts Santa Mònica",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -347,6 +308,26 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
+    "id": "e_bcn_99400789441",
+    "slug": "exposicio-secrets-de-fabricacio-99400789441",
+    "title": "Exposició 'Secrets de fabricació'",
+    "summary": "Secrets de fabricació , la tercera mostra del cicle Digues, cosa. Joan Brossa i els poemes objecte s'apropa a la construcció de l'objecte, tant des del seu del vessant material, com conceptual. Producció i ideació defineixen en aquest cas concret territoris que no es poden destriar tan…",
+    "startsAt": "2026-10-28",
+    "endsAt": "2027-02-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Centre de les Arts Lliures",
+    "primaryDomain": "fungi",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "exposicions",
+      "cultura-i-arts",
+      "activitats-dels-museus-i-arxius-de-barcelona"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/c99733d3-2c3e-a9df-634b-724e4662746f.00147433b.png",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
     "id": "e_bcn_99400179106",
     "slug": "world-press-photo-2026-mostra-internacional-de-fotoperiodism-99400179106",
     "title": "\"World Press Photo 2026\" Mostra Internacional de Fotoperiodisme",
@@ -355,7 +336,7 @@
     "endsAt": "2026-12-13",
     "placeId": "p_auto_unknown",
     "placeName": "Sala d'Exposicions",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
@@ -376,7 +357,7 @@
     "endsAt": "2027-01-05",
     "placeId": "p_auto_unknown",
     "placeName": "Centre d'Arts Digitals l'Ideal",
-    "primaryDomain": "plants",
+    "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "sant-marti",
@@ -387,781 +368,23 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
-    "id": "e_bcn_99400744012",
-    "slug": "espectacle-el-unipersonal-amb-laila-roth-99400744012",
-    "title": "Espectacle \"El Unipersonal\", amb Laila Roth",
-    "summary": "Després de recórrer Llatinoamèrica i gran part del món amb Lucy (el seu espectacle anterior, amb funcions exhaurides en nombroses ciutats i disponible ara gratuïtament a YouTube), Laila Roth torna a l'escenari amb el seu nou espectacle unipersonal. En els darrers anys, Laila Roth s'ha consolidat…",
-    "startsAt": "2026-11-15",
-    "placeId": "p_auto_unknown",
-    "placeName": "Teatre Borràs",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "monolegs",
-      "humor"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb.49df25ddb.png",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400766127",
-    "slug": "espectacle-massa-tard-lluis-gavalda-99400766127",
-    "title": "Espectacle \"Massa tard, Lluís Gavaldà\"",
-    "summary": "Tenim una tradició estranya: esperar que algú marxi d'aquest mon per explicar a tothom com era d'important aquesta persona. A Hilària sempre ens ha semblat poc pràctic. Això s'ha de fer en vida. Per això Massa tard és un homenatge a Lluís Gavaldà fet en el moment ideal: quan encara pot venir,…",
-    "startsAt": "2026-11-15",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "festivals",
-      "monolegs",
-      "humor"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/hilaria2026.c0339d8fb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400759112",
-    "slug": "concert-el-requiem-de-mozart-amb-guillermo-garcia-calvo-fran-99400759112",
-    "title": "Concert \"El Requiem de Mozart\" amb Guillermo García Calvo & Franz Schubert Filharmonia",
-    "summary": "Espiritualitat musical Guillermo García Calvo es posa al capdavant de la Franz Schubert Filharmonia en la que serà la seva tercera col·laboració amb l'orquestra. Un retrobament esperat per presentar una de les obres cabdals del repertori simfònic-coral, el Rèquiem de Mozart. El concert s'obrirà…",
-    "startsAt": "2026-11-15",
-    "placeId": "p_auto_unknown",
-    "placeName": "Palau de la Música Catalana",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica-classica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Captura.b9ed2f2ab.PNG",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400781279",
-    "slug": "itinerari-la-barcelona-rebel-l-aixecament-de-prats-de-mollo-99400781279",
-    "title": "Itinerari 'La Barcelona rebel. L'aixecament de Prats de Molló'",
-    "summary": "A càrrec d' Oriol Falguera . La temptativa per aconseguir proclamar la República Catalana, a través d'una vaga general i una incursió militar de les tropes dirigida per Francesc Macià i els seus voluntaris l'any 1926, tingué el seu centre d'operacions entre Barcelona, París i Prats de Molló…",
-    "startsAt": "2026-11-15",
-    "placeId": "p_auto_unknown",
-    "placeName": "Museu d'Història de Barcelona. Plaça del Rei",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "activitats-dels-museus-i-arxius-de-barcelona"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Disseny_sense_titol_9.ee9f01a4b.jpg",
-    "imageCredit": "15 de novembre de 1926: Diversos membres d’Estat Català es fotografien al Palau de la Justícia de París per a ser jutjats pels fets de Prats de Molló · Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400788506",
-    "slug": "espectacle-un-mal-normal-amb-maria-jover-i-gerard-franch-99400788506",
-    "title": "Espectacle \"Un mal normal\", amb Maria Jover i Gerard Franch",
-    "summary": "&lt;&lt; Una obra que imagina altres futurs possibles &gt;&gt; Aquesta és una història que neix de la necessitat de Maria Jover i Gerard Franch de trencar amb les ficcions distòpiques que planteja el poder. Què passa quan la burocràcia actua sense un control humà crític? Quan, sota el pretext de…",
-    "startsAt": "2026-11-15",
-    "placeId": "p_auto_unknown",
-    "placeName": "Baixos 22",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "teatre",
-      "teatre-i-dansa"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/unmalnormal.0de17336b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789716",
-    "slug": "espectacle-roast-al-foraster-99400789716",
-    "title": "Espectacle \"Roast al Foraster\"",
-    "summary": "Durant més de deu anys, Quim Masferrer ha recorregut Catalunya entrant als pobles, parlant amb desconeguts i fent preguntes a gent que estava tranquil·lament fent la seva vida sense cap necessitat de ser destorbat per un foraster. Ha arribat el moment de recollir les conseqüències dels seus…",
-    "startsAt": "2026-11-15",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "festivals",
-      "monolegs",
-      "humor"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/hilaria2026.c0339d8fb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789997",
-    "slug": "concert-alvaro-segura-luz-verde-99400789997",
-    "title": "Concert \"Álvaro Segura + Luz Verde\"",
-    "summary": "Concert \"Álvaro Segura + Luz Verde\"",
-    "startsAt": "2026-11-15",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sidecar Club",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "rock"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/alvaro-segura.0e11c3c3b.png",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400758565",
-    "slug": "concert-requiem-de-faure-amb-orquestra-da-camera-barcelona-a-99400758565",
-    "title": "Concert \"Requiem de Fauré\" amb Orquestra Da Camera, Barcelona Ars Nova & Barrera",
-    "summary": "Fitxa artística Núria Rial, soprano José Antonio López, baríton Orquestra Da Camera Barcelona Ars Nova Mireia Barrera, directora Programa F. Schubert: Gesang der geister über den wassern S. Barber: Agnus Dei G. Fauré: Cantique de Jean Racine G. Fauré: Requiem en Re menor, op. 48",
-    "startsAt": "2026-11-16",
-    "placeId": "p_auto_unknown",
-    "placeName": "Palau de la Música Catalana",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Captura.2035943cb.PNG",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400759093",
-    "slug": "concert-cosmos-quartet-99400759093",
-    "title": "Concert \"Cosmos Quartet\"",
-    "summary": "Fundat a Barcelona l'any 2014, el Cosmos Quartet s'ha consolidat com una de les formacions de corda més atractives del panorama musical actual. Les seves interpretacions, que abracen des del repertori del segle XVIII fins a les creacions més recents, han estat rebudes amb elogis per la crítica i…",
-    "startsAt": "2026-11-16",
-    "placeId": "p_auto_unknown",
-    "placeName": "Petit Palau",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Captura.dac953e7b.PNG",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400764134",
-    "slug": "conferencia-l-art-del-fervor-devocions-barcelonines-del-barr-99400764134",
-    "title": "Conferència 'L'art del fervor. Devocions barcelonines del Barroc entre universalisme i identitats locals'",
-    "summary": "A càrrec de Silvia Canalda Llobet (catedràtica d'Història de l'Art Modern, Universitat de Barcelona). La reobertura de l'església de Sant Sever ofereix un marc excepcional per reflexionar sobre la convivència entre cultes d'arrel local i devocions de dimensió universal a la Barcelona del Barroc,…",
-    "startsAt": "2026-11-16",
-    "placeId": "p_auto_unknown",
-    "placeName": "Saló del Tinell",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "activitats-dels-museus-i-arxius-de-barcelona"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Barroc_edit.53ad3eceb.jpg",
-    "imageCredit": "Silvia Canalda Llobet · Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400783134",
-    "slug": "concert-chris-potter-99400783134",
-    "title": "Concert \"Chris Potter\"",
-    "summary": "Chris Potter va debutar com a líder al nostre festival el 2008 amb el seu Underground Quartet. Des d'aleshores, l'hem vist sis vegades més amb els seus diversos trios o com a colíder de projectes amb Dave Holland, dues vegades amb l'anomenat Crosscurrents Trio (la primera vegada, 2020, amb Zakir…",
+    "id": "e_bcn_99400302511",
+    "slug": "drap-art-26-festival-internacional-d-art-sostenible-de-catal-99400302511",
+    "title": "\"Drap-Art 26\" Festival Internacional d'Art Sostenible de Catalunya",
+    "summary": "Drap-Art presenta una nova edició del festival amb un mes d'exposicions, accions culturals i activitats gratuïtes en espais públics, galeries i edificis singulars del barri Gòtic de Barcelona. El festival reuneix artistes locals i internacionals que, a través de les seves obres, transformen…",
     "startsAt": "2026-11-17",
+    "endsAt": "2026-12-21",
     "placeId": "p_auto_unknown",
-    "placeName": "Fundació Conservatori del Liceu",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "festivals",
-      "jazz-blues",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/1500x850-26155832.9ba6b68fb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400781637",
-    "slug": "xerrada-les-drassanes-reials-i-el-seu-encaix-en-la-ciutat-i--99400781637",
-    "title": "Xerrada 'Les Drassanes Reials i el seu encaix en la ciutat i l’entorn portuari: present i futur'",
-    "summary": "A càrrec d'Enric Garcia. L'Enric Garcia Domingo és doctor en Història Contemporània per la Universitat de Barcelona. Especialista en Història i cultura marítima, especialment dels segles XIX i XX. Autor de diferents llibres i articles sobre el tema. Membre del grup de recerca Treball,…",
-    "startsAt": "2026-11-17",
-    "placeId": "p_auto_unknown",
-    "placeName": "Museu Marítim de Barcelona",
-    "primaryDomain": "plants",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "arquitectura",
-      "activitats-dels-museus-i-arxius-de-barcelona"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/654272-76082_uri.8b4ca32ab.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400788770",
-    "slug": "espectacle-musaranyes-como-un-collar-de-perlas-d-adria-sarqu-99400788770",
-    "title": "Espectacle \"Musaranyes + Como un collar de perlas\", d'Adrià Sarquella + Matilda Deidda",
-    "summary": "Adrià Sarquella –Musaranyes -Nous llenguatges del cos– En un espai tancat i fosc, un llum que no funciona es converteix en el centre d'una acció aparentment quotidiana. L'intent d'arribar-hi es transforma en un recorregut ple de desviacions, dubtes, repeticions i distraccions. El cos insisteix,…",
-    "startsAt": "2026-11-17",
-    "placeId": "p_auto_unknown",
-    "placeName": "Teatre",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "teatre",
-      "dansa"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/musaranyes.afeb0ec1b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400787741",
-    "slug": "concert-musica-improvisada-i-nocturns-de-gabriel-faure-99400787741",
-    "title": "Concert \"Música improvisada i nocturns de Gabriel Fauré\"",
-    "summary": "MIREIA VENDRELL piano Mireia VENDRELL (BCN, 1986) i Gabriel FAURÉ (França, 1845 - 1924) \"Somniant Fauré\" El punt de partida del programa són els Nocturns n. 1, opus 33 i el n. 6 opus 63 de Gabriel Fauré. El seu univers sonor és el punt de partida d'unes improvisacions que prenen elements de la…",
-    "startsAt": "2026-11-17",
-    "placeId": "p_auto_unknown",
-    "placeName": "Reial Acadèmia Catalana de Belles Arts de Sant Jordi",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica-classica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/AFMC_event_744.4fcde002b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789064",
-    "slug": "concert-santiago-cruz-99400789064",
-    "title": "Concert \"Santiago Cruz\"",
-    "summary": "Santiago Cruz és un dels artistes pop més importants de Colòmbia i Amèrica Llatina. Amb més de 20 anys de trajectòria, el cantautor d'Ibagué s'ha consolidat com una figura clau de l'escena del pop internacional, amb múltiples reconeixements al llarg dels anys. Amb 10 àlbums publicats fins ara,…",
-    "startsAt": "2026-11-17",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "pop"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/cruz.b8c8ef3eb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789622",
-    "slug": "concert-samuel-blaser-quartet-99400789622",
-    "title": "Concert \"Samuel Blaser Quartet\"",
-    "summary": "Samuel Blaser trombó · Russ Lossing piano · Masa Kamaguchi baix · Billy Mintz bateria El trompetista Blaser presenta un quartet sòlid i empàtic format per Russ Lossing als teclats, Masa Kamaguchi al contrabaix i Billy Mintz a la bateria. Com a líder, Blaser aporta una presència clara però oberta…",
-    "startsAt": "2026-11-17",
-    "placeId": "p_auto_unknown",
-    "placeName": "Jamboree",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "jazz-blues",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/blaser.18e17fbab.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400790382",
-    "slug": "debat-pot-la-cultura-reescriure-el-rif-amb-abdellah-karroum--99400790382",
-    "title": "Debat 'Pot la cultura reescriure el Rif?', amb Abdellah Karroum, Younes Rahmoun i Ro Caminal",
-    "summary": "Malgrat l'estancament econòmic, el Rif és avui un territori fèrtil per a la creació contemporània. El comissari d'art Abdellah Karroum i els artistes Younes Rahmoun i Ro Caminal exploren com s'han creat els nous espais que connecten la regió amb les xarxes internacionals de l'art contemporani.…",
-    "startsAt": "2026-11-17",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Mirador",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "activitats-dels-museus-i-arxius-de-barcelona"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/foto-abdellah-karroum-younes-rahmoun.14aa8d50b.png",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400187622",
-    "slug": "diada-de-les-tecnologies-de-la-informacio-i-la-comunicacio-2-99400187622",
-    "title": "Diada de les Tecnologies de la Informació i la Comunicació 2026",
-    "summary": "El 18 i 19 de novembre de 2026 se celebrarà la Diada de les TIC , amb el lliurament dels Premis d'Innovació Digital de Catalunya. Sota el lema « Tecnologia amb propòsit «, la jornada posarà el focus en el repte de la responsabilitat digital en un context d'omnipresència de la intel·ligència…",
-    "startsAt": "2026-11-18",
-    "endsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "World Trade Center",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "destacats-agenda-us-intern-bi"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/event-7d9b78c28c4ea4720609610fd210ccaf-1786556739991941.72236a05b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400669954",
-    "slug": "fira-paint-coatings-99400669954",
-    "title": "Fira \"Paint & Coatings\"",
-    "summary": "Fòrum sobre formulació, manufactura i distribució en la indústria de la pintura.",
-    "startsAt": "2026-11-18",
-    "endsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Centre d'Activitats La Farga",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "destacats-agenda-us-intern-bi"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/51251_PCSPN26_Website_Dates_2026.0972a59eb.png",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400743808",
-    "slug": "opera-agrippina-de-handel-kozena-lezhneva-les-accents-noally-99400743808",
-    "title": "Òpera \"Agrippina de Händel - Kožená, Lezhneva, Les Accents & Noally\"",
-    "summary": "Fitxa artística Julia Lezhneva, soprano Adèle Charvet, mezzosoprano Magdalena Kožená, mezzosoprano Christophe Dumaux, contratenor Paul Figuier, contratenor Nicolas Brooymans, baix Adrien Fournaison, baix Les Accents Thibault Noally, violí i director Programa G. F. Händel: Agrippina",
-    "startsAt": "2026-11-18",
-    "placeId": "p_auto_unknown",
-    "placeName": "Palau de la Música Catalana",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "opera",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/POMO.48fc4cf0b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400784687",
-    "slug": "concert-playgrxvnd-99400784687",
-    "title": "Concert \"Playgrxvnd\"",
-    "summary": "Playgrxvnd és el primer projecte íntegrament personal i sense concessions de Klaus Stroink (Stay Homas, Nil Moliner, Búhos), una innovadora proposta instrumental on la trompeta governa un espai de joc en el qual col·lisionen el jazz de conservatori i l'electrònica de club. Dissenyat sota un…",
-    "startsAt": "2026-11-18",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala de Festes La Paloma",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "jazz-blues",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/1500x850-29100452.1cc16a23b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400469119",
-    "slug": "xiii-festival-barcelona-pensa-99400469119",
-    "title": "XIII Festival 'Barcelona Pensa'",
-    "summary": "Coincidint amb el Dia Mundial de la Filosofia de la UNESCO, que se celebra el tercer dijous de novembre, arriba una nova edició del Festival de Filosofia Barcelona Pensa. Enguany, el festival se celebrarà en el seu format curt, els dies 18 i 19 de novembre, a diversos espais de la ciutat de…",
-    "startsAt": "2026-11-18",
-    "endsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Diferents espais de Barcelona ciutat",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "festivals",
-      "visites-guiades",
-      "teatre"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/images.c237a72eb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789623",
-    "slug": "concert-francesco-bearzatti-trio-99400789623",
-    "title": "Concert \"Francesco Bearzatti Trio\"",
-    "summary": "Francesco Bearzatti saxòfon · Federico Casagrande guitarra · Jens Duppe bateria El nou trio de Francesco Bearzatti reuneix tres titans de l'escena del jazz europeu contemporani, creant un conjunt potent que combina energia en estat pur amb una narrativa musical sofisticada. Dirigit per…",
-    "startsAt": "2026-11-18",
-    "placeId": "p_auto_unknown",
-    "placeName": "Jamboree",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "jazz-blues",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/bearzatti.34482c27b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789624",
-    "slug": "concert-thome-99400789624",
-    "title": "Concert \"Thomé\"",
-    "summary": "Thomé veu i guitarra En aquest concert íntim, Thomé celebra el llançament del seu tercer àlbum, Quero Ser Tudo , amb una proposta que dialoga amb la tradició del cançoner popular brasiler. En format de veu, guitarra i percussió, l'artista revisita alguns dels èxits de la seva carrera en…",
-    "startsAt": "2026-11-18",
-    "placeId": "p_auto_unknown",
-    "placeName": "Jamboree",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/thome.54ec4605b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789855",
-    "slug": "visita-guiada-al-palau-guell-per-a-persones-cuidadores-99400789855",
-    "title": "Visita guiada al Palau Güell per a persones cuidadores",
-    "summary": "Visita guiada al Palau Güell, edifici emblemàtic dissenyat per Antoni Gaudí i exemple destacat del modernisme català. Antiga residència de la família Güell-López, és un espai singular amb una gran riquesa arquitectònica i cultural. La visita guiada es durà a terme en català. L'activitat s'adreça…",
-    "startsAt": "2026-11-18",
-    "placeId": "p_auto_unknown",
-    "placeName": "Palau Güell",
-    "primaryDomain": "plants",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "visites-guiades",
-      "arquitectura"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/20260313_tC_Palau_Guell_13_marc.c81ce5a0b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400790432",
-    "slug": "concert-steve-wynn-juana-everett-99400790432",
-    "title": "Concert \"Steve Wynn + Juana Everett\"",
-    "summary": "Steve Wynn, fundador de Dream Syndicate, presenta I Wouldn't Say It If It Wasn't True – Songs, Stories and Surprises, un espectacle que combina cançons, lectures i anècdotes de les seves quatre dècades de trajectòria musical, inspirat en les seves memòries publicades recentment en castellà per…",
-    "startsAt": "2026-11-18",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/stevewynn.a34b494eb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789807",
-    "slug": "jornada-la-intel-ligencia-artificial-ia-en-la-catalogacio-99400789807",
-    "title": "Jornada “La Intel·ligència Artificial (IA) en la catalogació\"",
-    "summary": "La Biblioteca de Catalunya organitza la jornada \"La Intel·ligència Artificial (IA) en la catalogació\", que tindrà lloc el proper dimecres 18 de novembre de 2026, de 9.30 a 13.30 hores, a la Sala de la Caritat de la BC. La jornada s'inscriu dins de les iniciatives que ha posat en marxa la…",
-    "startsAt": "2026-11-18",
-    "placeId": "p_auto_unknown",
-    "placeName": "Biblioteca Nacional de Catalunya",
+    "placeName": "Diferents espais del Barri Gòtic",
     "primaryDomain": "fungi",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
-      "literatura"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Jornada-La-Intel-ligencia-Artificial-en-la-catalogacio_large.13c6b1abb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400783135",
-    "slug": "concert-mary-halvorson-canis-major-99400783135",
-    "title": "Concert \"Mary Halvorson Canis Major\"",
-    "summary": "Per tercera vegada al festival després del seu sextet Code Girl (2021) i del seu duo explosiu amb Sylvie Courvoisier (2023), Halvorson torna a Barcelona per presentar el seu nou projecte, un quartet que ha anomenat Canis Major. «És com l'inici d'alguna cosa molt especial», ha explicat ella…",
-    "startsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Fundació Conservatori del Liceu",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
+      "exposicions",
       "festivals",
-      "jazz-blues",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/miguelzenon_g-15135956.0c82798db.png",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400736341",
-    "slug": "descobreix-els-espais-no-visitables-del-museu-maritim-reserv-99400736341",
-    "title": "Descobreix els espais no visitables del Museu Marítim: Reserva de col·leccions",
-    "summary": "Oferim una sèrie de visites a determinats espais de treball del museu que habitualment no són accessibles al públic, com el taller de restauració, les reserves, l'arxiu, la drassana, etc. i expliquem la feina que s'hi desenvolupa o que hi està vinculada. Aquesta proposta permet accedir al públic…",
-    "startsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Museu Marítim de Barcelona",
-    "primaryDomain": "plants",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "visites-guiades",
-      "fotografia",
-      "activitats-dels-museus-i-arxius-de-barcelona"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/638914-76082_uri.948ba533b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400762877",
-    "slug": "podcast-la-sotana-en-directe-99400762877",
-    "title": "Pòdcast \"La Sotana en directe\"",
-    "summary": "La Sotana, el pòdcast de referència d'humor i futbol a Catalunya, salta de l'estudi als escenaris. El programa preferit del teu programa preferit us presenta un xou moderadament especial i una mica immersiu, amb les millors seccions i la tertúlia més indocumentada del panorama. La Sotana en…",
-    "startsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "humor"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/lasotana.bb30d036b.JPG",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789168",
-    "slug": "espectacle-la-mujer-del-tercero-a-carrec-de-teatro-apatrida--99400789168",
-    "title": "Espectacle \"La mujer del tercero\", a càrrec de Teatro apátrida (Espanya - Xile)",
-    "summary": "&lt;&lt; El monòleg d'una mare &gt;&gt; Raquel és la dona del tercer pis i el seu fill és qui, en un rampell de fúria, ha fet miques les noves bústies de l'edifici. Des d'aquesta sentència s'inicia un monòleg profund d'una mare que té cura d'un fill que viu al marge del sistema. La seva…",
-    "startsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Baixos 22",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "monolegs",
-      "teatre-i-dansa"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/mujerdeltercero.c0cb6487b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789625",
-    "slug": "concert-namina-the-barbarians-99400789625",
-    "title": "Concert \"Namina & The Barbarians\"",
-    "summary": "Namina veu, guitarra, merlin · Pep Gol trompeta, melòdica, cargol de mar · Gerard Nieto piano, orgue, guitarra · Pep Pascual saxo tenor, clarinet, serra · Pep Rius contrabaix · Xevi Matamala bateria · Pere Miró saxo baríton, clarinet · Marc Marcet trompeta Com es troben el funk, el jazz, el…",
-    "startsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Jamboree 3",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "jazz-blues"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/namina.70e83362b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789626",
-    "slug": "concert-brigitte-emaga-99400789626",
-    "title": "Concert \"Brigitte Emaga\"",
-    "summary": "Brigitte Emaga veu · Arecio Smith teclats · Francisco Guisado guitarra · Charlie Cuevas baix · Carlos López bateria Brigitte Emaga , una talentosa cantant i compositora nascuda a Barcelona, ha demostrat la seva passió per la música des de ben petita, absorbint una àmplia varietat d'estils…",
-    "startsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Jamboree",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/brigitte1.a5e01892b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400790433",
-    "slug": "concert-la-bona-sort-99400790433",
-    "title": "Concert \"La Bona Sort\"",
-    "summary": "El 19 de novembre es presenten al Club P62 les cançons de La Bona Sort, un duet d'indie-folk de Barcelona format per Théo Navarro i Júlia Molina. En un format amb banda, i amb la flauta travessera prenent un paper protagonista, La Bona Sort presenta un directe ple de melodies pures, arranjaments…",
-    "startsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/latencies2.f4bccfe5b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789998",
-    "slug": "concert-bagon-vol-1-99400789998",
-    "title": "Concert \"Bagon vol. 1\"",
-    "summary": "Concert \"Bagon vol. 1\"",
-    "startsAt": "2026-11-19",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sidecar Club",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/bagon-01-880x1100.964d7547b.jpeg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400783563",
-    "slug": "concert-los-40-music-awards-santander-2026-99400783563",
-    "title": "Concert \"LOS 40 Music Awards Santander 2026\"",
-    "summary": "Torna la nit més important de la música al nostre país. Tornem amb els LOS40 Music Awards Santander 2026, celebrant el 60è aniversari de l'emissora número 1 del país. No et perdis l'aconteixement musical de l'any: al 2025 les entrades es van esgotar en només 2 hores. La música ens fa viatjar.",
-    "startsAt": "2026-11-20",
-    "placeId": "p_auto_unknown",
-    "placeName": "Palau Sant Jordi",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "sants-montjuic",
-      "concerts",
-      "pop",
-      "rock",
       "destacats-agenda-us-intern-bi"
     ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/00-00089rK.15e5c51fb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400550924",
-    "slug": "espectacle-ilustres-ignorantes-99400550924",
-    "title": "Espectacle \"Ilustres ignorantes\"",
-    "summary": "Estàs llegint bé... tornen els Ilustres Ignorantes al Teatre Borràs! Javier Cansado estarà absent i en el seu lloc comptarem amb Raúl Cimas. Ilustres Ignorantes és un debat a diverses bandes lliurat per il·luminar les més diverses branques del coneixement. Javier Coronas, Pepe Colubi i Raúl…",
-    "startsAt": "2026-11-20",
-    "endsAt": "2026-11-22",
-    "placeId": "p_auto_unknown",
-    "placeName": "Teatre Borràs",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "teatre",
-      "teatre-i-dansa"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/ilustres.c14e739db.JPG",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400784689",
-    "slug": "concert-vicente-amigo-99400784689",
-    "title": "Concert \"Vicente Amigo\"",
-    "summary": "El guitarrista Vicente Amigo celebra 40 anys de carrera amb una gira titulada Entre cuerdas y tiempo . Guitarrista que va molt més enllà del flamenc i admirat amb una devoció absoluta —per exemple— per tots els guitarristes de jazz, Amigo, convertit en un dels màxims exponents de la música…",
-    "startsAt": "2026-11-20",
-    "placeId": "p_auto_unknown",
-    "placeName": "Palau de la Música Catalana",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "festivals",
-      "flamenc",
-      "jazz-blues"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/1500x850-12152728.105449fbb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400788104",
-    "slug": "espectacle-ghost-in-the-machine-de-karla-kracht-99400788104",
-    "title": "Espectacle \"Ghost in the Machine\", de Karla Kracht",
-    "summary": "Com reinterpretaria una IA futura les tradicions i mites humans en un món on els humans ja no existeixen? Ghost in the Machine és un espai ritual del futur amb una imaginació desbordant. Aquesta obra especula sobre el llegat espiritual de la humanitat a través d'una intel·ligència post-sapiens,…",
-    "startsAt": "2026-11-20",
-    "endsAt": "2026-11-21",
-    "placeId": "p_auto_unknown",
-    "placeName": "Teatre",
-    "primaryDomain": "algae",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "espectacles",
-      "teatre"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/gosht.bc89c958b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789627",
-    "slug": "concert-true-loves-99400789627",
-    "title": "Concert \"True Loves\"",
-    "summary": "David McGraw bateria · Bryant Moore baix · Jimmy James guitarra · Iván Galvez percussió · Greg Kramer trombó · Gordon Brown saxo · Skerik saxo Escoltar True Loves , el grup instrumental de funk i soul original amb seu a Seattle, és com passejar pel teu carrer preferit del barri, xocar les mans…",
-    "startsAt": "2026-11-20",
-    "placeId": "p_auto_unknown",
-    "placeName": "Jamboree",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/trueloves.d74a163fb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789628",
-    "slug": "concert-tura-sala-99400789628",
-    "title": "Concert \"Tura Sala\"",
-    "summary": "Tura Sala cantant i artista · Ana Cruz baixista · Daniel Valladares guitarrista · Mikel Cassinello bateria · Gonzalo Zapata teclats i sintetitzadors Tura Sala és una cantant i compositora de 25 anys establerta a Barcelona que s'ha guanyat un espai propi dins de l'escena musical emergent del pop…",
-    "startsAt": "2026-11-20",
-    "placeId": "p_auto_unknown",
-    "placeName": "Jamboree 3",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/turasala.520719a6b.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400789999",
-    "slug": "concert-matthew-mole-99400789999",
-    "title": "Concert \"Matthew Mole\"",
-    "summary": "Concert \"Matthew Mole\"",
-    "startsAt": "2026-11-20",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sidecar Club",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "pop"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/matthew-mole_bcn_2026_4X5-880x1100.a837c715b.png",
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Postal-Drap-Art_26_CAT-db95b2b5.32165413b.jpg",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
@@ -1185,24 +408,6 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
-    "id": "e_bcn_99400759040",
-    "slug": "concert-la-dansa-del-sabre-amb-l-orquestra-simfonica-del-val-99400759040",
-    "title": "Concert \"La dansa del sabre\" amb l'Orquestra Simfònica del Vallès, Iñaki Bermúdez & Pasquina",
-    "summary": "Fitxa artística Iñaki Bermúdez, saxòfon Cor de Noies de l'Orfeó Català (Montserrat Meneses, directora) Orquestra Simfònica del Vallès Noemí Pasquina, directora Programa E. Smyth: Marxa de les dones M. de Jorge: Concert per a saxòfon, orquestra i cor de noies, \"Albes i nits\" (estrena absoluta) N.…",
-    "startsAt": "2026-11-21",
-    "placeId": "p_auto_unknown",
-    "placeName": "Palau de la Música Catalana",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "musica"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Captura.0800c14db.PNG",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
     "id": "e_bcn_99400790402",
     "slug": "concert-las-nietas-del-charli-99400790402",
     "title": "Concert \"Las Nietas del Charli\"",
@@ -1218,24 +423,6 @@
       "musica"
     ],
     "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/nietas.69fde88bb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400790437",
-    "slug": "concert-spike-and-the-gimme-gimmes-fanta-99400790437",
-    "title": "Concert \"Spike And The Gimme Gimmes + FANTA\"",
-    "summary": "𝐒𝐏𝐈𝐊𝐄 𝐀𝐍𝐃 𝐓𝐇𝐄 𝐆𝐈𝐌𝐌𝐄 𝐆𝐈𝐌𝐌𝐄𝐒 són una de les bandes més icòniques i divertides del punk rock internacional. Amb membres de grups com NOFX, Lagwagon o Me First and the Gimme Gimmes, han convertit les versions en un art propi, reinterpretant clàssics de tots els gèneres amb…",
-    "startsAt": "2026-11-21",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "rock"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/spikegimme.771e0592b.jpg",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
@@ -1258,6 +445,42 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
+    "id": "e_bcn_99400790437",
+    "slug": "concert-spike-and-the-gimme-gimmes-fanta-99400790437",
+    "title": "Concert \"Spike And The Gimme Gimmes + FANTA\"",
+    "summary": "𝐒𝐏𝐈𝐊𝐄 𝐀𝐍𝐃 𝐓𝐇𝐄 𝐆𝐈𝐌𝐌𝐄 𝐆𝐈𝐌𝐌𝐄𝐒 són una de les bandes més icòniques i divertides del punk rock internacional. Amb membres de grups com NOFX, Lagwagon o Me First and the Gimme Gimmes, han convertit les versions en un art propi, reinterpretant clàssics de tots els gèneres amb…",
+    "startsAt": "2026-11-21",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "rock"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/spikegimme.771e0592b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400759040",
+    "slug": "concert-la-dansa-del-sabre-amb-l-orquestra-simfonica-del-val-99400759040",
+    "title": "Concert \"La dansa del sabre\" amb l'Orquestra Simfònica del Vallès, Iñaki Bermúdez & Pasquina",
+    "summary": "Fitxa artística Iñaki Bermúdez, saxòfon Cor de Noies de l'Orfeó Català (Montserrat Meneses, directora) Orquestra Simfònica del Vallès Noemí Pasquina, directora Programa E. Smyth: Marxa de les dones M. de Jorge: Concert per a saxòfon, orquestra i cor de noies, \"Albes i nits\" (estrena absoluta) N.…",
+    "startsAt": "2026-11-21",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau de la Música Catalana",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Captura.0800c14db.PNG",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
     "id": "e_bcn_99400744230",
     "slug": "concert-szymanowski-say-kopatchinskaja-i-beethoven-amb-patri-99400744230",
     "title": "Concert ''Szymanowski, Say, Kopatchinskaja i Beethoven\" amb Patricia Kopatchinskaja & Fazil Say",
@@ -1276,39 +499,20 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
-    "id": "e_bcn_99400790443",
-    "slug": "concert-evadne-shattered-sigh-99400790443",
-    "title": "Concert \"Evadne + Shattered Sigh\"",
-    "summary": "Els referents del doom/death metal melòdic estatal, Evadne, arriben a la Sala Paral·lel 62 de Barcelona en la seva única actuació a Espanya durant el 2026. Amb més de dues dècades donant forma a la malenconia, la banda valenciana oferirà un ritual sonor exclusiu d'atmosferes denses i passatges…",
+    "id": "e_bcn_99400789908",
+    "slug": "suite-coral-alcarem-cantant-el-vol-de-baltassar-bibiloni-99400789908",
+    "title": "Suite Coral 'Alçarem cantant el vol', de Baltassar Bibiloni",
+    "summary": "Intèrprets: Cor Aurica, Art Vocal Ensemble, Musicantes de Mallorca. Directors: Aleix Oliveras, Llorenç Gelabert Clarinet: Bartolomé Garcia-Plata Violoncel: Lluís Heras, Piano: Marina Pelfort Soprano: Anaïs Oliveras Baríton: Aleix Oliveras.",
     "startsAt": "2026-11-22",
     "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
+    "placeName": "Parròquia de Santa Maria del Pi - Basílica",
     "primaryDomain": "animals",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
-      "concerts",
-      "rock"
+      "concerts"
     ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/evadne.e34b76adb.jpg",
-    "imageCredit": "Agenda: Ajuntament de Barcelona"
-  },
-  {
-    "id": "e_bcn_99400790108",
-    "slug": "concert-temples-99400790108",
-    "title": "Concert \"Temples\"",
-    "summary": "Temples és una banda britànica de rock psicodèlic formada a Kettering el 2012 per James Bagshaw i Thomas Walmsley. Nascuda com un projecte casolà, va començar a circular per YouTube fins a cridar l'atenció de Heavenly Recordings, que els va fitxar ràpidament. Amb la incorporació d'Adam Smith i…",
-    "startsAt": "2026-11-22",
-    "placeId": "p_auto_unknown",
-    "placeName": "Sala Paral·lel 62",
-    "primaryDomain": "animals",
-    "tags": [
-      "bcn-agenda",
-      "ciutat-vella",
-      "concerts",
-      "rock"
-    ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/eaaa0370-4481-4630-801f-ec2fc32fd9cd.f2f87669b.jpg",
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Captura_de_pantalla_2026-11-03_103854.cc3c5700b.png",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
@@ -1367,20 +571,157 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
-    "id": "e_bcn_99400789908",
-    "slug": "suite-coral-alcarem-cantant-el-vol-de-baltassar-bibiloni-99400789908",
-    "title": "Suite Coral 'Alçarem cantant el vol', de Baltassar Bibiloni",
-    "summary": "Intèrprets: Cor Aurica, Art Vocal Ensemble, Musicantes de Mallorca. Directors: Aleix Oliveras, Llorenç Gelabert Clarinet: Bartolomé Garcia-Plata Violoncel: Lluís Heras, Piano: Marina Pelfort Soprano: Anaïs Oliveras Baríton: Aleix Oliveras.",
+    "id": "e_bcn_99400790443",
+    "slug": "concert-evadne-shattered-sigh-99400790443",
+    "title": "Concert \"Evadne + Shattered Sigh\"",
+    "summary": "Els referents del doom/death metal melòdic estatal, Evadne, arriben a la Sala Paral·lel 62 de Barcelona en la seva única actuació a Espanya durant el 2026. Amb més de dues dècades donant forma a la malenconia, la banda valenciana oferirà un ritual sonor exclusiu d'atmosferes denses i passatges…",
     "startsAt": "2026-11-22",
     "placeId": "p_auto_unknown",
-    "placeName": "Parròquia de Santa Maria del Pi - Basílica",
+    "placeName": "Sala Paral·lel 62",
     "primaryDomain": "animals",
     "tags": [
       "bcn-agenda",
       "ciutat-vella",
-      "concerts"
+      "concerts",
+      "rock"
     ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Captura_de_pantalla_2026-11-03_103854.cc3c5700b.png",
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/evadne.e34b76adb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790108",
+    "slug": "concert-temples-99400790108",
+    "title": "Concert \"Temples\"",
+    "summary": "Temples és una banda britànica de rock psicodèlic formada a Kettering el 2012 per James Bagshaw i Thomas Walmsley. Nascuda com un projecte casolà, va començar a circular per YouTube fins a cridar l'atenció de Heavenly Recordings, que els va fitxar ràpidament. Amb la incorporació d'Adam Smith i…",
+    "startsAt": "2026-11-22",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "rock"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/eaaa0370-4481-4630-801f-ec2fc32fd9cd.f2f87669b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400744151",
+    "slug": "concert-hong-kong-philharmonic-orchestra-peltokoski-mozart-i-99400744151",
+    "title": "Concert \"Hong Kong Philharmonic Orchestra & Peltokoski - Mozart i Bruckner\"",
+    "summary": "Fitxa artística Martin Helmchen, piano Hong Kong Philharmonic Orchestra Tarmo Peltokoski, director Programa W. A. Mozart: Concert per a piano i orquestra núm. 24, en Do menor, KV 491 A. Bruckner: Simfonia núm. 4, en Mi bemoll major, WAB 104, \"Romàntica\"",
+    "startsAt": "2026-11-23",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau de la Música Catalana",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica-classica",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/FUJITA.71f6f6a2b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400720613",
+    "slug": "espectacle-guillermotta-99400720613",
+    "title": "Espectacle \"Guillermotta\"",
+    "summary": "Concert homenatge a Guillermina Motta Torna per quarta temporada el concert íntim de cançons de la Guillermina Motta interpretades per un alter ego molt particular, anomenat Guillermotta, encarnat per Jordi Vidal, acompanyat de Jordi Cornudella al piano, sota la direcció de Jordi Prat i Coll.…",
+    "startsAt": "2026-11-23",
+    "placeId": "p_auto_unknown",
+    "placeName": "Teatre El Maldà",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "espectacles",
+      "teatre",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/guillermotta.fe8ee105b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400744163",
+    "slug": "concert-cecilia-bartoli-lang-lang-99400744163",
+    "title": "Concert ''Cecilia Bartoli & Lang Lang\"",
+    "summary": "Fitxa artística Cecilia Bartoli, mezzosoprano Lang Lang, piano Programa Programa per determinar",
+    "startsAt": "2026-11-24",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau de la Música Catalana",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica-classica",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/BENJAMIN.c348b4c5b.jpeg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400781058",
+    "slug": "concert-lela-soto-99400781058",
+    "title": "Concert \"Lela Soto\"",
+    "summary": "Lela Soto és una de les cantaores més rellevants de la seva generació i una de les veus més especials del gènere. Destaca pel seu color de veu, la seva sensibilitat, la seva afinació, el seu gran sentit del ritme i la seva marcada personalitat, característiques que l'han dut a erigir-se en una…",
+    "startsAt": "2026-11-24",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree 3",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "flamenc",
+      "jazz-blues"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/mesadetrabajo2-27153115.6dccc897b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400783137",
+    "slug": "concert-eddie-henderson-quartet-99400783137",
+    "title": "Concert \"Eddie Henderson Quartet\"",
+    "summary": "Eddie Henderson, trompeta Matyas Gayer, piano Arnie Somogyi, contrabaix Stephen Keogh, bateria Aquest concert forma part del Festival de Jazz de Barcelona Feliç aniversari, John Coltrane i Miles Davis L'any 2026 marca el centenari del naixement de dos dels músics i innovadors més importants de…",
+    "startsAt": "2026-11-24",
+    "endsAt": "2026-11-25",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "jazz-blues",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/1500x850-18111827.037f666fb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790069",
+    "slug": "dimarts-de-video-stampa-models-de-mirar-99400790069",
+    "title": "Dimarts de vídeo 'Stampa. Models de Mirar'",
+    "summary": "Sessió dedicada a l'obra audiovisual d'ESTAMPA, col·lectiu de programadors, realitzadors i investigadors amb base a Barcelona. La sessió recorre alguns dels principals àmbits de la seva pràctica artística: la intel·ligència artificial i la visió computacional, l'animació experimental, la…",
+    "startsAt": "2026-11-24",
+    "placeId": "p_auto_unknown",
+    "placeName": "Centre d'Arts Santa Mònica",
+    "primaryDomain": "fungi",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "projeccions",
+      "cinema",
+      "activitats-dels-museus-i-arxius-de-barcelona"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/19_ECOSS_ESTAMPA_03.379a75afb.jpg",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
@@ -1399,6 +740,62 @@
       "activitats-dels-museus-i-arxius-de-barcelona"
     ],
     "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/10.b242b16cb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400781059",
+    "slug": "concert-maria-marin-99400781059",
+    "title": "Concert \"María Marín\"",
+    "summary": "«En un sueño viniste», canta María Marín en una de les versions del seu últim disc, Las tres Marías (recordant Enrique Morente). L'onirisme forma part, sens dubte, del poderós ideari poètic d'aquesta artista singularíssima, cantaora i guitarrista capaç d'enlluernar amb un recital que inclou…",
+    "startsAt": "2026-11-25",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree 3",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "flamenc",
+      "jazz-blues"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/mesadetrabajo2-27141141.b89498c6b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400781060",
+    "slug": "concert-sant-andreu-dixie-band-99400781060",
+    "title": "Concert \"Sant Andreu Dixie Band\"",
+    "summary": "La Sant Andreu Jazz Band (SAJB) va néixer el 2006 interpretant, sobretot, música vinculada al bressol del jazz, Nova Orleans. El seu creixement any rere any va desplaçar el repertori cap a l'era de les big bands, però des de fa temps la SAJB va decidir tornar als orígens amb els més joves de…",
+    "startsAt": "2026-11-25",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala de Festes La Paloma",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "jazz-blues",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/8.ff73a612b.png",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400785946",
+    "slug": "concert-esdeekid-99400785946",
+    "title": "Concert \"EsDeeKid\"",
+    "summary": "Llavors, qui és EsDeeKid? Des que aquest misteriós raper de Liverpool va publicar, a mitjans del 2025, el seu primer disc, \"Rebel\", internet s'ha afanyat a construir un relat biogràfic que expliqués qui era aquell noi que amagava el rostre sota un passamuntanyes. El problema és que només hi…",
+    "startsAt": "2026-11-25",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/esdeekid.25e59750b.jpg",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
@@ -1421,6 +818,152 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
+    "id": "e_bcn_99400787747",
+    "slug": "concert-triada-99400787747",
+    "title": "Concert \"Tríada\"",
+    "summary": "Diamela Spina, veu i percussió Aylen Reynoso, guitarra Julia Percowicz, veu Recordeu aquest nom: Tríada . I recordeu aquestes artistes: Diamela Spina (percussió i veu), Aylen Reynoso (guitarra) i Julia Percowicz (veu). Perquè les descobrirem a la intimitat del Jamboree i perquè estem convençuts…",
+    "startsAt": "2026-11-26",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree 3",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "jazz-blues",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Mesa-de-trabajo-52-8.924d50d8b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400789924",
+    "slug": "espectacle-de-puta-madre-amb-anita-eme-99400789924",
+    "title": "Espectacle \"De puta madre\", amb Anita Eme",
+    "summary": "Espectacle \"De puta madre\", amb Anita Eme",
+    "startsAt": "2026-11-26",
+    "placeId": "p_auto_unknown",
+    "placeName": "Teatre El Llantiol",
+    "primaryDomain": "algae",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "espectacles",
+      "monolegs",
+      "humor"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/anitaeme.06f8103bb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790405",
+    "slug": "concert-claudia-arenas-99400790405",
+    "title": "Concert \"Claudia Arenas\"",
+    "summary": "Claudia Arenas puja per primera vegada sola a l'escenari per presentar uns showcases íntims i propers, en què repassarà els seus primers llançaments, descobrirà noves cançons i compartirà algunes sorpreses amb el públic. Després del seu pas per Operación Triunfo , l'artista alacantina inicia una…",
+    "startsAt": "2026-11-26",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "pop"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/claudiarenas.73e8f1beb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790001",
+    "slug": "concert-dib-99400790001",
+    "title": "Concert \"DIB\"",
+    "summary": "Concert \"DIB\"",
+    "startsAt": "2026-11-26",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sidecar Club",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "pop"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/dib-880x880.6f6d919ab.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790474",
+    "slug": "dialeg-entre-el-mestre-i-l-alumne-amb-roman-gausa-rull-99400790474",
+    "title": "'Diàleg entre el mestre i l'alumne', amb Román Gausa Rull",
+    "summary": "La publicitat entre els anys 1950-1980 Barris desapareguts Retrats de personalitats de l'art i la cultura. Foto: © Román Gausa Rull.",
+    "startsAt": "2026-11-26",
+    "placeId": "p_auto_unknown",
+    "placeName": "Agrupació Fotogràfica de Catalunya",
+    "primaryDomain": "fungi",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "fotografia"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Dialegs-Analogics_3_AFC_2026_3MB.33bf713bb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400713114",
+    "slug": "concert-cloenda-d-el-primer-palau-2026-amb-karen-kuronuma-99400713114",
+    "title": "Concert ''Cloenda d'El Primer Palau 2026'', amb Karen Kuronuma",
+    "summary": "Fitxa artística Karen Kuronuma, piano Programa D. SCARLATTI: Sonates K 118, K 239 \"Fandango\", K 427 C. DEBUSSY: Estampes: Pagodes, La soirée dans Grenade, Jardins sous la pluie E. GRANADOS: \"El pelele\" de Goyescas núm. 5 S. RAKHMÀNINOV: Sonata per a piano núm. 2, en Si bemoll menor, op. 26…",
+    "startsAt": "2026-11-26",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau de la Música Catalana",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Captura.98e1a9d9b.PNG",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790445",
+    "slug": "concert-camila-blazquez-99400790445",
+    "title": "Concert \"Camila Blázquez\"",
+    "summary": "Camila Blazquez, cantant i compositora nascuda a Buenos Aires i establerta a Barcelona, arriba a l'escenari del Club Paral·lel 62 per presentar oficialment en directe el seu primer EP, Adicta. Després de consolidar el seu so al llarg de diversos senzills, l'artista argentina ha construït un…",
+    "startsAt": "2026-11-26",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/camilablazquez.e89bfba6b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790446",
+    "slug": "concert-luck-ra-99400790446",
+    "title": "Concert \"Luck Ra\"",
+    "summary": "El fenomen argentí del moment arriba a Barcelona. Luck Ra, un dels artistes més explosius de l'escena pop i urbana, presenta el seu espectacle més esperat a la Sala Paral·lel 62. Amb èxits com \"La Morocha\", \"Hola Perdida\" i \"Que Me Falte Todo\", promet una nit plena d'energia, emoció i festa.",
+    "startsAt": "2026-11-26",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/luckra.d1635eceb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
     "id": "e_bcn_99400782578",
     "slug": "concert-los-fabulosos-cadillacs-99400782578",
     "title": "Concert \"Los Fabulosos Cadillacs\"",
@@ -1437,6 +980,154 @@
       "destacats-agenda-us-intern-bi"
     ],
     "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/LFC_352x198.f652d679b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400784691",
+    "slug": "concert-ethan-iverson-bill-mchenry-99400784691",
+    "title": "Concert \"Ethan Iverson - Bill McHenry\"",
+    "summary": "Fa més d'un quart de segle que admiro Ethan Iverson i Bill McHenry. De fet, d'ençà que els vaig descobrir a Live at Smalls (Fresh Sound), amb els grandíssims Reid Anderson i Jeff Williams. Des de llavors que els tinc al meu calaix d'inspiradors únics i imprevisibles. Sobretot, per ser creadors…",
+    "startsAt": "2026-11-27",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree 3",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "jazz-blues",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/1500x850-11105705.f98494cab.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790536",
+    "slug": "25e-aniversari-d-xcentric-colors-99400790536",
+    "title": "25è aniversari d’\"Xcèntric\": Colors",
+    "summary": "Aquesta tardor, Xcèntric , el cinema del CCCB, celebra 25 anys i més de mil projeccions amb un programa especial al voltant del color, un element central del cinema experimental. Celebrarem l'aniversari durant tot un cap de setmana amb performances, una instal·lació, una masterclass i una…",
+    "startsAt": "2026-11-27",
+    "endsAt": "2026-11-29",
+    "placeId": "p_auto_unknown",
+    "placeName": "Centre de Cultura Contemporània de Barcelona",
+    "primaryDomain": "fungi",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "projeccions",
+      "cinema",
+      "activitats-dels-museus-i-arxius-de-barcelona"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/xcentric_cicle_25_anys.5593f5a9b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790406",
+    "slug": "concert-seven-seas-orchestra-un-viatge-als-anys-20-99400790406",
+    "title": "Concert \"Seven Seas Orchestra: Un viatge als anys 20\"",
+    "summary": "contrabaix · trompeta · violí · washboard · dobro · banjo · veus Seven Seas Orchestra és una banda de hot jazz inspirada en la Nova Orleans dels inicis, el París dels anys 20 i els sons del Carib. La banda actua amb instruments d'època i una identitat visual que recrea l'ambient d'un antic club…",
+    "startsAt": "2026-11-27",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "jazz-blues"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/sevenseas.654d85cdb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790407",
+    "slug": "concert-lubiana-99400790407",
+    "title": "Concert \"Lubiana\"",
+    "summary": "L'artista belga-camerunesa, compositora i intèrpret de kora, Lubiana , crea una cruïlla de cultures, fusionant l'herència ancestral amb l'expressió contemporània. Com una de les poques dones del món que toquen la kora (un instrument tradicional de l'Àfrica Occidental històricament reservat als…",
+    "startsAt": "2026-11-27",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "pop"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/lubiana.83689d5ab.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790003",
+    "slug": "concert-radio-free-alice-99400790003",
+    "title": "Concert \"Radio Free Alice\"",
+    "summary": "Concert \"Radio Free Alice\"",
+    "startsAt": "2026-11-27",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sidecar Club",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/radio-free-alice_post-880x1100.04b018abb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400715677",
+    "slug": "visita-comentada-santa-caterina-de-convent-a-mercat-99400715677",
+    "title": "Visita comentada 'Santa Caterina: de convent a mercat'",
+    "summary": "Sabies que sota el mercat de Santa Caterina s'amaguen unes de les restes arqueològiques de l'edat mitjana més importants de Barcelona? Vista comentada que explica la transformació del convent més gran, de fundació medieval, en el primer mercat modern de la ciutat.",
+    "startsAt": "2026-11-27",
+    "placeId": "p_auto_unknown",
+    "placeName": "MUHBA Museu d'Història de Barcelona - Santa Caterina",
+    "primaryDomain": "algae",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "visites-guiades",
+      "activitats-dels-museus-i-arxius-de-barcelona"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/santa-caterina-interior_0.88ec7cdeb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790447",
+    "slug": "concert-lia-kali-99400790447",
+    "title": "Concert \"Lia Kali\"",
+    "summary": "Poc s'imaginava la cantant barcelonina Lia Kali quan va publicar el seu primer disc 'Contra Todo Pronóstico' el 2023 com a catarsi personal per curar ensopegades, penes i pors del seu dia a dia que la gent es faria seva les cançons d'una manera tan profunda. El 2025 va arribar 'Kaelis', un segon…",
+    "startsAt": "2026-11-27",
+    "endsAt": "2026-11-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/liakali.37fc2e6ab.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790448",
+    "slug": "concert-vacaciones-permanentes-99400790448",
+    "title": "Concert \"Vacaciones Permanentes\"",
+    "summary": "Vacaciones Permanentes torna a Barcelona, aquesta vegada en el marc de la seva gira AIEnRuta. Iván Andrés presentarà en directe i per primera vegada cançons del seu pròxim àlbum, previst per al 2027. La seva proposta combina post-punk, rockabilly i electrònica dels anys 80, amb guitarres…",
+    "startsAt": "2026-11-27",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "rock"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/vacacionespermanentes.2ec7a16eb.jpg",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
@@ -1460,22 +1151,154 @@
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
-    "id": "e_bcn_99400760710",
-    "slug": "concert-galvan-real-99400760710",
-    "title": "Concert \"Galvan Real\"",
-    "summary": "Al 2026 el cantant tornarà amb el seu flamenc fusió.",
-    "startsAt": "2026-11-29",
+    "id": "e_bcn_99400786568",
+    "slug": "concert-marta-robles-i-alicia-grillo-99400786568",
+    "title": "Concert \"Marta Robles i Alicia Grillo\"",
+    "summary": "Marta Robles i Alicia Grillo, guitarristes de Las Migas, ens presenten un format especialíssim, el duo, nascut de la necessitat d'explorar noves formes de comunicació a través de la guitarra. Robles i Grillo recrearan en la intimitat del Jamboree l'univers de Las Migas des d'una perspectiva…",
+    "startsAt": "2026-11-28",
     "placeId": "p_auto_unknown",
-    "placeName": "Palau Sant Jordi",
+    "placeName": "Jamboree 3",
     "primaryDomain": "animals",
     "tags": [
       "bcn-agenda",
-      "sants-montjuic",
+      "ciutat-vella",
       "concerts",
+      "festivals",
       "flamenc",
-      "destacats-agenda-us-intern-bi"
+      "jazz-blues"
     ],
-    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Sense_titol.70b23509b.png",
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/1500x850-25132329.a4c0d7e5b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400770049",
+    "slug": "concert-ramon-mirabet-all-stars-jazz-project-99400770049",
+    "title": "Concert \"Ramon Mirabet All Stars Jazz Project\"",
+    "summary": "«No vull demostrar res amb aquest disc; el que vull és disfrutar de tocar amb alguns dels músics més increïbles que he conegut», explica el mateix Mirabet sobre aquest projecte original que el porta fins al jazz al capdavant d'un quartet de luxe: Perico Sambeat, Albert Sanz, Doug Weiss i Jordi…",
+    "startsAt": "2026-11-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau de la Música Catalana",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "jazz-blues",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/ramon_mirabet.6fcfcbe6b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400776977",
+    "slug": "espectacle-diva-de-barrio-amb-isabel-rey-99400776977",
+    "title": "Espectacle \"Diva de Barrio\", amb Isabel Rey",
+    "summary": "Isabel Rey presenta Diva de Barrio, un espectacle ple de nostàlgia i humor que et farà reviure els bons temps. A través de les seves vivències, l'Isabel ens confronta amb una realitat actual: vivim en un món on aparentem felicitat a les xarxes socials, però per dins, de vegades, arrosseguem més…",
+    "startsAt": "2026-11-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Teatre Borràs",
+    "primaryDomain": "algae",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "espectacles",
+      "monolegs",
+      "humor",
+      "teatre-i-dansa"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/divadebarrio.6c6e4ca3b.JPG",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400778138",
+    "slug": "concert-tu-otra-bonita-99400778138",
+    "title": "Concert \"Tu Otra Bonita\"",
+    "summary": "Tu Otra Bonita presenta el seu nou LP en el Festival Íntims amb un concert en format acústic on la música recupera tot el protagonisme. Una oportunitat única per a gaudir de la seva energia i autenticitat en un directe pròxim i sense artificis que també permetrà redescobrir algunes de les seves…",
+    "startsAt": "2026-11-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Gran Casino de Barcelona",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "pop"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/b.f96b0d99b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400784234",
+    "slug": "concert-carlos-sarduy-trio-99400784234",
+    "title": "Concert \"Carlos Sarduy Trio\"",
+    "summary": "Carlos Sarduy trompeta, congues, teclats i veu · Frank Durand bateria Carlos Sarduy , nascut a l'Havana, Cuba, és un destacat trompetista, percussionista, pianista i compositor la versatilitat del qual l'ha consolidat com una figura prominent de l'escena musical europea des de la seva arribada…",
+    "startsAt": "2026-11-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "jazz-blues"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/carlossarduy.b7d92516b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400766465",
+    "slug": "espectacle-verguenza-ajena-d-alex-vega-i-raquel-montalvo-99400766465",
+    "title": "Espectacle \"Vergüenza ajena\", d'Alex Vega i Raquel Montalvo",
+    "summary": "Espectacle \"Vergüenza ajena\", d'Alex Vega i Raquel Montalvo",
+    "startsAt": "2026-11-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Teatre El Llantiol",
+    "primaryDomain": "algae",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "espectacles",
+      "teatre"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/verguenza_ajena.b289b839b.PNG",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790451",
+    "slug": "concert-club-mediodia-99400790451",
+    "title": "Concert \"Club Mediodía\"",
+    "summary": "Club Mediodía és una banda de Barcelona formada per Adriel Achaval (veu i guitarra), Marco Mazzotta (bateria i cors) i Mauri Armora (baix i cors). El seu univers és la «psicodèlia domèstica»: cançons sobre el quotidià —un diumenge llarg, una tassa de cafè a mig acabar, una conversa mal…",
+    "startsAt": "2026-11-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/clubmediodia.5b756229b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790004",
+    "slug": "concert-supercremalleras-99400790004",
+    "title": "Concert \"Supercremalleras\"",
+    "summary": "Concert \"Supercremalleras\"",
+    "startsAt": "2026-11-28",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sidecar Club",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "rock"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/supercremalleras-jester-2026-poster-barcelona-880x1174.d071c8d7b.jpeg",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   },
   {
@@ -1496,6 +1319,191 @@
       "destacats-agenda-us-intern-bi"
     ],
     "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Sense_titol.ecdd7f44b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400760710",
+    "slug": "concert-galvan-real-99400760710",
+    "title": "Concert \"Galvan Real\"",
+    "summary": "Al 2026 el cantant tornarà amb el seu flamenc fusió.",
+    "startsAt": "2026-11-29",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau Sant Jordi",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "sants-montjuic",
+      "concerts",
+      "flamenc",
+      "destacats-agenda-us-intern-bi"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/Sense_titol.70b23509b.png",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790410",
+    "slug": "concert-daniel-ferruz-quartet-99400790410",
+    "title": "Concert \"Daniel Ferruz Quartet\"",
+    "summary": "Joan Mas saxo · Daniel Ferruz piano · David Mengual contrabaix · Adrià Claramunt bateria Daniel Ferruz Quartet és el projecte personal del pianista i compositor saragossà Daniel Ferruz , acompanyat per Joan Mas al saxòfon, David Mengual al contrabaix i Adrià Claramunt a la bateria. Es tracta…",
+    "startsAt": "2026-11-29",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree 3",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "jazz-blues"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/danielferruz.47751a54b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790411",
+    "slug": "concert-trilog-99400790411",
+    "title": "Concert \"TRILOG\"",
+    "summary": "Melón Jimenez guitarra flamenca i veu · Lara Wong flautes i bansuri · Chaitanya Natu percussió i tabla TRILOG és el punt de trobada on el flamenc, el jazz i la música hindustànica dialoguen en una conversa espontània i vibrant. Format per la flautista i bansurista Lara Wong , el guitarrista…",
+    "startsAt": "2026-11-29",
+    "placeId": "p_auto_unknown",
+    "placeName": "Jamboree",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "jazz-blues"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/trilog.c9934f5ab.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400659649",
+    "slug": "itinerari-l-obertura-de-la-via-laietana-i-la-creacio-del-bar-99400659649",
+    "title": "Itinerari 'L'obertura de la Via Laietana i la creació del barri Gòtic'",
+    "summary": "Itinerari al voltant de la Via Laietana que visibilitza una de les grans operacions urbanístiques del segle XX i un dels projectes que més ha transformat el centre històric de Barcelona. L'activitat examina el procés d'obertura de la via, inspirat en criteris d'higienisme i modernització, que va…",
+    "startsAt": "2026-11-29",
+    "placeId": "p_auto_unknown",
+    "placeName": "Plaça del Rei 7",
+    "primaryDomain": "algae",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "activitats-dels-museus-i-arxius-de-barcelona"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/99400659649-ViaLaietana%5B2%5D.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400790450",
+    "slug": "concert-aloud-all-yearer-the-noyrd-99400790450",
+    "title": "Concert \"Aloud All-Yearer: The Noyrd\"",
+    "summary": "Amants del caos sonor controlat i deutors del noise i el shoegaze ben executats, sense perdre de vista la psicodèlia i els paisatges brillants i atmosfèrics. The Noyrd són una de les joies ocultes de l'escena catalana. Els seus concerts, una catarsi de principi a fi, combinen imatges amb un so…",
+    "startsAt": "2026-11-29",
+    "placeId": "p_auto_unknown",
+    "placeName": "Sala Paral·lel 62",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/aloud.8d4f752cb.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400744166",
+    "slug": "concert-franco-fagioli-gabetta-consort-99400744166",
+    "title": "Concert ''Franco Fagioli & Gabetta Consort\"",
+    "summary": "Fitxa artística Franco Fagioli, contratenor Gabetta Consort Andrés Gabetta, violí i director Programa Obres de Vivaldi, Hasse, Geminiani, Porpora, Sellitto i Locatelli",
+    "startsAt": "2026-11-30",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau de la Música Catalana",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica-classica",
+      "opera",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/SERENA.48a0d6d1b.PNG",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400783139",
+    "slug": "concert-omar-sosa-marcelo-woloski-focus-quartet-99400783139",
+    "title": "Concert \"Omar Sosa - Marcelo Woloski - Focus Quartet\"",
+    "summary": "Omar Sosa, piano i composicions Marcelo Woloski, percussions i composicions Convidats especials: Focus Quartet Shanti Easton, violí Laura Romero, violí Clementina Boeykens, viola Genís Pagès, violoncel",
+    "startsAt": "2026-11-30",
+    "placeId": "p_auto_unknown",
+    "placeName": "Fundació Conservatori del Liceu",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "jazz-blues",
+      "musica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/1500x850-29101712.0f9e9d41b.jpg",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400789400",
+    "slug": "conferencia-subministrament-de-neu-i-glac-a-la-barcelona-mod-99400789400",
+    "title": "Conferència 'Subministrament de neu i glaç a la Barcelona moderna'",
+    "summary": "A càrrec de Jaume Dantí i Riu , catedràtic d'Història Moderna de la Universitat de Barcelona, i coordinador del Grup d'Estudis d'Història de la Mediterrània Occidental (GEHMO). ATENCIÓ! Donat el volum de demanda d'inscripcions per a aquesta activitat, aquest Diàleg es farà finalment a la Sala…",
+    "startsAt": "2026-11-30",
+    "placeId": "p_auto_unknown",
+    "placeName": "El Born. Museu d'Història de Barcelona",
+    "primaryDomain": "algae",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "activitats-dels-museus-i-arxius-de-barcelona"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/casa_de_la_neu.2b2d0c43b.png",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400783140",
+    "slug": "concert-antonio-serrano-kaele-jimenez-99400783140",
+    "title": "Concert \"Antonio Serrano - Kaele Jiménez\"",
+    "summary": "L'harmonicista Antonio Serrano és, sens dubte, un dels músics més singulars d'avui en dia, com va reconèixer l'any passat el Premio Nacional de Música, el jurat del qual va lloar «l'excel·lència i l'originalitat» dels seus treballs discogràfics del 2024 ( Flamenco Messengers i Porter & Gershwin…",
+    "startsAt": "2026-12-01",
+    "placeId": "p_auto_unknown",
+    "placeName": "Fundació Conservatori del Liceu",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "festivals",
+      "flamenc",
+      "jazz-blues"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/antoniog.78b6d4adb.png",
+    "imageCredit": "Agenda: Ajuntament de Barcelona"
+  },
+  {
+    "id": "e_bcn_99400744708",
+    "slug": "accademia-nazionale-di-santa-cecilia-harding-txaikovski-i-br-99400744708",
+    "title": "Accademia Nazionale di Santa Cecilia & Harding - \"Txaikovski i Brahms\"",
+    "summary": "Fitxa artística Kirill Gerstein, piano Orchestra dell'Accademia Nazionale di Santa Cecilia Daniel Harding, director Programa P. I. Txaikovski: Concert per a piano i orquestra núm. 1, en Si bemoll menor, op. 23 J. Brahms: Simfonia núm. 4, en Mi menor, op. 98",
+    "startsAt": "2026-12-01",
+    "placeId": "p_auto_unknown",
+    "placeName": "Palau de la Música Catalana",
+    "primaryDomain": "animals",
+    "tags": [
+      "bcn-agenda",
+      "ciutat-vella",
+      "concerts",
+      "musica-classica"
+    ],
+    "imageUrl": "https://estatics-nasia.dtibcn.cat/nasia-pro/media/PARLEM.05c09886b.JPG",
     "imageCredit": "Agenda: Ajuntament de Barcelona"
   }
 ]

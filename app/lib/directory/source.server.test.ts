@@ -109,6 +109,37 @@ describe('mapEventRow', () => {
       null,
     );
   });
+
+  it('falls back to seed imageUrl when Supabase omits image_url', () => {
+    const seed = new Map([
+      [
+        'expo-macba',
+        {
+          id: 'e_seed',
+          slug: 'expo-macba',
+          title: 'Expo',
+          summary: '',
+          startsAt: '2026-04-13T00:00',
+          placeId: '',
+          primaryDomain: 'fungi' as const,
+          imageUrl: 'https://estatics-nasia.dtibcn.cat/example.jpg',
+        },
+      ],
+    ]);
+    const event = mapEventRow(
+      {
+        id: 'e_live',
+        slug: 'expo-macba',
+        title: 'Expo',
+        starts_at: '2026-04-13T00:00:00.000Z',
+        primary_domain: 'plants',
+      },
+      new Map(),
+      seed,
+    );
+    assert.ok(event);
+    assert.equal(event.imageUrl, 'https://estatics-nasia.dtibcn.cat/example.jpg');
+  });
 });
 
 describe('mapCreatorRow', () => {

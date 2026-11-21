@@ -74,9 +74,19 @@ const DEFAULT_PLACE = [
 const DOMAIN_EVENT: Record<DomainCategory, string[]> = {
   plants: ['photo-1464822759023-fed622ff2c3b', 'photo-1441974231531-c6227db76b6e'],
   algae: ['photo-1505118380757-91f5f5632de0', 'photo-1439066615861-d1af74d74000'],
-  fungi: ['photo-1518709268805-4e9042af9f23', 'photo-1518837695005-2083093ee35b'],
+  // Galleries / exhibitions (Fungi · Connect)
+  fungi: [
+    'photo-1541961017774-22349e4a1262',
+    'photo-1536924940846-227afb31e2a5',
+    'photo-1579783902614-a3fb3927b6a5',
+    'photo-1518998053901-5348d3961a04',
+  ],
   microbes: ['photo-1532187863486-abf9dbad1b69', 'photo-1576086213369-97a3063a8e18'],
-  animals: ['photo-1474511320723-9a56873867b5', 'photo-1504006833117-8886f35596fa'],
+  animals: [
+    'photo-1470229722913-7c0e2dbbafd3',
+    'photo-1514525253161-7a46d19cd819',
+    'photo-1501612780327-45045538702b',
+  ],
   earth: ['photo-1506905925346-21bda4d32df4', 'photo-1469474968028-56623f02e42e'],
 };
 
@@ -97,13 +107,25 @@ export function resolvePlaceImageUrl(place: Place): string | undefined {
   return unsplash(path);
 }
 
-export function resolveEventImageUrl(event: CityEvent, place?: Place | null): string | undefined {
-  if (event.imageUrl) return event.imageUrl;
-  if (place) return resolvePlaceImageUrl(place);
+/** Domain/place stock photo — never the live event.imageUrl (for error fallbacks). */
+export function eventStockImageUrl(event: CityEvent, place?: Place | null): string {
+  if (place?.imageUrl) return place.imageUrl;
+  if (place) {
+    const cat = place.categories[0];
+    const pool = (cat && PLACE_IMAGES[cat]) ?? DEFAULT_PLACE;
+    const path = pool[bucket(event.slug || place.slug, pool.length)] ?? pool[0];
+    return unsplash(path);
+  }
   const domain = normalizeDomain(event.primaryDomain) ?? 'earth';
   const pool = DOMAIN_EVENT[domain] ?? DOMAIN_EVENT.earth;
   const path = pool[bucket(event.slug, pool.length)] ?? pool[0];
   return unsplash(path);
+}
+
+/** Always returns a URL: live image, or a stable stock photo. */
+export function resolveEventImageUrl(event: CityEvent, place?: Place | null): string {
+  if (event.imageUrl) return event.imageUrl;
+  return eventStockImageUrl(event, place);
 }
 
 export function resolveCreatorImageUrl(creator: Creator): string | undefined {
