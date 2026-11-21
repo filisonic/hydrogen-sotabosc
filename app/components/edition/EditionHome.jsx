@@ -1,12 +1,16 @@
 import {useState} from 'react';
 import {Link} from 'react-router';
 import {JsonLd} from '~/components/seo/JsonLd';
+import {
+  journalStockImageUrl,
+  rubriqueStockImageUrl,
+} from '~/lib/media/fallbackImagery';
 
 /**
- * Hotlinked edition figure: CSP/hotlink failures fall back to a letter mark
- * instead of the browser’s broken-image icon.
+ * Hotlinked edition figure: on failure, try a stock photo, then a letter mark.
  * @param {{
  *   src?: string | null;
+ *   fallbackSrc?: string | null;
  *   figClass: string;
  *   emptyClass?: string;
  *   fallback?: import('react').ReactNode;
@@ -15,27 +19,40 @@ import {JsonLd} from '~/components/seo/JsonLd';
  */
 function EditionFig({
   src,
+  fallbackSrc,
   figClass,
   emptyClass = `${figClass} ${figClass}--empty`,
   fallback = 'S',
   loading = 'lazy',
 }) {
-  const [failed, setFailed] = useState(false);
-  const showImage = Boolean(src) && !failed;
+  const [stage, setStage] = useState(/** @type {'primary' | 'stock' | 'done'} */ ('primary'));
+  const active =
+    stage === 'primary' && src
+      ? src
+      : stage !== 'done' && fallbackSrc
+        ? fallbackSrc
+        : null;
+
+  if (!active) {
+    return <div className={emptyClass}>{fallback}</div>;
+  }
+
   return (
-    <div className={showImage ? figClass : emptyClass}>
-      {showImage ? (
-        <img
-          src={src}
-          alt=""
-          loading={loading}
-          decoding="async"
-          referrerPolicy="no-referrer"
-          onError={() => setFailed(true)}
-        />
-      ) : (
-        fallback
-      )}
+    <div className={figClass}>
+      <img
+        src={active}
+        alt=""
+        loading={loading}
+        decoding="async"
+        referrerPolicy="no-referrer"
+        onError={() => {
+          if (stage === 'primary' && fallbackSrc && fallbackSrc !== src) {
+            setStage('stock');
+          } else {
+            setStage('done');
+          }
+        }}
+      />
     </div>
   );
 }
@@ -176,6 +193,10 @@ export function EditionHome({edition, journalArticles = []}) {
         <Link to={leadHref} className="edition-front-lead edition-lead">
           <EditionFig
             src={leadImage}
+            fallbackSrc={rubriqueStockImageUrl(
+              isEventFeatured ? 'art' : 'culture',
+              featured?.slug || featured?.id || 'lead',
+            )}
             figClass="edition-lead-fig"
             emptyClass="edition-lead-fig edition-lead-fig--empty"
             loading="eager"
@@ -242,6 +263,10 @@ export function EditionHome({edition, journalArticles = []}) {
               >
                 <EditionFig
                   src={story.imageUrl}
+                  fallbackSrc={rubriqueStockImageUrl(
+                    story.rubrique,
+                    story.id || story.title,
+                  )}
                   figClass="edition-news-fig"
                   emptyClass="edition-news-fig edition-news-fig--empty"
                   fallback={story.rubrique?.slice(0, 1)?.toUpperCase() || '·'}
@@ -290,6 +315,9 @@ export function EditionHome({edition, journalArticles = []}) {
               >
                 <EditionFig
                   src={article.imageUrl}
+                  fallbackSrc={journalStockImageUrl(
+                    article.handle || article.id || article.title,
+                  )}
                   figClass="edition-journal-fig"
                   emptyClass="edition-journal-fig edition-journal-fig--empty"
                   fallback={<span aria-hidden="true">S</span>}
@@ -334,6 +362,7 @@ export function EditionHome({edition, journalArticles = []}) {
               >
                 <EditionFig
                   src={ev.imageUrl}
+                  fallbackSrc={rubriqueStockImageUrl('art', ev.slug || ev.id)}
                   figClass="edition-media-fig"
                   emptyClass="edition-media-fig edition-media-fig--empty"
                   fallback="Ex"

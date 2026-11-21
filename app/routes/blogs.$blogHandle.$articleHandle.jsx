@@ -11,6 +11,7 @@ import {
   shopifyImageSrcSet,
   shopifyImageUrl,
 } from '~/components/journal/shopifyImageUrl';
+import {resolveJournalImageUrl} from '~/lib/media/fallbackImagery';
 import {pageTitle} from '~/lib/seo/siteMeta';
 import {openGraphImageMeta} from '~/lib/seo/siteImagery';
 import {canonicalLinkMeta} from '~/lib/seo/metaHelpers';
@@ -94,8 +95,11 @@ async function loadCriticalData({context, request, params}) {
   );
 
   const article = blog.articleByHandle;
-  const heroUrl =
-    article.image?.url || firstImageSrcFromHtml(article.contentHtml) || null;
+  const heroUrl = resolveJournalImageUrl({
+    imageUrl: article.image?.url || firstImageSrcFromHtml(article.contentHtml),
+    handle: article.handle,
+    title: article.title,
+  });
 
   const related = (blog.articles?.nodes || [])
     .filter((node) => node.handle !== articleHandle)
@@ -113,8 +117,12 @@ async function loadCriticalData({context, request, params}) {
       handle: node.handle,
       publishedAt: node.publishedAt,
       excerpt: excerptFromHtml(node.contentHtml, 140),
-      imageUrl:
-        node.image?.url || firstImageSrcFromHtml(node.contentHtml) || null,
+      imageUrl: resolveJournalImageUrl({
+        imageUrl: node.image?.url || firstImageSrcFromHtml(node.contentHtml),
+        handle: node.handle,
+        title: node.title,
+        width: 800,
+      }),
     }));
 
   return {
@@ -156,23 +164,17 @@ export default function Article() {
       <JsonLd data={articleLd} />
 
       <article className="journal-feature">
-        {heroUrl ? (
-          <figure className="journal-feature-hero">
-            <img
-              src={shopifyImageUrl(heroUrl, 1600)}
-              srcSet={shopifyImageSrcSet(heroUrl)}
-              sizes="100vw"
-              alt={article.image?.altText || title}
-              loading="eager"
-              decoding="async"
-              referrerPolicy="no-referrer"
-            />
-          </figure>
-        ) : (
-          <div className="journal-feature-hero journal-feature-hero--mark" aria-hidden="true">
-            <span>Sotabosc</span>
-          </div>
-        )}
+        <figure className="journal-feature-hero">
+          <img
+            src={shopifyImageUrl(heroUrl, 1600)}
+            srcSet={shopifyImageSrcSet(heroUrl)}
+            sizes="100vw"
+            alt={article.image?.altText || title}
+            loading="eager"
+            decoding="async"
+            referrerPolicy="no-referrer"
+          />
+        </figure>
 
         <div className="journal-feature-inner">
           <Link to={`/blogs/${blogHandle}`} className="journal-back">
@@ -238,26 +240,16 @@ export default function Article() {
                 className="journal-related-card"
                 prefetch="intent"
               >
-                <div
-                  className={
-                    item.imageUrl
-                      ? 'journal-related-fig'
-                      : 'journal-related-fig journal-related-fig--empty'
-                  }
-                >
-                  {item.imageUrl ? (
-                    <img
-                      src={shopifyImageUrl(item.imageUrl, 800)}
-                      srcSet={shopifyImageSrcSet(item.imageUrl, [400, 800, 1200])}
-                      sizes="(min-width: 900px) 33vw, 100vw"
-                      alt=""
-                      loading="lazy"
-                      decoding="async"
-                      referrerPolicy="no-referrer"
-                    />
-                  ) : (
-                    <span aria-hidden="true">S</span>
-                  )}
+                <div className="journal-related-fig">
+                  <img
+                    src={shopifyImageUrl(item.imageUrl, 800)}
+                    srcSet={shopifyImageSrcSet(item.imageUrl, [400, 800, 1200])}
+                    sizes="(min-width: 900px) 33vw, 100vw"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    referrerPolicy="no-referrer"
+                  />
                 </div>
                 <h2 className="journal-related-title">{item.title}</h2>
                 {item.excerpt ? (

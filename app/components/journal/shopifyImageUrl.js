@@ -1,10 +1,12 @@
 /**
  * Build a Shopify CDN URL at a target width (and optional srcset).
+ * Non-Shopify URLs (Unsplash stock, agenda CDNs) are returned unchanged.
  * @param {string | null | undefined} url
  * @param {number} width
  */
 export function shopifyImageUrl(url, width) {
   if (!url) return '';
+  if (!/cdn\.shopify\.com/i.test(url)) return url;
   try {
     const u = new URL(url);
     u.searchParams.set('width', String(width));
@@ -21,6 +23,7 @@ export function shopifyImageUrl(url, width) {
  */
 export function shopifyImageSrcSet(url, widths = [640, 960, 1280, 1600, 2000]) {
   if (!url) return undefined;
+  if (!/cdn\.shopify\.com/i.test(url)) return undefined;
   return widths.map((w) => `${shopifyImageUrl(url, w)} ${w}w`).join(', ');
 }
 

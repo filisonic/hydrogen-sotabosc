@@ -1,9 +1,11 @@
 import { useLoaderData, Link, redirect } from 'react-router';
 import { useEffect } from 'react';
 import { ContributionActions } from '~/components/directory/ContributionActions';
+import { DirectoryPreviewImage } from '~/components/directory/DirectoryPreviewImage';
 import { DirectorySurface } from '~/components/directory/DirectorySurface';
 import { getDomain } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
+import { eventStockImageUrl, resolveEventImageUrl } from '~/lib/directory/sceneVisuals';
 import { trackEventView } from '~/lib/analytics';
 import { useOrganismStore } from '~/lib/store/useOrganismStore';
 import { openGraphImageMeta } from '~/lib/seo/siteImagery';
@@ -25,12 +27,19 @@ export const meta = ({ data }) => {
   if (!data?.event) return [{ title: 'Event Not Found — Sotabosc City' }];
   const path = directoryRoutes.event(data.event.slug);
   const ended = data?.eventEnded === true;
+  const imageUrl = data?.heroUrl;
   return [
     { title: `${data.event.title} — Sotabosc City` },
     { name: 'description', content: data.event.summary },
     ...(ended ? [{ name: 'robots', content: 'noindex, follow' }] : []),
     ...canonicalLinkMeta(data?.origin, path),
-    ...openGraphImageMeta(data?.origin),
+    ...(imageUrl
+      ? [
+          { property: 'og:image', content: imageUrl },
+          { name: 'twitter:card', content: 'summary_large_image' },
+          { name: 'twitter:image', content: imageUrl },
+        ]
+      : openGraphImageMeta(data?.origin)),
   ];
 };
 
@@ -41,11 +50,21 @@ export async function loader({ params, request, context }) {
   const { getEventBySlug, getPlaceById } = await getCityDirectory(context);
   const event = getEventBySlug(params.slug);
   if (!event) throw new Response('Event not found', { status: 404 });
-  const place = getPlaceById(event.placeId);
+  const place = getPlaceById(event.placeId) || null;
   const endMs = new Date(event.endsAt ?? event.startsAt).getTime();
   const eventEnded = endMs < Date.now();
   const liveNow = eventPulse(event) === 'now';
-  return { event, place: place || null, origin: new URL(request.url).origin, eventEnded, liveNow };
+  const heroUrl = resolveEventImageUrl(event, place);
+  const stockUrl = eventStockImageUrl(event, place);
+  return {
+    event,
+    place,
+    heroUrl,
+    stockUrl,
+    origin: new URL(request.url).origin,
+    eventEnded,
+    liveNow,
+  };
 }
 
 function formatFullDate(isoStr) {
@@ -62,7 +81,8 @@ function formatTime(isoStr) {
 }
 
 export default function EventDetail() {
-  const { event, place, origin, eventEnded, liveNow } = useLoaderData();
+  const { event, place, heroUrl, stockUrl, origin, eventEnded, liveNow } =
+    useLoaderData();
   const eventPageUrl = `${origin}${directoryRoutes.event(event.slug)}`;
   const eventLd = buildEventJsonLd(event, eventPageUrl, place);
   const breadcrumbLd = buildBreadcrumbListJsonLd([
@@ -99,24 +119,46 @@ export default function EventDetail() {
           </Link>
 
           <div
-            className="aspect-[21/9] rounded-2xl mb-6 flex items-center justify-center text-6xl"
-            style={{ backgroundColor: `${domain.color}15` }}
+            className="aspect-[16/9] md:aspect-[21/9] overflow-hidden mb-6 relative bg-[var(--sotabosc-surface-muted)]"
+            style={{ borderRadius: 0 }}
           >
-            {domain.emoji}
+            <DirectoryPreviewImage
+              src={heroUrl}
+              fallbackSrc={stockUrl !== heroUrl ? stockUrl : undefined}
+              alt={event.title}
+              className="absolute inset-0 h-full w-full object-cover"
+              treatment="aurelia"
+              fallback={
+                <div
+                  className="flex h-full min-h-[12rem] w-full items-center justify-center text-6xl"
+                  style={{ backgroundColor: `${domain.color}15` }}
+                >
+                  {domain.emoji}
+                </div>
+              }
+            />
           </div>
 
           <span
-            className="inline-flex items-center gap-1 text-xs font-bold px-3 py-1 rounded-full mb-3"
-            style={{ backgroundColor: `${domain.color}20`, color: domain.color }}
+            className="inline-flex items-center gap-1 text-xs font-bold tracking-[0.14em] uppercase px-0 py-1 mb-3"
+            style={{ color: 'var(--sotabosc-muted)' }}
           >
-            {domain.emoji}{' '}
+            <span
+              aria-hidden="true"
+              className="inline-block w-2 h-2 mr-1"
+              style={{ backgroundColor: 'var(--sotabosc-accent, #c8ff3d)' }}
+            />
             {domain.role ? `${domain.role} · ${domain.label}` : domain.label}
+            {event.placeName ? ` · ${event.placeName}` : ''}
           </span>
 
-          <h1 className="text-3xl md:text-4xl font-black tracking-tight mb-2 font-[family-name:var(--font-display)]">
+          <h1
+            className="text-3xl md:text-5xl tracking-tight mb-3"
+            style={{ fontFamily: 'var(--font-display, Georgia, serif)', fontWeight: 400 }}
+          >
             {event.title}
           </h1>
-          <p className="text-base mb-6 max-w-2xl" style={{ color: 'var(--sotabosc-muted)' }}>
+          <p className="text-base mb-6 max-w-2xl leading-relaxed" style={{ color: 'var(--sotabosc-muted)' }}>
             {event.summary}
           </p>
 

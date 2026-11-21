@@ -5,6 +5,7 @@ import {
   shopifyImageSrcSet,
   shopifyImageUrl,
 } from './shopifyImageUrl';
+import {resolveJournalImageUrl} from '~/lib/media/fallbackImagery';
 
 /**
  * @param {{
@@ -17,8 +18,12 @@ export function ArticleCard({article, featured = false, loading = 'lazy'}) {
   const publishedAt = formatJournalDate(article.publishedAt);
   const excerpt = excerptFromHtml(article.contentHtml);
   const blogHandle = article.blog?.handle;
-  const imageUrl =
-    article.image?.url || firstImageSrcFromHtml(article.contentHtml) || null;
+  const imageUrl = resolveJournalImageUrl({
+    imageUrl: article.image?.url || firstImageSrcFromHtml(article.contentHtml),
+    handle: article.handle,
+    title: article.title,
+    width: featured ? 1200 : 800,
+  });
 
   return (
     <article className={`journal-card${featured ? ' journal-card-featured' : ''}`}>
@@ -27,27 +32,21 @@ export function ArticleCard({article, featured = false, loading = 'lazy'}) {
         prefetch="intent"
         className="journal-card-link"
       >
-        {imageUrl ? (
-          <div className="journal-card-image">
-            <img
-              src={shopifyImageUrl(imageUrl, featured ? 1200 : 800)}
-              srcSet={shopifyImageSrcSet(imageUrl)}
-              sizes={
-                featured
-                  ? '(min-width: 900px) 50vw, 100vw'
-                  : '(min-width: 900px) 33vw, 100vw'
-              }
-              alt={article.image?.altText || article.title}
-              loading={loading}
-              decoding="async"
-              referrerPolicy="no-referrer"
-            />
-          </div>
-        ) : (
-          <div className="journal-card-image journal-card-image--empty" aria-hidden="true">
-            <span>S</span>
-          </div>
-        )}
+        <div className="journal-card-image">
+          <img
+            src={shopifyImageUrl(imageUrl, featured ? 1200 : 800)}
+            srcSet={shopifyImageSrcSet(imageUrl)}
+            sizes={
+              featured
+                ? '(min-width: 900px) 50vw, 100vw'
+                : '(min-width: 900px) 33vw, 100vw'
+            }
+            alt={article.image?.altText || article.title}
+            loading={loading}
+            decoding="async"
+            referrerPolicy="no-referrer"
+          />
+        </div>
         <div>
           <div className="journal-card-meta">
             <time dateTime={article.publishedAt}>{publishedAt}</time>

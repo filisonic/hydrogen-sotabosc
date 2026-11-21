@@ -3,7 +3,7 @@ import { CacheCustom, createWithCache } from '@shopify/hydrogen';
 import type { CityEvent, Creator, DomainCategory, ListingCategory, Place } from './types';
 import { normalizeDomain } from './domains';
 import { createDirectoryQueries, type DirectoryQueries, type DirectorySnapshot } from './queries';
-import { SEED_PLACES, SEED_REVIEWS, SEED_SNAPSHOT } from './seed.server';
+import { SEED_EVENTS, SEED_PLACES, SEED_REVIEWS, SEED_SNAPSHOT } from './seed.server';
 
 /**
  * The persistent city: places, events and creators from Supabase (anon key, public-read tables),
@@ -96,27 +96,36 @@ export function mapPlaceRow(row: Row, seedBySlug: Map<string, Place>): Place | n
   };
 }
 
-export function mapEventRow(row: Row, placeIdBySlug: Map<string, string>): CityEvent | null {
+export function mapEventRow(
+  row: Row,
+  placeIdBySlug: Map<string, string>,
+  seedBySlug?: Map<string, CityEvent>,
+): CityEvent | null {
   const id = str(row.id);
   const slug = str(row.slug);
   const title = str(row.title);
   const startsAt = toCityWallClock(row.starts_at);
   if (!id || !slug || !title || !startsAt) return null;
   const placeSlug = str(row.place_slug);
+  const seed = seedBySlug?.get(slug);
   return {
     id,
     slug,
     title,
-    summary: str(row.summary) ?? '',
+    summary: str(row.summary) ?? seed?.summary ?? '',
     startsAt,
-    endsAt: toCityWallClock(row.ends_at),
-    placeId: str(row.place_id) ?? (placeSlug ? placeIdBySlug.get(placeSlug) : undefined) ?? '',
-    placeName: str(row.place_name),
-    primaryDomain: domain(row.primary_domain, 'animals'),
-    secondaryDomains: domains(row.secondary_domains),
-    tags: strArray(row.tags),
-    imageUrl: str(row.image_url),
-    sourceUrl: str(row.booking_url),
+    endsAt: toCityWallClock(row.ends_at) ?? seed?.endsAt,
+    placeId:
+      str(row.place_id) ??
+      (placeSlug ? placeIdBySlug.get(placeSlug) : undefined) ??
+      seed?.placeId ??
+      '',
+    placeName: str(row.place_name) ?? seed?.placeName,
+    primaryDomain: domain(row.primary_domain, seed?.primaryDomain ?? 'animals'),
+    secondaryDomains: domains(row.secondary_domains) ?? seed?.secondaryDomains,
+    tags: strArray(row.tags) ?? seed?.tags,
+    imageUrl: str(row.image_url) ?? seed?.imageUrl,
+    sourceUrl: str(row.booking_url) ?? seed?.sourceUrl,
   };
 }
 
@@ -172,15 +181,18 @@ export async function fetchSupabaseSnapshot(url: string, key: string): Promise<D
     fetchTable(url, key, 'directory_creators', CREATOR_COLUMNS),
   ]);
 
-  const seedBySlug = new Map(SEED_PLACES.map((p) => [p.slug, p]));
+  const seedPlaceBySlug = new Map(SEED_PLACES.map((p) => [p.slug, p]));
+  const seedEventBySlug = new Map(SEED_EVENTS.map((e) => [e.slug, e]));
   const places = placeRows
-    .map((r) => mapPlaceRow(r, seedBySlug))
+    .map((r) => mapPlaceRow(r, seedPlaceBySlug))
     .filter((p): p is Place => p != null);
   const placeIdBySlug = new Map(places.map((p) => [p.slug, p.id]));
 
   return {
     places,
-    events: eventRows.map((r) => mapEventRow(r, placeIdBySlug)).filter((e): e is CityEvent => e != null),
+    events: eventRows
+      .map((r) => mapEventRow(r, placeIdBySlug, seedEventBySlug))
+      .filter((e): e is CityEvent => e != null),
     creators: creatorRows.map(mapCreatorRow).filter((c): c is Creator => c != null),
     reviews: SEED_REVIEWS,
     source: 'supabase',

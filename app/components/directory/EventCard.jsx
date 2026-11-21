@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 import { getDomain } from '~/lib/directory/domains';
 import { directoryRoutes } from '~/lib/directory/routes';
-import { resolveEventImageUrl } from '~/lib/directory/sceneVisuals';
+import { eventStockImageUrl, resolveEventImageUrl } from '~/lib/directory/sceneVisuals';
 import { DirectoryPreviewImage } from '~/components/directory/DirectoryPreviewImage';
 
 function formatDate(isoStr) {
@@ -23,7 +23,13 @@ export function EventCard({ event, place = null, className = '', tone = 'directo
   const sceneInk = tone === 'sceneInk';
   const onScene = tone === 'scene' || sceneInk;
   const muted = sceneInk ? 'rgba(0,0,0,0.5)' : onScene ? 'rgba(255,255,255,0.85)' : 'var(--sotabosc-muted)';
-  const imgSrc = onScene ? resolveEventImageUrl(event, place) : null;
+  const imgSrc = resolveEventImageUrl(event, place);
+  const stockSrc = eventStockImageUrl(event, place);
+  const emojiNode = (
+    <div className="flex h-full w-full flex-col items-center justify-center text-center">
+      <span className="text-lg">{domain.emoji}</span>
+    </div>
+  );
 
   if (!onScene) {
     return (
@@ -37,11 +43,20 @@ export function EventCard({ event, place = null, className = '', tone = 'directo
         }}
       >
         <div
-          className="shrink-0 w-16 h-16 rounded-xl flex flex-col items-center justify-center text-center"
+          className="shrink-0 w-20 h-20 overflow-hidden relative"
           style={{ backgroundColor: `${domain.color}15` }}
         >
-          <span className="text-lg">{domain.emoji}</span>
-          <span className="text-[10px] font-bold uppercase" style={{ color: domain.color }}>
+          <DirectoryPreviewImage
+            src={imgSrc}
+            fallbackSrc={stockSrc !== imgSrc ? stockSrc : undefined}
+            alt=""
+            className="h-full w-full object-cover"
+            treatment="none"
+            fallback={emojiNode}
+          />
+          <span
+            className="pointer-events-none absolute bottom-1 left-1 right-1 text-[9px] font-bold uppercase tracking-wide text-center px-1 py-0.5 bg-black/55 text-white"
+          >
             {new Date(event.startsAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}
           </span>
         </div>
@@ -71,24 +86,23 @@ export function EventCard({ event, place = null, className = '', tone = 'directo
         color: sceneInk ? 'rgba(15,23,42,0.95)' : 'rgba(255,255,255,0.98)',
       }}
     >
-      {imgSrc ? (
-        <div className="relative h-32 sm:h-auto sm:w-[42%] sm:max-w-[220px] shrink-0 overflow-hidden bg-zinc-900">
-          <DirectoryPreviewImage
-            src={imgSrc}
-            alt={event.title}
-            className="h-full w-full min-h-[8rem] object-cover transition-transform duration-500 group-hover:scale-[1.04]"
-            fallback={
-              <div
-                className="flex h-full min-h-[8rem] w-full items-center justify-center text-3xl"
-                style={{ backgroundColor: `${domain.color}40` }}
-              >
-                {domain.emoji}
-              </div>
-            }
-          />
-          <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-t from-black/35 via-transparent to-black/12 sm:bg-gradient-to-r sm:from-transparent sm:via-black/8 sm:to-black/32" />
-        </div>
-      ) : null}
+      <div className="relative h-32 sm:h-auto sm:w-[42%] sm:max-w-[220px] shrink-0 overflow-hidden bg-zinc-900">
+        <DirectoryPreviewImage
+          src={imgSrc}
+          fallbackSrc={stockSrc !== imgSrc ? stockSrc : undefined}
+          alt={event.title}
+          className="h-full w-full min-h-[8rem] object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+          fallback={
+            <div
+              className="flex h-full min-h-[8rem] w-full items-center justify-center text-3xl"
+              style={{ backgroundColor: `${domain.color}40` }}
+            >
+              {domain.emoji}
+            </div>
+          }
+        />
+        <div className="pointer-events-none absolute inset-0 z-[3] bg-gradient-to-t from-black/35 via-transparent to-black/12 sm:bg-gradient-to-r sm:from-transparent sm:via-black/8 sm:to-black/32" />
+      </div>
 
       <div className="flex min-h-[6.5rem] flex-1 gap-3 p-3 sm:p-4">
         <div
