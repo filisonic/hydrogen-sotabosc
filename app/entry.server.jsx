@@ -37,14 +37,20 @@ export default async function handleRequest(
       storeDomain: context.env.PUBLIC_STORE_DOMAIN,
     },
     // default-src does not cover hotlinked directory heroes; without img-src browsers still
-    // evaluate images against default-src, which blocks images.unsplash.com.
+    // evaluate images against default-src, which blocks remote photos.
+    // Agenda events hotlink estatics-nasia.dtibcn.cat; the edition culture desk
+    // hotlinks publisher CDNs (TinyFish). Allow https images so those don't render
+    // as broken icons — venue files under /images/venues stay on 'self'.
     imgSrc: [
       "'self'",
+      'data:',
       'https://cdn.shopify.com',
       'https://shopify.com',
       'https://images.unsplash.com',
       'https://i.vimeocdn.com',
       'https://i.ytimg.com',
+      'https://estatics-nasia.dtibcn.cat',
+      'https:',
     ],
     // Labs lightbox embeds (Vimeo + YouTube) + existing lead form iframe.
     frameSrc: [
