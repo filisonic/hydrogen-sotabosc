@@ -120,8 +120,8 @@ export default function MagazineIssue() {
         <Link to="/contact" className="mag-btn">
           Talk to us
         </Link>
-        <Link to="/screens" className="mag-btn-o">
-          See the screens
+        <Link to="/tv" className="mag-btn-o">
+          About Sotabosc TV
         </Link>
       </footer>
 
