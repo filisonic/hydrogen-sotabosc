@@ -57,10 +57,21 @@ function EditionFig({
   );
 }
 
+/** Magazine running head: section number and name left, edition right. */
+function RunningHead({n, name, edition}) {
+  return (
+    <div className="ed-rh">
+      <span>
+        <b>{n}</b> · {name}
+      </span>
+      <span>Sotabosc · {edition}</span>
+    </div>
+  );
+}
+
 /**
- * Sotabosc digital magazine / channel edition homepage.
- * Modern hybrid: Fashion Front masthead + Broadsheet Lite front page.
- * Living map lives on `/map`.
+ * Sotabosc homepage, laid out like the printed magazine:
+ * cover, contents, then numbered sections with running heads.
  * @param {{
  *   edition: import('~/lib/directory/editionWindow').EditionWindow;
  *   journalArticles?: Array<{
@@ -72,9 +83,11 @@ function EditionFig({
  *     publishedAt?: string;
  *     imageUrl?: string | null;
  *   }>;
+ *   magazine?: {slug: string; title: string; issue: string; date: string; description: string; coverHtml: string} | null;
  * }} props
  */
-export function EditionHome({edition, journalArticles = []}) {
+export function EditionHome({edition, journalArticles = [], magazine = null}) {
+  const monthLabel = edition.editionLabel.split(' · ')[1] || '';
   const featured = edition.featured;
   const isEventFeatured = featured && 'startsAt' in featured;
   const leadHref = featured
@@ -95,11 +108,55 @@ export function EditionHome({edition, journalArticles = []}) {
         'From the Barcelona cultural window.'
       : featured.summary?.slice(0, 140) || featured.neighborhood
     : 'Art, design, exhibitions and what’s happening — pulled from the city directory.';
-  const leadImage =
-    featured && 'imageUrl' in featured ? featured.imageUrl : null;
+  const leadImage = featured && 'imageUrl' in featured ? featured.imageUrl : null;
 
-  const frontHeadlines = edition.happening.slice(0, 6);
-  const frontThumbs = edition.localEdit.slice(0, 4);
+  const agenda = edition.happening.slice(0, 8);
+  const news = edition.inTheNews ?? [];
+  const [journalLead, ...journalRest] = journalArticles;
+  const exhibitions = edition.exhibitions.slice(0, 2).map((ev) => ({
+      id: ev.id,
+      href: `/city/events/${ev.slug}`,
+      rubrique: 'The Exhibition',
+      title: ev.title,
+      copy: ev.placeName || ev.summary?.slice(0, 120),
+      src: ev.imageUrl,
+      fallbackSrc: rubriqueStockImageUrl('art', ev.slug || ev.id),
+      mark: 'Ex',
+  }));
+  const artists = edition.artists.slice(0, 2).map((c) => ({
+      id: c.id,
+      href: `/city/creators/${c.slug}`,
+      rubrique: 'The Artist',
+      title: c.displayName,
+      copy: c.bio?.slice(0, 140),
+      src: c.imageUrl,
+      fallbackSrc: null,
+      mark: c.displayName.slice(0, 1),
+  }));
+  // One large exhibition, then an artist, then whatever is left.
+  const showcase = [exhibitions[0], artists[0], exhibitions[1], artists[1]].filter(Boolean).slice(0, 3);
+  const local = edition.localEdit.slice(0, 6);
+
+  // Cover lines: one line from each part of the edition that has content.
+  const coverLines = [
+    agenda[0] && {k: 'The Agenda', t: agenda[0].title, href: '#agenda'},
+    news[0] && {k: 'In the News', t: news[0].title, href: '#in-the-news'},
+    journalLead && {k: 'The Journal', t: journalLead.title, href: '#journal'},
+    local[0] && {k: 'The Local Edit', t: `${local[0].name}, ${local[0].neighborhood}`, href: '#local-edit'},
+  ].filter(Boolean);
+
+  // Contents and section numbers follow what is actually on the page.
+  const sections = [
+    agenda.length > 0 && {id: 'agenda', name: 'The Agenda', note: `${agenda.length} dates in the next weeks`},
+    news.length > 0 && {id: 'in-the-news', name: 'In the News', note: 'The culture desk, Barcelona and Spain'},
+    journalLead && {id: 'journal', name: 'The Journal', note: 'Field notes from the Sotabosc desk'},
+    showcase.length > 0 && {id: 'showcase', name: 'Exhibition & Artist', note: 'Shows on now, people making the city'},
+    local.length > 0 && {id: 'local-edit', name: 'The Local Edit', note: 'Places worth sitting in'},
+    {id: 'magazine', name: 'The Magazine', note: magazine ? `${magazine.issue} is out now` : 'Screens, digital, print'},
+  ]
+    .filter(Boolean)
+    .map((s, i) => ({...s, n: String(i + 1).padStart(2, '0')}));
+  const num = (id) => sections.find((s) => s.id === id)?.n ?? '';
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -125,362 +182,354 @@ export function EditionHome({edition, journalArticles = []}) {
     <div className="edition">
       <JsonLd data={jsonLd} />
 
-      <header className="edition-mast">
-        <div className="edition-mast-numeral" aria-hidden="true">
-          {edition.issueNumeral || '11'}
-        </div>
-        <p className="edition-issue">
-          <span className="edition-issue-accent">{edition.editionLabel}</span>
-          <span aria-hidden="true">·</span>
-          <span>Cultural window · {edition.windowDays}d</span>
-        </p>
-        <h1 className="edition-brand">Sotabosc</h1>
-        <p className="edition-dek">
-          Culture, art and creative life — wherever you are. An intelligent local
-          cultural channel with the visual language of a magazine.
-        </p>
-        <div className="edition-mast-actions">
-          <Link to="/city/events" className="edition-cta">
-            This week in the city
-          </Link>
-          <Link to="/map" className="edition-cta edition-cta-ghost">
-            Living map
-          </Link>
+      {/* ── Cover ── */}
+      <header className="ed-cover">
+        <EditionFig
+          src={leadImage}
+          fallbackSrc={rubriqueStockImageUrl(
+            isEventFeatured ? 'art' : 'culture',
+            featured?.slug || featured?.id || 'lead',
+          )}
+          figClass="ed-cover-fig"
+          emptyClass="ed-cover-fig ed-cover-fig--empty"
+          fallback={null}
+          loading="eager"
+        />
+        <div className="ed-cover-inner">
+          <div className="ed-cover-strip">
+            <span>{edition.editionLabel}</span>
+            <span>No. {edition.issueNumeral}</span>
+          </div>
+          <h1 className="ed-nameplate">Sotabosc</h1>
+          <p className="ed-cover-tag">Culture, art and creative life, wherever you are.</p>
+
+          <div className="ed-cover-foot">
+            <Link to={leadHref} className="ed-cover-lead">
+              <span className="ed-kicker ed-kicker--lime">
+                {isEventFeatured ? 'Cover story · The Exhibition' : 'Cover story'}
+              </span>
+              <h2 className="ed-u">{leadTitle}</h2>
+              <p>{leadDek}</p>
+            </Link>
+            {coverLines.length > 0 ? (
+              <ul className="ed-cover-lines">
+                {coverLines.map((line) => (
+                  <li key={line.k}>
+                    <a href={line.href}>
+                      <span>{line.k}</span>
+                      {line.t}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+          </div>
         </div>
       </header>
 
-      <nav className="edition-rail" aria-label="Edition rubriques">
-        <a href="#front">Front</a>
-        <a href="#in-the-news">In the News</a>
-        <a href="#journal">Journal</a>
-        <a href="#exhibition">The Exhibition</a>
-        <a href="#artist">The Artist</a>
-        <a href="#local-edit">The Local Edit</a>
-        <a href="#delivery">Screens · Digital · Print</a>
-        <Link to="/city">Directory</Link>
-        <Link to="/map">Living map</Link>
+      {/* ── Contents ── */}
+      <nav className="ed-contents" aria-label="In this edition">
+        <div className="ed-contents-head">
+          <h2>
+            In this <em>edition</em>
+          </h2>
+          <p>
+            Pulled each day from the city directory: {edition.totals.places} places,{' '}
+            {edition.totals.events} events and {edition.totals.creators} creators.
+          </p>
+        </div>
+        <ol>
+          {sections.map((s) => (
+            <li key={s.id}>
+              <a href={`#${s.id}`}>
+                <span className="ed-contents-n">{s.n}</span>
+                <span className="ed-contents-name">{s.name}</span>
+                <span className="ed-contents-note">{s.note}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
       </nav>
 
-      <section className="edition-front" id="front" aria-label="Edition front page">
-        <div className="edition-front-headlines">
-          <span className="edition-front-col-label">
-            <span>Happening</span>
-          </span>
-          {frontHeadlines.length > 0 ? (
-            frontHeadlines.map((ev) => (
+      {/* ── The Agenda ── */}
+      {agenda.length > 0 ? (
+        <section className="ed-sec" id="agenda">
+          <RunningHead n={num('agenda')} name="The Agenda" edition={monthLabel} />
+          <div className="ed-sec-title">
+            <h2>
+              What’s <em>on</em>
+            </h2>
+            <Link to="/city/events" className="ed-more">
+              Full calendar →
+            </Link>
+          </div>
+          <ol className="ed-agenda">
+            {agenda.map((ev) => {
+              // Shows already running read "Until <end>", not a past start date.
+              const running = ev.endsAt && Date.parse(ev.startsAt) < Date.now();
+              const d = splitDate(running ? ev.endsAt : ev.startsAt);
+              return (
+                <li key={ev.id}>
+                  <Link to={`/city/events/${ev.slug}`} className="ed-agenda-row">
+                    <span className="ed-agenda-date">
+                      {running ? <i>Until</i> : null}
+                      <b>{d.day}</b>
+                      {d.mon}
+                    </span>
+                    <span className="ed-agenda-body">
+                      <span className="ed-agenda-title ed-u">{ev.title}</span>
+                      <span className="ed-agenda-venue">
+                        {ev.placeName || ev.place?.name || 'Barcelona'}
+                      </span>
+                    </span>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        </section>
+      ) : null}
+
+      {/* ── In the News ── */}
+      {news.length > 0 ? (
+        <section className="ed-sec" id="in-the-news">
+          <RunningHead n={num('in-the-news')} name="In the News" edition={monthLabel} />
+          <div className="ed-sec-title">
+            <h2>
+              In the <em>News</em>
+            </h2>
+            <span className="ed-more ed-more--plain">Art, music, film, design</span>
+          </div>
+          <div className="ed-news">
+            <a href={news[0].url} className="ed-news-lead" target="_blank" rel="noopener noreferrer">
+              <EditionFig
+                src={news[0].imageUrl}
+                fallbackSrc={rubriqueStockImageUrl(news[0].rubrique, news[0].id || news[0].title)}
+                figClass="ed-fig ed-fig--wide"
+                emptyClass="ed-fig ed-fig--wide ed-fig--empty"
+                fallback={news[0].rubrique?.slice(0, 1)?.toUpperCase() || '·'}
+              />
+              <span className="ed-kicker">{news[0].rubrique}</span>
+              <h3 className="ed-u">{news[0].title}</h3>
+              <p className="ed-meta">
+                {news[0].publisher}
+                {news[0].publishedAt ? ` · ${formatEditionDate(news[0].publishedAt)}` : ''}
+              </p>
+            </a>
+            <ol className="ed-briefs">
+              {news.slice(1, 7).map((story, i) => (
+                <li key={story.id}>
+                  <a href={story.url} target="_blank" rel="noopener noreferrer">
+                    <span className="ed-briefs-n">{String(i + 2).padStart(2, '0')}</span>
+                    <span>
+                      <span className="ed-kicker">{story.rubrique}</span>
+                      <span className="ed-briefs-title ed-u">{story.title}</span>
+                      <span className="ed-meta">{story.publisher}</span>
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </section>
+      ) : null}
+
+      {/* ── Pull quote ── */}
+      {/* Not <aside>: app.css styles every aside as the off-canvas drawer. */}
+      <figure className="ed-quote">
+        <blockquote>
+          <p>
+            “Culture as atmosphere, <em>the host as setting.</em>”
+          </p>
+        </blockquote>
+        <figcaption>The Sotabosc idea, in one line</figcaption>
+      </figure>
+
+      {/* ── The Journal: lead article as a feature ── */}
+      {journalLead ? (
+        <section className="ed-sec" id="journal">
+          <RunningHead n={num('journal')} name="The Journal" edition={monthLabel} />
+          <article className="ed-feature">
+            <Link
+              to={`/blogs/${journalLead.blogHandle}/${journalLead.handle}`}
+              className="ed-feature-fig-link"
+              prefetch="intent"
+            >
+              <EditionFig
+                src={journalLead.imageUrl}
+                fallbackSrc={journalStockImageUrl(journalLead.handle || journalLead.id || journalLead.title)}
+                figClass="ed-fig ed-fig--feature"
+                emptyClass="ed-fig ed-fig--feature ed-fig--empty"
+              />
+            </Link>
+            <div className="ed-feature-text">
+              <span className="ed-kicker">Feature · From the Journal</span>
+              <h2>
+                <Link to={`/blogs/${journalLead.blogHandle}/${journalLead.handle}`} className="ed-u">
+                  {journalLead.title}
+                </Link>
+              </h2>
+              {journalLead.excerpt ? (
+                <p className="ed-standfirst">
+                  {journalLead.excerpt.trim()}
+                  {/[.!?…”"]$/.test(journalLead.excerpt.trim()) ? '' : '…'}
+                </p>
+              ) : null}
+              <p className="ed-meta">
+                Sotabosc Editorial
+                {journalLead.publishedAt ? ` · ${formatEditionDate(journalLead.publishedAt)}` : ''}
+              </p>
               <Link
-                key={ev.id}
-                to={`/city/events/${ev.slug}`}
-                className="edition-headline"
+                to={`/blogs/${journalLead.blogHandle}/${journalLead.handle}`}
+                className="ed-more"
               >
-                <span className="edition-headline-date">
-                  {formatEditionDate(ev.startsAt)}
+                Read the story →
+              </Link>
+              {journalRest.length > 0 ? (
+                <div className="ed-also">
+                  <span className="ed-kicker">Also in the journal</span>
+                  {journalRest.map((a) => (
+                    <Link key={a.id} to={`/blogs/${a.blogHandle}/${a.handle}`} prefetch="intent">
+                      <span className="ed-u">{a.title}</span>
+                    </Link>
+                  ))}
+                  <Link to="/blogs/news" className="ed-more">
+                    All reports →
+                  </Link>
+                </div>
+              ) : null}
+            </div>
+          </article>
+        </section>
+      ) : null}
+
+      {/* ── Exhibition & Artist: one large, two small ── */}
+      {showcase.length > 0 ? (
+        <section className="ed-sec" id="showcase">
+          <RunningHead n={num('showcase')} name="Exhibition & Artist" edition={monthLabel} />
+          <div className="ed-sec-title">
+            <h2>
+              On the <em>walls</em>
+            </h2>
+            <span className="ed-more-group">
+              <Link to="/city?cat=art-gallery" className="ed-more">
+                Galleries →
+              </Link>
+              <Link to="/city/creators" className="ed-more">
+                Creators →
+              </Link>
+            </span>
+          </div>
+          <div className="ed-showcase">
+            {showcase.map((item, i) => (
+              <Link
+                key={item.id}
+                to={item.href}
+                className={i === 0 ? 'ed-show ed-show--big' : 'ed-show'}
+              >
+                <EditionFig
+                  src={item.src}
+                  fallbackSrc={item.fallbackSrc}
+                  figClass="ed-fig"
+                  emptyClass="ed-fig ed-fig--empty"
+                  fallback={item.mark}
+                />
+                <span className="ed-show-text">
+                  <span className="ed-kicker">{item.rubrique}</span>
+                  <span className="ed-show-title ed-u">{item.title}</span>
+                  {item.copy ? <span className="ed-show-copy">{item.copy}</span> : null}
                 </span>
-                <h2 className="edition-headline-title">{ev.title}</h2>
-                <p className="edition-headline-meta">
-                  {ev.placeName || ev.place?.name || 'Barcelona'}
-                </p>
-              </Link>
-            ))
-          ) : (
-            <p className="edition-sec-note">No dated events in this window yet.</p>
-          )}
-          <Link to="/city/events" className="edition-front-more">
-            Full calendar →
-          </Link>
-        </div>
-
-        <Link to={leadHref} className="edition-front-lead edition-lead">
-          <EditionFig
-            src={leadImage}
-            fallbackSrc={rubriqueStockImageUrl(
-              isEventFeatured ? 'art' : 'culture',
-              featured?.slug || featured?.id || 'lead',
-            )}
-            figClass="edition-lead-fig"
-            emptyClass="edition-lead-fig edition-lead-fig--empty"
-            loading="eager"
-          />
-          <span className="edition-lead-kicker">
-            {isEventFeatured ? 'The Exhibition' : 'Lead'}
-          </span>
-          <h2 className="edition-lead-title">{leadTitle}</h2>
-          <p className="edition-lead-dek">{leadDek}</p>
-        </Link>
-
-        <div className="edition-front-thumbs">
-          <span className="edition-front-col-label">
-            <span>Local Edit</span>
-          </span>
-          {frontThumbs.length > 0 ? (
-            frontThumbs.map((p) => (
-              <Link
-                key={p.id}
-                to={`/city/places/${p.slug}`}
-                className="edition-thumb"
-              >
-                <EditionFig
-                  src={p.imageUrl}
-                  figClass="edition-thumb-fig"
-                  emptyClass="edition-thumb-fig"
-                  fallback={null}
-                />
-                <div>
-                  <span className="edition-thumb-hood">{p.neighborhood}</span>
-                  <h3 className="edition-thumb-name">{p.name}</h3>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <p className="edition-sec-note">Places will appear as the directory fills.</p>
-          )}
-          <Link to="/city" className="edition-front-more">
-            Full directory →
-          </Link>
-        </div>
-      </section>
-
-      {edition.inTheNews?.length > 0 ? (
-        <section className="edition-sec" id="in-the-news">
-          <div className="edition-sec-head">
-            <h2 className="edition-sec-label">
-              In the <span>News</span>
-            </h2>
-            <span className="edition-sec-link">Culture desk</span>
-          </div>
-          <p className="edition-sec-note">
-            Art, music, film, design and luxury — Barcelona and Spain, filtered
-            for the channel. Not a tech feed.
-          </p>
-          <div className="edition-news">
-            {edition.inTheNews.map((story) => (
-              <a
-                key={story.id}
-                href={story.url}
-                className="edition-news-row"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <EditionFig
-                  src={story.imageUrl}
-                  fallbackSrc={rubriqueStockImageUrl(
-                    story.rubrique,
-                    story.id || story.title,
-                  )}
-                  figClass="edition-news-fig"
-                  emptyClass="edition-news-fig edition-news-fig--empty"
-                  fallback={story.rubrique?.slice(0, 1)?.toUpperCase() || '·'}
-                />
-                <div>
-                  <span className="edition-news-rubrique">{story.rubrique}</span>
-                  <h3 className="edition-news-title">{story.title}</h3>
-                  <p className="edition-news-meta">
-                    {story.publisher}
-                    {story.publishedAt
-                      ? ` · ${formatEditionDate(story.publishedAt)}`
-                      : ''}
-                  </p>
-                </div>
-              </a>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {journalArticles.length > 0 ? (
-        <section className="edition-sec" id="journal">
-          <div className="edition-sec-head">
-            <h2 className="edition-sec-label">
-              From the <span>Journal</span>
-            </h2>
-            <Link to="/blogs/news" className="edition-sec-link">
-              All reports →
-            </Link>
-          </div>
-          <p className="edition-sec-note">
-            Field notes from the Sotabosc desk — festivals, residencies, and
-            city culture. Tech dispatches stay off this page.
-          </p>
-          <div className="edition-journal">
-            {journalArticles.map((article, index) => (
-              <Link
-                key={article.id}
-                to={`/blogs/${article.blogHandle}/${article.handle}`}
-                className={
-                  index === 0
-                    ? 'edition-journal-card edition-journal-card--lead'
-                    : 'edition-journal-card'
-                }
-                prefetch="intent"
-              >
-                <EditionFig
-                  src={article.imageUrl}
-                  fallbackSrc={journalStockImageUrl(
-                    article.handle || article.id || article.title,
-                  )}
-                  figClass="edition-journal-fig"
-                  emptyClass="edition-journal-fig edition-journal-fig--empty"
-                  fallback={<span aria-hidden="true">S</span>}
-                />
-                <div className="edition-journal-body">
-                  <span className="edition-news-rubrique">Journal</span>
-                  <h3 className="edition-journal-title">{article.title}</h3>
-                  {article.excerpt ? (
-                    <p className="edition-journal-excerpt">{article.excerpt}</p>
-                  ) : null}
-                  <p className="edition-news-meta">
-                    {article.publishedAt
-                      ? formatEditionDate(article.publishedAt)
-                      : 'Sotabosc Editorial'}
-                  </p>
-                </div>
               </Link>
             ))}
           </div>
         </section>
       ) : null}
 
-      {edition.exhibitions.length > 0 ? (
-        <section className="edition-sec" id="exhibition">
-          <div className="edition-sec-head">
-            <h2 className="edition-sec-label">
-              The <span>Exhibition</span>
+      {/* ── The Local Edit: photo strip + numbered guide ── */}
+      {local.length > 0 ? (
+        <section className="ed-sec" id="local-edit">
+          <RunningHead n={num('local-edit')} name="The Local Edit" edition={monthLabel} />
+          <div className="ed-sec-title">
+            <h2>
+              The Local <em>Edit</em>
             </h2>
-            <Link to="/city?cat=art-gallery" className="edition-sec-link">
-              Galleries →
-            </Link>
-          </div>
-          <p className="edition-sec-note">
-            What’s on nearby — shows, openings, installations.
-          </p>
-          <div className="edition-media">
-            {edition.exhibitions.slice(0, 3).map((ev) => (
-              <Link
-                key={ev.id}
-                to={`/city/events/${ev.slug}`}
-                className="edition-media-card"
-              >
-                <EditionFig
-                  src={ev.imageUrl}
-                  fallbackSrc={rubriqueStockImageUrl('art', ev.slug || ev.id)}
-                  figClass="edition-media-fig"
-                  emptyClass="edition-media-fig edition-media-fig--empty"
-                  fallback="Ex"
-                />
-                <span className="edition-media-rubrique">The Exhibition</span>
-                <h3 className="edition-media-title">{ev.title}</h3>
-                <p className="edition-media-copy">
-                  {ev.placeName || ev.summary?.slice(0, 110)}
-                </p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {edition.artists.length > 0 ? (
-        <section className="edition-sec" id="artist">
-          <div className="edition-sec-head">
-            <h2 className="edition-sec-label">
-              The <span>Artist</span>
-            </h2>
-            <Link to="/city/creators" className="edition-sec-link">
-              All creators →
-            </Link>
-          </div>
-          <p className="edition-sec-note">
-            Short portraits from the network — people making the city.
-          </p>
-          <div className="edition-media">
-            {edition.artists.slice(0, 3).map((c) => (
-              <Link
-                key={c.id}
-                to={`/city/creators/${c.slug}`}
-                className="edition-media-card"
-              >
-                <EditionFig
-                  src={c.imageUrl}
-                  figClass="edition-media-fig"
-                  emptyClass="edition-media-fig edition-media-fig--empty"
-                  fallback={c.displayName.slice(0, 1)}
-                />
-                <span className="edition-media-rubrique">The Artist</span>
-                <h3 className="edition-media-title">{c.displayName}</h3>
-                <p className="edition-media-copy">{c.bio?.slice(0, 140)}</p>
-              </Link>
-            ))}
-          </div>
-        </section>
-      ) : null}
-
-      {edition.localEdit.length > 0 ? (
-        <section className="edition-sec" id="local-edit">
-          <div className="edition-sec-head">
-            <h2 className="edition-sec-label">
-              The Local <span>Edit</span>
-            </h2>
-            <Link to="/city" className="edition-sec-link">
+            <Link to="/city" className="ed-more">
               Full directory →
             </Link>
           </div>
-          <p className="edition-sec-note">
-            Curated places — galleries, design-led cafés, workshops, shops.
-            Atmosphere over inventory.
-          </p>
-          <div className="edition-places">
-            {edition.localEdit.map((p) => (
-              <Link
+          <div className="ed-strip" aria-hidden="true">
+            {local.slice(0, 4).map((p) => (
+              <EditionFig
                 key={p.id}
-                to={`/city/places/${p.slug}`}
-                className="edition-place"
-              >
-                <EditionFig
-                  src={p.imageUrl}
-                  figClass="edition-place-fig"
-                  emptyClass="edition-place-fig"
-                  fallback={null}
-                />
-                <span className="edition-place-hood">{p.neighborhood}</span>
-                <h3 className="edition-place-name">{p.name}</h3>
-                <p className="edition-place-sum">{p.summary}</p>
-              </Link>
+                src={p.imageUrl}
+                figClass="ed-fig"
+                emptyClass="ed-fig ed-fig--empty"
+                fallback={p.name.slice(0, 1)}
+              />
             ))}
           </div>
+          <ol className="ed-guide">
+            {local.map((p, i) => (
+              <li key={p.id}>
+                <Link to={`/city/places/${p.slug}`}>
+                  <span className="ed-guide-n">{i + 1}</span>
+                  <span>
+                    <span className="ed-guide-name ed-u">{p.name}</span>
+                    <span className="ed-kicker">{p.neighborhood}</span>
+                    {p.summary ? <span className="ed-guide-sum">{p.summary}</span> : null}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ol>
         </section>
       ) : null}
 
-      <section className="edition-delivery" id="delivery">
-        <div className="edition-delivery-inner">
-          <div className="edition-delivery-intro">
-            <h2>One channel. Three deliveries.</h2>
-            <p>
-              Same editorial spine whether it hangs in a lobby, opens in a
-              browser, or lands as a printed issue later.
-            </p>
-          </div>
-          <div className="edition-delivery-item">
-            <h3>Screens</h3>
-            <p>
-              Sotabosc screens in boutique hotels, galleries, cafés — culture as
-              atmosphere, host as setting.
-            </p>
-            <Link to="/screens">See the screens</Link>
-          </div>
-          <div className="edition-delivery-item">
-            <h3>Digital</h3>
-            <p>
-              This edition: city directory, happenings, creators — magazine
-              pages, not lobby signage.
-            </p>
-            <Link to="/city">Browse the city</Link>
-          </div>
-          <div className="edition-delivery-item">
-            <h3>Print</h3>
-            <p>
-              Seasonal folio / object — same rubriques, tactile. Coming after
-              the channel is proven in space.
-            </p>
-            <Link to="/contact">Talk to us</Link>
+      {/* ── The Magazine + deliveries ── */}
+      <section className="ed-mag" id="magazine">
+        <div className="ed-mag-inner">
+          <RunningHead n={num('magazine')} name="The Magazine" edition={monthLabel} />
+          <div className="ed-mag-grid">
+            {magazine ? (
+              <Link to={`/magazine/${magazine.slug}`} className="ed-mag-cover" aria-label={`Read ${magazine.title}`}>
+                <div
+                  className="ed-mag-page"
+                  // Built from our own canvas files by scripts/build-magazine-issue.mjs, which rejects any script.
+                  dangerouslySetInnerHTML={{__html: magazine.coverHtml}}
+                />
+              </Link>
+            ) : null}
+            <div className="ed-mag-text">
+              <span className="ed-kicker ed-kicker--lime">
+                {magazine ? `${magazine.issue} · ${magazine.date}` : 'The magazine'}
+              </span>
+              <h2>
+                One channel. <em>Three deliveries.</em>
+              </h2>
+              {magazine ? <p className="ed-standfirst">{magazine.description}</p> : null}
+              {magazine ? (
+                <Link to={`/magazine/${magazine.slug}`} className="ed-btn">
+                  Read the issue
+                </Link>
+              ) : null}
+              <div className="ed-deliveries">
+                <div>
+                  <h3>Screens</h3>
+                  <p>Sotabosc screens in hotels, galleries and cafés: culture as atmosphere.</p>
+                  <Link to="/screens">See the screens</Link>
+                </div>
+                <div>
+                  <h3>Digital</h3>
+                  <p>This edition: the city directory, happenings and creators.</p>
+                  <Link to="/city">Browse the city</Link>
+                </div>
+                <div>
+                  <h3>Magazine</h3>
+                  <p>A monthly issue, 16 pages: the city first, then the house.</p>
+                  <Link to="/contact">Get one for your place</Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -492,6 +541,7 @@ export function EditionHome({edition, journalArticles = []}) {
           <Link to="/city/events">Events</Link>
           <Link to="/city/creators">Creators</Link>
           <Link to="/screens">Screens</Link>
+          <Link to="/magazine/no-0">Magazine</Link>
           <Link to="/how-it-works">About</Link>
           <Link to="/map">Living map</Link>
           <Link to="/contact">Contact</Link>
@@ -516,4 +566,9 @@ function formatEditionDate(iso) {
   } catch {
     return '';
   }
+}
+
+function splitDate(iso) {
+  const [day = '', mon = ''] = formatEditionDate(iso).split(' ');
+  return {day, mon};
 }

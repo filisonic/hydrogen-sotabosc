@@ -48,22 +48,37 @@ export async function loader({context}) {
     journalArticles = [];
   }
 
+  const {ISSUES} = await import('~/lib/magazine/issues.server');
+  const latest = ISSUES[ISSUES.length - 1];
+  // Only the cover page travels to the client, not the whole issue.
+  const magazine = latest
+    ? {
+        slug: latest.slug,
+        title: latest.title,
+        issue: latest.issue,
+        date: latest.date,
+        description: latest.description,
+        coverHtml: latest.pages[0].html,
+      }
+    : null;
+
   try {
     const {getCityDirectory} = await import('~/lib/directory/source.server');
     const {buildEditionWindow} = await import('~/lib/directory/editionWindow');
     const {places, events, creators} = await getCityDirectory(context);
     const edition = buildEditionWindow(places, events, creators);
-    return {edition, journalArticles};
+    return {edition, journalArticles, magazine};
   } catch {
     const {buildEditionWindow} = await import('~/lib/directory/editionWindow');
     return {
       edition: buildEditionWindow([], [], []),
       journalArticles,
+      magazine,
     };
   }
 }
 
 export default function EditionIndexPage() {
-  const {edition, journalArticles} = useLoaderData();
-  return <EditionHome edition={edition} journalArticles={journalArticles} />;
+  const {edition, journalArticles, magazine} = useLoaderData();
+  return <EditionHome edition={edition} journalArticles={journalArticles} magazine={magazine} />;
 }

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Lead: The city gets a screen</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#121212}a:hover{color:#3a3a3a}
+.cols p{margin:0;text-indent:1.2em}
+.cols p.first{text-indent:0}
+.cols p.first::first-letter{font-family:'Instrument Serif',Georgia,serif;float:left;font-size:64px;line-height:.8;padding:5px 7px 0 0}
+</style>
+</helmet>
+<div style="width: 840px; height: 1188px; box-sizing: border-box; padding: 34px 40px 26px; background: #fafaf8; color: #121212; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 14px">
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid #121212; padding-bottom: 10px">
+<span>The city</span><span>The lead</span><span>Digital arts</span>
+</div>
+
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 6px">
+<svg viewBox="0 0 760 500" width="760" height="500" style="display: block; background: #f0efeb" aria-hidden="true">
+<sc-for list="{{squares}}" as="s" hint-placeholder-count="120">
+<rect x="{{s.x}}" y="{{s.y}}" width="{{s.w}}" height="{{s.w}}" fill="{{s.fill}}" stroke="#121212" stroke-width="1.2" transform="{{s.t}}"></rect>
+</sc-for>
+</svg>
+<figcaption style="display: flex; justify-content: space-between; font-size: 10px; color: #3a3a3a"><span>After Vera Molnár, one of the 33 artists in “Vectors”: a grid of squares, each nudged a little further from order.</span><span>Drawing: Sotabosc</span></figcaption>
+</figure>
+
+<div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; margin-top: 6px">
+<div style="grid-column: span 8; display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase">Biennial of Digital Arts · DHub</span>
+<h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 84px; line-height: .84; letter-spacing: -.025em">The city gets <span style="font-style: italic">a&#160;screen</span></h1>
+</div>
+<div style="grid-column: span 4; display: flex; flex-direction: column; justify-content: flex-end; gap: 8px; padding-bottom: 4px">
+<p style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: 20px; line-height: 1.15">Barcelona’s first Biennial of Digital Arts opens with forty works at DHub, and plans a screen for art in a metro hall.</p>
+<span style="font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #3a3a3a">Words by the Sotabosc desk</span>
+</div>
+</div>
+
+<div class="cols" style="column-count: 2; column-gap: 24px; column-rule: 1px solid rgba(18,18,18,.14); font-size: 12.8px; line-height: 1.6; text-align: justify; hyphens: auto; flex: 1; min-height: 0">
+<p class="first">For a long time, digital art in Barcelona lived in festivals: two loud days at a fairground, then gone until next year. This week the city tried something slower. The first Biennial of Digital Arts opened at the Disseny Hub on 25 November and will run, in pieces, until March.</p>
+<p>Its first exhibition is called “Vectors. Digital art to think about the future”. Curated by Irma Vidal i Òdena, it brings together around forty works by thirty-three artists, and it does something festivals rarely have room for: it puts the pioneers in the same room as the people they made possible.</p>
+<p>So Vera Molnár, Elena Asins, Manfred Mohr, John Whitney and Lillian Schwartz, who were drawing with machines before most of us had seen one, hang alongside Mario Klingemann, Joana Moll, Mónica Rikić, Anna Carreras, Alba G. Corral, Hamill Industries, Playmodes and Zachary Lieberman.</p>
+<p>The Biennial is directed by Pep Salazar and organised by the City Council, the Generalitat’s culture department and the Barcelona Creativity &amp; Design Foundation, with money from the Ministry of Culture.</p>
+<p style="text-indent: 0; font-style: italic; color: #3a3a3a">Continued on page 4 →</p>
+</div>
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #3a3a3a">
+<span>03</span><span>Sotabosc · Barcelona Edition · No. 0</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":840,"height":1188}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var seed = 7;
+    function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+    var out = [], cols = 16, rows = 10, cell = 760 / cols, size = cell * 0.62;
+    for (var r = 0; r < rows; r++) {
+      for (var c = 0; c < cols; c++) {
+        var drift = c / (cols - 1);
+        var cx = c * cell + cell / 2 + (rnd() - 0.5) * 16 * drift;
+        var cy = r * (500 / rows) + 500 / rows / 2 + (rnd() - 0.5) * 16 * drift;
+        var a = (rnd() - 0.5) * 70 * drift * drift;
+        var lime = r === 5 && c === 11;
+        out.push({
+          x: (cx - size / 2).toFixed(1), y: (cy - size / 2).toFixed(1), w: size.toFixed(1),
+          fill: lime ? '#c8ff3d' : 'none',
+          t: 'rotate(' + a.toFixed(1) + ' ' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ')'
+        });
+      }
+    }
+    return { squares: out };
+  }
+}
+</script>
+</body>
+</html>

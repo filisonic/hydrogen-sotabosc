@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sotabosc TV</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#c8ff3d}a:hover{color:#fafaf8}
+</style>
+</helmet>
+<div style="width: 840px; height: 1188px; box-sizing: border-box; padding: 34px 40px 26px; background: #161816; color: #fafaf8; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 18px">
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid rgba(250,250,248,.35); padding-bottom: 10px">
+<span style="color: #c8ff3d">The house</span><span>Sotabosc TV</span><span>11</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: end">
+<h1 style="grid-column: span 7; margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 100px; line-height: .8; letter-spacing: -.03em">Not signage. <span style="font-style: italic; color: #c8ff3d">A channel.</span></h1>
+<p style="grid-column: span 5; margin: 0 0 6px; font-family: 'Instrument Serif', Georgia, serif; font-size: 21px; line-height: 1.18; color: #e0e0da">A local cultural TV with the manners of a magazine, playing by itself on a screen in your space.</p>
+</div>
+
+<div style="display: flex; flex-direction: column; align-items: center">
+<div style="width: 760px; height: 400px; background: #050605; padding: 10px; box-sizing: border-box; position: relative">
+<img src="/_blob/ae0080f64755eed0571554c6591e0911" alt="Coral recovering over nine weeks, shown on a screen" style="width: 100%; height: 100%; object-fit: cover; display: block">
+<div style="position: absolute; left: 10px; right: 10px; bottom: 10px; padding: 18px 22px; background: rgba(5,6,5,.78); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 16px; align-items: end">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="align-self: flex-start; background: #c8ff3d; color: #121212; font-size: 9.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; padding: 3px 7px">Did You Know</span>
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; line-height: 1">A coral can be brought back by touch</span>
+</div>
+<span style="font-size: 11px; color: #c9c9c3; text-align: right">sotabosc.world<br>18:42 · 14°</span>
+</div>
+</div>
+<div style="width: 110px; height: 12px; background: #050605"></div>
+<span style="font-size: 10px; color: #a8a8a8; padding-top: 6px">A Did You Know beat as it appears on a host’s screen (mock-up).</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; flex: 1; min-height: 0">
+<div style="grid-column: span 7; display: flex; flex-direction: column">
+<div style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #c8ff3d; border-bottom: 1px solid rgba(250,250,248,.35); padding-bottom: 6px">The formats</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 18px">
+<sc-for list="{{formats}}" as="f" hint-placeholder-count="10">
+<div style="border-bottom: 1px solid rgba(250,250,248,.16); padding: 10px 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 13px; font-weight: 700">{{f.n}}</span>
+<span style="font-size: 11.5px; color: #c9c9c3; line-height: 1.35">{{f.d}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="grid-column: span 5; display: flex; flex-direction: column; gap: 14px">
+<div style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: #c8ff3d; border-bottom: 1px solid rgba(250,250,248,.35); padding-bottom: 6px">The mix</div>
+<div style="display: flex; height: 34px">
+<div style="flex: 65; background: #fafaf8; color: #121212; font-size: 10.5px; font-weight: 700; display: flex; align-items: center; padding-left: 8px">Culture</div>
+<div style="flex: 22; background: #c8ff3d; color: #121212; font-size: 10.5px; font-weight: 700; display: flex; align-items: center; padding-left: 6px">Local</div>
+<div style="flex: 13; background: #3a3a3a; color: #fafaf8; font-size: 10.5px; font-weight: 700; display: flex; align-items: center; padding-left: 6px">House</div>
+</div>
+<p style="margin: 0; font-size: 11.8px; line-height: 1.5; color: #e0e0da">Most of the airtime goes to the city’s culture, some to the street outside, and a measured share to the host. When your place appears, it reads as a recommendation, not an interruption.</p>
+<div style="border-top: 2px solid #c8ff3d; padding-top: 10px; font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 22px; line-height: 1.1">The channel is worth having even if you never promote yourself on it.</div>
+<span style="margin-top: auto; font-size: 10.5px; line-height: 1.45; color: #a8a8a8">A small computer behind the screen. It keeps playing without internet, and your photos stay on the device.</span>
+</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":840,"height":1188}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      formats: [
+        { n: 'The Artist', d: 'A short portrait of a creator' },
+        { n: 'The Exhibition', d: 'Shows and installations nearby' },
+        { n: 'The Object', d: 'One object, one story' },
+        { n: 'The Local Edit', d: 'Places in your neighbourhood' },
+        { n: 'In the News', d: 'Good cultural news, briefly' },
+        { n: 'Did You Know', d: 'A minute of wonder' },
+        { n: 'Interlude', d: 'Generative art, drawn live' },
+        { n: 'Happening', d: 'Tonight and this week' },
+        { n: 'The House', d: 'Your story, menu or event' },
+        { n: 'Neighbour', d: 'Peer places, by invitation' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

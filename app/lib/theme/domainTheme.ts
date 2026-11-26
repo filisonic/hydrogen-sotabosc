@@ -19,14 +19,15 @@ export const NEUTRAL_THEME: DomainTheme = {
   key: 'neutral',
   label: 'Sotabosc',
   emoji: '🌿',
-  bg: '#f4f1ea',
-  surface: '#ffffff',
-  surfaceMuted: '#ebe6dc',
-  accent: '#1b4332',
-  accentSoft: '#2d6a4f',
-  text: '#1a1a1a',
-  muted: '#5c5c5c',
-  border: 'rgba(27, 67, 50, 0.12)',
+  // Magazine paper, ink and hairlines (same tokens as the edition homepage).
+  bg: '#fafaf8',
+  surface: '#fafaf8',
+  surfaceMuted: '#f0efeb',
+  accent: '#121212',
+  accentSoft: '#3a3a3a',
+  text: '#121212',
+  muted: '#727272',
+  border: 'rgba(18, 18, 18, 0.14)',
 };
 
 const THEMES: Record<DomainCategory, DomainTheme> = {

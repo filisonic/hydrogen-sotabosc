@@ -1,0 +1,219 @@
+/* Sotabosc magazine viewer (/magazine/:issue). Pages are fixed 840×1188 designs scaled to fit. */
+
+.magz {
+  --magz-ink: #121212;
+  --magz-paper: #fafaf8;
+  --magz-desk: #e8e6df;
+  --magz-lime: #c8ff3d;
+  background: var(--magz-desk);
+  color: var(--magz-ink);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  min-height: 100vh;
+  padding: 24px 16px 64px;
+}
+
+.magz-head {
+  max-width: 1160px;
+  margin: 0 auto 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.magz-head__back {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--magz-ink);
+  text-decoration: none;
+}
+.magz-head__kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+.magz-head h1 {
+  margin: 6px 0 8px;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(2.2rem, 6vw, 4.2rem);
+  line-height: 0.95;
+}
+.magz-head p {
+  margin: 0;
+  max-width: 62ch;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: #3a3a3a;
+}
+
+.magz-spreads {
+  max-width: 1160px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.magz-spread {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 4px;
+  box-shadow: 0 18px 40px rgba(18, 18, 18, 0.18);
+}
+.magz-spread--single {
+  grid-template-columns: minmax(0, 1fr);
+  width: calc(50% - 2px);
+  margin: 0 auto;
+}
+.magz-sheet {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.magz-sheet__frame {
+  position: relative;
+  overflow: hidden;
+  background: var(--magz-paper);
+}
+.magz-page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  overflow: hidden;
+}
+.magz-sheet__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 2px 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  background: var(--magz-desk);
+}
+.magz-sheet__zoom,
+.magz-dialog__bar button {
+  min-height: 44px;
+  padding: 0 14px;
+  border: 1px solid var(--magz-ink);
+  background: transparent;
+  color: var(--magz-ink);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.magz-sheet__zoom:hover,
+.magz-dialog__bar button:hover:not(:disabled) {
+  background: var(--magz-ink);
+  color: var(--magz-paper);
+}
+.magz-dialog__bar button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.magz-foot {
+  max-width: 1160px;
+  margin: 56px auto 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+.magz-foot p {
+  margin: 0 8px 0 0;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 1.6rem;
+}
+
+.magz-dialog {
+  width: min(100vw, 900px);
+  max-width: 100vw;
+  height: 100vh;
+  max-height: 100vh;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  background: var(--magz-desk);
+  display: flex;
+  flex-direction: column;
+}
+.magz-dialog:not([open]) {
+  display: none;
+}
+.magz-dialog::backdrop {
+  background: rgba(18, 18, 18, 0.7);
+}
+.magz-dialog__bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 12px;
+}
+.magz-dialog__bar span {
+  margin-right: auto;
+}
+.magz-dialog__scroll {
+  flex: 1;
+  overflow: auto;
+}
+.magz-page--full {
+  position: relative;
+  margin: 0 auto 24px;
+}
+
+@media (max-width: 760px) {
+  .magz-spread {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    box-shadow: none;
+  }
+  .magz-spread--single {
+    width: 100%;
+  }
+  .magz-sheet__frame {
+    box-shadow: 0 10px 24px rgba(18, 18, 18, 0.18);
+  }
+}
+
+/* Type rules the canvas kept in each page's <helmet>. */
+.magz-page .cols p {
+  margin: 0;
+  text-indent: 1.2em;
+}
+.magz-page .cols p.first {
+  text-indent: 0;
+}
+.magz-page[data-page='E03-Lead'] .cols p.first::first-letter,
+.magz-page[data-page='E05-Mira'] .cols p.first::first-letter,
+.magz-page[data-page='E13-Network'] .cols p.first::first-letter {
+  font-family: 'Instrument Serif', Georgia, serif;
+  float: left;
+  font-size: 62px;
+  line-height: 0.8;
+  padding: 5px 7px 0 0;
+}
+.magz-page[data-page='E05-Mira'] .cols p.first::first-letter {
+  color: var(--magz-lime);
+}
+.magz-page .lede::first-letter {
+  font-family: 'Instrument Serif', Georgia, serif;
+  float: left;
+  font-size: 58px;
+  line-height: 0.82;
+  padding: 4px 6px 0 0;
+}
+.magz-page a {
+  color: inherit;
+}
+.magz-page img {
+  max-width: none;
+}

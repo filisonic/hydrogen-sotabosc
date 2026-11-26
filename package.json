@@ -19,6 +19,7 @@
         "refresh:event-urls": "tsx scripts/refresh-event-urls.ts",
         "pipeline:auto-events": "tsx scripts/run-auto-events-pipeline.ts",
         "refresh:edition-stories": "tsx scripts/refresh-edition-stories.ts",
+        "magazine:build": "node scripts/build-magazine-issue.mjs",
         "schedule:auto-events": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/scheduled/register-auto-events-task.ps1",
         "directory:assess": "tsx scripts/filter-assess-places.ts",
         "directory:prune-templates": "tsx scripts/prune-template-places.ts",

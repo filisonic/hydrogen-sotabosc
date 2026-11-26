@@ -5,7 +5,7 @@ import { Link } from 'react-router';
  */
 export function MembershipDormantPage() {
   return (
-    <div className="mag" style={{ backgroundColor: 'var(--y)', color: 'var(--ink)', minHeight: '80vh' }}>
+    <div className="mag" style={{ backgroundColor: 'var(--bg)', color: 'var(--ink)', minHeight: '80vh' }}>
       <section
         style={{
           maxWidth: '720px',

@@ -30,7 +30,7 @@ export default function AboutPage() {
   const data = useLoaderData();
 
   return (
-    <main className="min-h-screen bg-white">
+    <main className="mag-page min-h-screen">
       {/* Header */}
       <div className="bg-stone-50 border-b border-stone-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
@@ -38,7 +38,7 @@ export default function AboutPage() {
             to="/"
             className="inline-flex items-center text-sm text-stone-600 hover:text-stone-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-600 focus-visible:ring-offset-2 rounded-md"
           >
-            ← Back to agency
+            ← Sotabosc
           </Link>
         </div>
       </div>

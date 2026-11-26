@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Local Edit: El Born</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#121212}a:hover{color:#3a3a3a}
+</style>
+</helmet>
+<div style="width: 840px; height: 1188px; box-sizing: border-box; background: #fafaf8; color: #121212; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column">
+
+<div style="padding: 26px 40px 10px; display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase"><span>The city</span><span>The Local Edit</span><span>09</span></div>
+<figure style="margin: 0; position: relative; height: 470px">
+<img src="/_blob/18c52f21d33d9af652cbb0a145636e10" alt="The iron market hall of El Born Centre de Cultura i Memòria, with the excavated 1714 streets below" style="width: 100%; height: 100%; object-fit: cover; display: block">
+</figure>
+<figcaption style="padding: 7px 40px 0; font-size: 10px; color: #3a3a3a; display: flex; justify-content: space-between"><span>El Born Centre de Cultura i Memòria: an iron market hall over the streets of 1714. Sala Moragues hosts the History Congress on 2 December.</span><span>Photo: Jayne via Google</span></figcaption>
+
+<div style="padding: 18px 40px 0; display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px">
+<div style="grid-column: span 7; display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase">08003 · Sant Pere, Santa Caterina i la Ribera</span>
+<h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 78px; line-height: .86; letter-spacing: -.02em">El Born, <span style="font-style: italic">one street at a time</span></h1>
+</div>
+<div style="grid-column: span 5; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px">
+<p style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: 19px; line-height: 1.18">The Sotabosc directory lists 65 places in this one postcode: 30 galleries, 25 workshops, 12 coffee bars and five places to work.</p>
+</div>
+</div>
+
+<div style="padding: 18px 40px 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 24px; flex: 1; min-height: 0">
+<sc-for list="{{streets}}" as="s" hint-placeholder-count="3">
+<section style="display: flex; flex-direction: column; gap: 8px; border-top: 2px solid #121212; padding-top: 10px">
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 26px; line-height: 1">{{s.street}}</span>
+<span style="font-size: 11.5px; line-height: 1.45; color: #3a3a3a">{{s.intro}}</span>
+<sc-for list="{{s.places}}" as="p" hint-placeholder-count="4">
+<div style="display: flex; flex-direction: column; gap: 1px; border-top: 1px solid rgba(18,18,18,.16); padding-top: 8px; padding-bottom: 2px">
+<span style="font-size: 13.5px; font-weight: 600">{{p.name}}</span>
+<span style="font-size: 10.5px; color: #3a3a3a">{{p.note}}</span>
+</div>
+</sc-for>
+</section>
+</sc-for>
+</div>
+
+<div style="padding: 14px 40px 22px; display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #3a3a3a">
+<span>All listings at sotabosc.world/city</span><span>Sotabosc · Barcelona Edition · No. 0</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":840,"height":1188}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      streets: [
+        { street: 'Sant Pere Més Alt', intro: 'The gallery street: small rooms, doors open, work changing every few weeks.', places: [
+          { name: 'Lab36', note: 'Art gallery' }, { name: 'Matiz Gallery', note: 'Gallery and event space' },
+          { name: 'Waku Specialty Coffee', note: 'Roastery and coffee bar' }, { name: 'Syra Coffee, no. 32', note: 'Coffee bar' } ] },
+        { street: 'Méndez Núñez to Flassaders', intro: 'From a historic gallery to a founders’ table, a short walk apart.', places: [
+          { name: 'Galeria Joan Prats', note: 'Art gallery' }, { name: 'Sra.Gallery', note: 'Sculpture' },
+          { name: 'GroundInn LAB', note: 'Founder community and coworking' }, { name: 'Cityzen Barcelona', note: 'Meeting rooms' } ] },
+        { street: 'Picasso, Rosic, Acadèmia', intro: 'Photography and making, from the park edge to a quiet square.', places: [
+          { name: 'Fundació Foto Colectania', note: 'Photography foundation' }, { name: 'Pentaprisma', note: 'Photography workshops' },
+          { name: 'Lomography Embassy', note: 'Analogue cameras and film' }, { name: 'MakerConvent', note: 'Workshop' } ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
