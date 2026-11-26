@@ -236,13 +236,12 @@ export function ErrorBoundary() {
 
   return (
     <div className="route-error">
-      <h1>Oops</h1>
-      <h2>{errorStatus}</h2>
-      {errorMessage && (
-        <fieldset>
-          <pre>{errorMessage}</pre>
-        </fieldset>
-      )}
+      <p className="route-error__kicker">Error {errorStatus}</p>
+      <h1>{errorStatus === 404 ? 'This page isn’t in the edition.' : 'Something went wrong.'}</h1>
+      {errorMessage && <pre>{errorMessage}</pre>}
+      <a href="/" className="mag-btn">
+        Back to Sotabosc
+      </a>
     </div>
   );
 }

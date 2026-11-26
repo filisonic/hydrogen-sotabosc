@@ -11,7 +11,7 @@ export const meta = () => {
 
 export default function Contact() {
   return (
-    <div className="min-h-screen pt-24">
+    <div className="mag-page min-h-screen pt-24">
       {/* Hero Section */}
       <section className="min-h-[60vh] flex items-center justify-center px-4 py-20 relative overflow-hidden">
         <div className="absolute inset-0 z-0 bg-gradient-to-br from-yellow-light via-dark-bg to-yellow-dark opacity-30" />

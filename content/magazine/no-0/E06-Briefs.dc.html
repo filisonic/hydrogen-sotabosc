@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Briefs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#121212}a:hover{color:#3a3a3a}
+</style>
+</helmet>
+<div style="width: 840px; height: 1188px; box-sizing: border-box; padding: 34px 40px 26px; background: #fafaf8; color: #121212; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid #121212; padding-bottom: 10px">
+<span>The city</span><span>Briefs</span><span>November</span>
+</div>
+
+<div style="display: flex; align-items: baseline; gap: 16px">
+<h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 100px; line-height: .8; letter-spacing: -.03em">Briefs</h1>
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 24px; color: #3a3a3a">four rooms, one month</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 28px; flex: 1; min-height: 0; align-content: start">
+<sc-for list="{{briefs}}" as="b" hint-placeholder-count="4">
+<article style="display: flex; flex-direction: column; gap: 7px; border-top: 2px solid #121212; padding-top: 10px; min-height: 0">
+<img src="{{b.img}}" alt="{{b.alt}}" style="{{b.imgStyle}}">
+<span style="font-size: 9.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase">{{b.kicker}}</span>
+<h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 28px; line-height: .98">{{b.title}}</h2>
+<p style="margin: 0; font-size: 11.8px; line-height: 1.52; text-align: justify; hyphens: auto">{{b.body}}</p>
+<span style="font-size: 10px; color: #3a3a3a; font-style: italic">{{b.src}}</span>
+</article>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 18px; background: #f0efeb; padding: 14px 18px; align-items: center">
+<span style="font-size: 9.5px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase">Also closed this month</span>
+<span style="font-size: 12px; line-height: 1.45"><strong>A labyrinth of glass at the Barcelona Pavilion.</strong> From 12 to 22 November, Ciro Najle and Josep Ferrando laid a transparent maze over Mies van der Rohe and Lilly Reich’s travertine podium, turning the building’s famous see-through calm into something less settled. <span style="font-style: italic; color: #3a3a3a">ArchDaily, 12 November</span></span>
+</div>
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #3a3a3a">
+<span>06</span><span>Sotabosc · Barcelona Edition · No. 0</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":840,"height":1188}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var img = 'width: 100%; height: 262px; object-fit: cover; display: block; background: #f0efeb';
+    return {
+      briefs: [
+        { img: '/_blob/45807d3e15ccdc3c5ae75e2967bb0bef', alt: 'Glitched collage still from an In-Edit film', imgStyle: img, kicker: 'Film · Cinemes Aribau', title: 'Eleven days of music documentaries', body: 'In-Edit’s 24th edition filled Cinemes Aribau from 29 October to 8 November with films about people who organised their lives around a sound, from Carlo Padial’s El Doble to 152 minutes on Voïvod. New this year: an award for music videos, and a screening with Arrels Fundació.', src: 'Sotabosc journal, 24 October' },
+        { img: '/_blob/0b8875eaa0751595b2398411c9400bf6', alt: 'The aiaiai poster: dotted letters over a pink circle', imgStyle: img, kicker: 'Talks · Hangar, Poblenou', title: 'Where does AI actually live?', body: 'Three free Thursday evenings at Hangar asked a grounded question: about training data and the books bought up to feed it, about the chips that go to data centres first, and about small models that run on a laptop or a Raspberry Pi.', src: 'Sotabosc journal, 24 October' },
+        { img: '/_blob/5e9d3dfa0e84fcaccfcb6c404c05db3b', alt: 'Blendícete workshop poster at Hangar', imgStyle: img, kicker: 'Workshop · Hangar', title: 'Blender from zero', body: 'Desirée Quevedo’s #Blendícete teaches the free 3D suite to anyone curious enough to turn up. Volume one ran four Thursdays in November; volume two, on animation, starts 14 January at €90. Bring a laptop; the rest is taught.', src: 'Sotabosc journal, 17 October' },
+        { img: '/_blob/aec61146b178488f6b36ac6875099246', alt: 'A grid of generative SVG patterns from Book of Shapes', imgStyle: img, kicker: 'Design · Online', title: 'A library of shapes you can take apart', body: 'Book of Shapes, by the Bremen designer Nikolaj Sokolowski, is about ninety generative patterns, from woven grids to Truchet arcs. Each one is a small chain of steps you can open, change and remake, which makes it a teacher as much as a catalogue.', src: 'Sotabosc journal, 8 October' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

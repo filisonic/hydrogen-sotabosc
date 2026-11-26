@@ -1,6 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;500;600;700&display=swap');
 @import "tailwindcss";
 @import "./aurelia-imagery.css";
 @import "./living-map-hero.css";
@@ -12,22 +9,28 @@
   --color-yellow-light: #FFFACD;
   --color-warm-gray: #FFED4A;
   --color-cool-gray: #FFF9C4;
-  --font-family-sans: 'Inter', system-ui, sans-serif;
-  --font-display: 'Manrope', 'Inter', system-ui, sans-serif;
-  /* Editorial display for Stitch “Sotabosc Reserve” / home hero (paired with Inter body) */
-  --font-editorial: 'Newsreader', Georgia, 'Times New Roman', serif;
+  --font-family-sans: 'DM Sans', system-ui, sans-serif;
+  /* Magazine type: every display/editorial heading is Instrument Serif. */
+  --font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+  --font-editorial: 'Instrument Serif', Georgia, 'Times New Roman', serif;
 }
 
 @layer base {
   body {
-    background-color: var(--color-dark-bg);
-    color: black;
+    background-color: #fafaf8;
+    color: #121212;
     -webkit-font-smoothing: antialiased;
   }
   
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: bold;
+  /* Layered, so any page's own heading styles still win. */
+  h1, h2, h3 {
+    font-family: 'Instrument Serif', 'Times New Roman', Georgia, serif;
+    font-weight: 400;
     letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  h4, h5, h6 {
+    font-weight: 700;
   }
 }
 
@@ -72,13 +75,19 @@
   --color-cool: #FFF9C4;
 }
 
-* {
-  font-family: 'Inter', system-ui, sans-serif;
+/* Magazine type everywhere: DM Sans body, Instrument Serif headings (fonts load from mag.css). */
+body {
+  background-color: #fafaf8;
+  color: #121212;
+  font-family: 'DM Sans', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-body {
-  background-color: var(--color-primary);
-  -webkit-font-smoothing: antialiased;
+button,
+input,
+select,
+textarea {
+  font: inherit;
 }
 
 img {
@@ -237,7 +246,7 @@ button.reset:hover:not(:has(> *)) {
 */
 .header {
   align-items: center;
-  background: var(--color-primary);
+  background: #fafaf8;
   display: flex;
   height: var(--header-height);
   padding: 0 1rem;
@@ -263,7 +272,7 @@ button.reset:hover:not(:has(> *)) {
 
 /* City directory + feedback — match DirectorySurface / NEUTRAL_THEME (not shop yellow) */
 .layout-directory {
-  background-color: #f4f1ea;
+  background-color: #fafaf8;
   min-height: 100vh;
 }
 
@@ -325,11 +334,10 @@ button.reset:hover:not(:has(> *)) {
 * --------------------------------------------------
 */
 .site-footer {
-  background: #1b4332;
+  background: #161816;
   color: rgba(255, 255, 255, 0.82);
   margin-top: auto;
-  border-top: 4px solid #000;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'DM Sans', system-ui, sans-serif;
 }
 
 .site-footer-top {
@@ -347,9 +355,9 @@ button.reset:hover:not(:has(> *)) {
 
 .site-footer-logo {
   display: inline-block;
-  font-family: 'Newsreader', Georgia, serif;
-  font-size: 1.5rem;
-  font-weight: 600;
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-size: 2rem;
+  font-weight: 400;
   letter-spacing: -0.01em;
   color: #fff;
   text-decoration: none;
@@ -369,13 +377,13 @@ button.reset:hover:not(:has(> *)) {
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  color: #f4ff00;
+  color: #c8ff3d;
   text-decoration: none;
-  border-bottom: 1px solid rgba(244, 255, 0, 0.4);
+  border-bottom: 1px solid rgba(200, 255, 61, 0.4);
 }
 
 .site-footer-email:hover {
-  border-bottom-color: #f4ff00;
+  border-bottom-color: #c8ff3d;
 }
 
 .site-footer-cols {
@@ -408,7 +416,7 @@ button.reset:hover:not(:has(> *)) {
 }
 
 .site-footer-col a:hover {
-  color: #f4ff00;
+  color: #c8ff3d;
 }
 
 .site-footer-bottom {

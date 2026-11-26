@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Your own channel</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#121212}a:hover{color:#3a3a3a}
+</style>
+</helmet>
+<div style="width: 840px; height: 1188px; box-sizing: border-box; padding: 34px 40px 26px; background: #fafaf8; color: #121212; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 20px">
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid #121212; padding-bottom: 10px">
+<span><span style="background: #c8ff3d; padding: 2px 6px">The house</span></span><span>Your own channel</span><span>12</span>
+</div>
+
+<h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 92px; line-height: .82; letter-spacing: -.03em">A channel and a magazine <span style="font-style: italic">of your own</span></h1>
+<p style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; line-height: 1.2; max-width: 680px; color: #3a3a3a">One editorial desk, three places to be seen: the screen in your room, a page on the web, and an issue every month.</p>
+
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid #121212; border-bottom: 1px solid #121212">
+<sc-for list="{{outputs}}" as="o" hint-placeholder-count="3">
+<div style="{{o.style}}">
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 46px; line-height: .9">{{o.n}}</span>
+<span style="font-size: 15px; font-weight: 700">{{o.t}}</span>
+<span style="font-size: 12px; line-height: 1.5; color: #3a3a3a">{{o.d}}</span>
+<span style="font-size: 10px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase">{{o.when}}</span>
+</div>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; flex: 1; min-height: 0">
+<figure style="grid-column: span 5; margin: 0; display: flex; flex-direction: column; gap: 8px">
+<div style="background: #fafaf8; border: 1px solid #121212; box-shadow: 10px 10px 0 #121212; display: flex; flex-direction: column; height: 400px; margin-right: 10px">
+<div style="padding: 10px 12px 4px; display: flex; justify-content: space-between; font-size: 7px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase"><span>Sotabosc</span><span>December 2026</span></div>
+<span style="padding: 0 10px; font-family: 'Instrument Serif', Georgia, serif; font-size: 50px; line-height: .85; letter-spacing: -.03em">GroundInn <span style="font-style: italic; font-size: 26px">Monthly</span></span>
+<img src="/_blob/5c4c28c049a27827f07a94e682971a91" alt="Sample cover photo: GroundInn LAB’s long table" style="margin-top: 8px; width: 100%; flex: 1; min-height: 0; object-fit: cover; display: block">
+<span style="padding: 8px 10px; font-family: 'Instrument Serif', Georgia, serif; font-size: 18px; line-height: 1">The room is <span style="font-style: italic">the product</span></span>
+</div>
+<figcaption style="font-size: 10px; color: #3a3a3a; padding-top: 6px">A sample issue made for GroundInn LAB, a founders’ space in El Born.</figcaption>
+</figure>
+
+<div style="grid-column: span 7; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; flex-direction: column; gap: 8px">
+<span style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase">Every issue, the same rule</span>
+<div style="display: flex; height: 54px">
+<div style="flex: 6; background: #121212; color: #fafaf8; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center"><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; line-height: 1">60% <span style="font-style: italic">your world</span></span><span style="font-size: 10.5px; color: #d6d6d0">news from your field and the scenes around it</span></div>
+<div style="flex: 4; background: #c8ff3d; padding: 8px 12px; display: flex; flex-direction: column; justify-content: center"><span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; line-height: 1">40% <span style="font-style: italic">your house</span></span><span style="font-size: 10.5px">your month, your people</span></div>
+</div>
+</div>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid #121212; padding-bottom: 4px">You send</span>
+<sc-for list="{{you}}" as="y" hint-placeholder-count="4"><span style="font-size: 13px; line-height: 1.4; border-bottom: 1px solid rgba(18,18,18,.14); padding: 4px 0 8px">{{y}}</span></sc-for>
+</div>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid #121212; padding-bottom: 4px">We do</span>
+<sc-for list="{{we}}" as="w" hint-placeholder-count="4"><span style="font-size: 13px; line-height: 1.4; border-bottom: 1px solid rgba(18,18,18,.14); padding: 4px 0 8px">{{w}}</span></sc-for>
+</div>
+</div>
+<div style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 26px; line-height: 1.1; border-top: 2px solid #121212; padding-top: 12px">Your name on the cover. Your city in the pages.</div>
+<div style="margin-top: auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); border-top: 2px solid #121212">
+<sc-for list="{{cycle}}" as="c" hint-placeholder-count="5">
+<div style="padding: 8px 8px 0 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 24px; line-height: 1">{{c.d}}</span>
+<span style="font-size: 11px; line-height: 1.35; color: #3a3a3a">{{c.t}}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #3a3a3a">
+<span>12</span><span>Sotabosc · Barcelona Edition · No. 0</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":840,"height":1188}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var base = 'padding: 14px 16px 16px 0; display: flex; flex-direction: column; gap: 6px;';
+    return {
+      outputs: [
+        { n: '01', t: 'The screen', d: 'Sotabosc TV in your room: culture, your street, and your house, mixed live through the day.', when: 'Every day', style: base },
+        { n: '02', t: 'The web edition', d: 'Your page at sotabosc.world: your story, events and people, linked into the city’s directory.', when: 'Always on', style: base + ' padding-left: 16px; border-left: 1px solid rgba(18,18,18,.18);' },
+        { n: '03', t: 'The magazine', d: 'A 16-page issue with your name on the cover, on the web and ready to print.', when: 'Every month', style: base + ' padding-left: 16px; border-left: 1px solid rgba(18,18,18,.18);' }
+      ],
+      you: ['A short letter, once a month', 'Photos you own or have permission for', 'Your events and news', 'Members who said yes to appear'],
+      we: ['Read your field every day', 'Write and design every page', 'Credit and link every source', 'Send the House pages for your approval'],
+      cycle: [
+        { d: '1st', t: 'We gather the month' },
+        { d: '2nd', t: 'We choose the stories' },
+        { d: '3rd', t: 'You send your news' },
+        { d: '6th', t: 'You approve' },
+        { d: '8th', t: 'It goes live' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

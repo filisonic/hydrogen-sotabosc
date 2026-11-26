@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Contents</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#121212}a:hover{color:#3a3a3a}
+.lede::first-letter{font-family:'Instrument Serif',Georgia,serif;float:left;font-size:58px;line-height:.82;padding:4px 6px 0 0}
+</style>
+</helmet>
+<div style="width: 840px; height: 1188px; box-sizing: border-box; padding: 34px 40px 26px; background: #fafaf8; color: #121212; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 22px">
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid #121212; padding-bottom: 10px">
+<span>Sotabosc · Barcelona Edition</span><span>Contents</span><span>No. 0 — December 2026</span>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 28px; flex: 1; min-height: 0">
+
+<aside style="grid-column: span 5; display: flex; flex-direction: column; gap: 16px; border-right: 1px solid rgba(18,18,18,.18); padding-right: 24px">
+<h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 96px; line-height: .8; letter-spacing: -.03em">Issue <span style="font-style: italic">zero</span></h1>
+<div style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase">From the editors</div>
+<p class="lede" style="margin: 0; font-size: 13.5px; line-height: 1.62; text-align: justify; hyphens: auto">Every day the Sotabosc desk reads the city: openings, festivals, workshops, the small rooms where things start. Most of it ends up on screens in cafés, studios and coworking spaces, as Sotabosc TV. This is the same desk, on paper.</p>
+<p style="margin: 0; font-size: 13.5px; line-height: 1.62; text-align: justify; hyphens: auto; text-indent: 1.2em">Issue zero follows the rule we offer every business in our network: most of the pages for the world around you, the rest for your own house. Here the house is us. Pages 3 to 9 are Barcelona in November. Pages 10 to 15 explain what Sotabosc is, and how a café, a gallery or a studio can have a channel and a magazine of its own.</p>
+<p style="margin: 0; font-size: 13.5px; line-height: 1.62; text-align: justify; hyphens: auto; text-indent: 1.2em">We summarise, we credit, we link out. Nobody appears without saying yes.</p>
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 18px">— The Sotabosc desk</span>
+<div style="margin-top: auto; display: flex; flex-direction: column; gap: 5px; border-top: 1px solid #121212; padding-top: 12px; font-size: 10.5px; line-height: 1.5; color: #3a3a3a">
+<span><strong style="color: #121212">Edited by</strong> Sotabosc, Barcelona</span>
+<span><strong style="color: #121212">Sources</strong> the Sotabosc journal, Open Data BCN, and the outlets credited on each page</span>
+<span><strong style="color: #121212">Cover</strong> MIRA festival identity, 2026</span>
+<span><strong style="color: #121212">Online</strong> sotabosc.world/edition</span>
+</div>
+</aside>
+
+<section style="grid-column: span 7; display: flex; flex-direction: column">
+<div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #121212; padding-bottom: 8px">
+<span style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase">The city</span>
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 15px; color: #3a3a3a">pages 3–9</span>
+</div>
+<sc-for list="{{city}}" as="it" hint-placeholder-count="6">
+<div style="display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 12px; padding: 13px 0; border-bottom: 1px solid rgba(18,18,18,.18)">
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 30px; line-height: .9">{{it.n}}</span>
+<span style="font-size: 12.5px; line-height: 1.45"><strong>{{it.t}}</strong> <span style="color: #3a3a3a">{{it.d}}</span></span>
+</div>
+</sc-for>
+
+<div style="display: flex; align-items: baseline; gap: 12px; border-bottom: 1px solid #121212; padding: 20px 0 8px">
+<span style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; background: #c8ff3d; padding: 2px 6px">The house</span>
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-style: italic; font-size: 15px; color: #3a3a3a">pages 10–15</span>
+</div>
+<sc-for list="{{house}}" as="it" hint-placeholder-count="6">
+<div style="display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 12px; padding: 13px 0; border-bottom: 1px solid rgba(18,18,18,.18)">
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 30px; line-height: .9">{{it.n}}</span>
+<span style="font-size: 12.5px; line-height: 1.45"><strong>{{it.t}}</strong> <span style="color: #3a3a3a">{{it.d}}</span></span>
+</div>
+</sc-for>
+<div style="margin-top: auto; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; padding-top: 16px">
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 4px"><img src="/_blob/0b8875eaa0751595b2398411c9400bf6" alt="The aiaiai poster" style="width: 100%; height: 96px; object-fit: cover; display: block"><figcaption style="font-size: 10px; color: #3a3a3a">06 · aiaiai at Hangar</figcaption></figure>
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 4px"><img src="/_blob/45807d3e15ccdc3c5ae75e2967bb0bef" alt="A still from In-Edit" style="width: 100%; height: 96px; object-fit: cover; display: block"><figcaption style="font-size: 10px; color: #3a3a3a">06 · In-Edit at Aribau</figcaption></figure>
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 4px"><img src="/_blob/ae0080f64755eed0571554c6591e0911" alt="Coral recovering over nine weeks" style="width: 100%; height: 96px; object-fit: cover; display: block"><figcaption style="font-size: 10px; color: #3a3a3a">07 · Coral, by touch</figcaption></figure>
+</div>
+</section>
+</div>
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #3a3a3a">
+<span>02</span><span>Sotabosc · Barcelona Edition · No. 0</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":840,"height":1188}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      city: [
+        { n: '03', t: 'The city gets a screen.', d: 'The first Biennial of Digital Arts, and what a public screen can be.' },
+        { n: '05', t: 'MIRA at fifteen.', d: 'Eleven works about eyes that look back.' },
+        { n: '06', t: 'Briefs.', d: 'In-Edit at Aribau, aiaiai and Blender at Hangar, a glass labyrinth at the Pavilion.' },
+        { n: '07', t: 'Ideas.', d: 'Generative science on a wall, a library of shapes, a coral that recovers by touch.' },
+        { n: '08', t: 'Agenda.', d: 'December, from DHub to the Jamboree.' },
+        { n: '09', t: 'The Local Edit.', d: 'El Born, one street at a time.' }
+      ],
+      house: [
+        { n: '10', t: 'What Sotabosc is.', d: 'A living directory of the city’s creative places.' },
+        { n: '11', t: 'Sotabosc TV.', d: 'Not signage. A cultural channel for the rooms where people linger.' },
+        { n: '12', t: 'Your own channel.', d: 'A screen and a monthly magazine, made from the same desk.' },
+        { n: '13', t: 'The network.', d: 'How places grow together without shouting.' },
+        { n: '14', t: 'Membership.', d: 'Pilot terms for the first venues.' },
+        { n: '15', t: 'Become a host.', d: 'Four steps from a conversation to a screen.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

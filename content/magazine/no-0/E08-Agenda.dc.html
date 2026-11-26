@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Agenda</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#121212}a:hover{color:#3a3a3a}
+</style>
+</helmet>
+<div style="width: 840px; height: 1188px; box-sizing: border-box; padding: 34px 40px 26px; background: #fafaf8; color: #121212; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 16px">
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid #121212; padding-bottom: 10px">
+<span>The city</span><span>Agenda</span><span>December 2026</span>
+</div>
+
+<div style="display: flex; justify-content: space-between; align-items: flex-end">
+<h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 136px; line-height: .78; letter-spacing: -.04em">Decem<span style="font-style: italic">ber</span></h1>
+<span style="font-size: 11px; line-height: 1.45; text-align: right; color: #3a3a3a; padding-bottom: 8px">Twelve picks from the<br>Sotabosc agenda</span>
+</div>
+
+<div style="display: flex; flex-direction: column; flex: 1; min-height: 0">
+<sc-for list="{{rows}}" as="r" hint-placeholder-count="12">
+<div style="display: grid; grid-template-columns: 74px 120px minmax(0, 1fr) 190px; gap: 16px; border-top: 1px solid rgba(18,18,18,.22); padding: 14px 0; align-items: baseline">
+<span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 34px; line-height: .9; letter-spacing: -.02em">{{r.d}}</span>
+<span style="font-size: 9.5px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase">{{r.kind}}</span>
+<span style="font-size: 13.5px; line-height: 1.3; font-weight: 600">{{r.t}}</span>
+<span style="font-size: 11.5px; color: #3a3a3a; text-align: right">{{r.p}}</span>
+</div>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; background: #161816; color: #fafaf8; padding: 18px 22px">
+<span style="grid-column: span 4; font-family: 'Instrument Serif', Georgia, serif; font-size: 26px; line-height: 1">How this page <span style="font-style: italic; color: #c8ff3d">is made</span></span>
+<span style="grid-column: span 8; font-size: 12px; line-height: 1.5; color: #e0e0da">Every morning the Sotabosc desk reads the city’s open agenda and the listings of the places in our directory. A host’s screen shows the events that suit its room and its street; this page is the same feed, chosen by an editor.</span>
+</div>
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #3a3a3a">
+<span>08</span><span>Listings: Open Data BCN via the Sotabosc agenda</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":840,"height":1188}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      rows: [
+        { d: '1', kind: 'Jazz', t: 'Ethan Iverson and the Liceu Big Band', p: 'Conservatori del Liceu' },
+        { d: '1', kind: 'Classical', t: 'Accademia di Santa Cecilia: Tchaikovsky and Brahms', p: 'Palau de la Música' },
+        { d: '2', kind: 'Debate', t: 'Dubai, the dream of the 21st century', p: 'CCCB' },
+        { d: '2', kind: 'History', t: 'Barcelona History Congress: Migrations, 1249–1975', p: 'Sala Moragues' },
+        { d: '3', kind: 'Performance', t: 'FOMO! The fear of not belonging', p: 'Arts Santa Mònica' },
+        { d: '3', kind: 'Music', t: 'Cantúria Cantada, by Carles Santos', p: 'Petit Palau' },
+        { d: '3', kind: 'Music', t: 'Las Migas', p: 'Palau de la Música' },
+        { d: '4', kind: 'Jazz', t: 'Belén Bandera and the Carla Motis Quartet', p: 'Jamboree 3' },
+        { d: '4–20', kind: 'Digital art', t: '1.5 minutes, Domestic Data Streamers and Aída Bueno', p: 'DHub' },
+        { d: '10', kind: 'Day of talks', t: 'CREATEACH: digital art and AI', p: 'DHub' },
+        { d: '15', kind: 'Photobooks', t: 'III Espai Fotollibre', p: 'Centro de Exposiciones' },
+        { d: '→14/3', kind: 'Exhibition', t: 'Vectors. Digital art to think about the future', p: 'DHub' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

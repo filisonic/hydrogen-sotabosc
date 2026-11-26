@@ -7,7 +7,7 @@ import { NEUTRAL_THEME } from '~/lib/theme/domainTheme';
 export function DirectorySurface({ children, className = '' }) {
   return (
     <div
-      className={`min-h-screen antialiased transition-[background-color,color] duration-500 ${className}`}
+      className={`mag-skin min-h-screen antialiased transition-[background-color,color] duration-500 ${className}`}
       style={{
         '--sotabosc-bg': NEUTRAL_THEME.bg,
         '--sotabosc-surface': NEUTRAL_THEME.surface,

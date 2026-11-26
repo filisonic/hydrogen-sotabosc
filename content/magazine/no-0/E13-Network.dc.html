@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The network</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&amp;family=Instrument+Serif:ital@0;1&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#121212}a:hover{color:#3a3a3a}
+.cols p{margin:0;text-indent:1.2em}
+.cols p.first{text-indent:0}
+.cols p.first::first-letter{font-family:'Instrument Serif',Georgia,serif;float:left;font-size:60px;line-height:.8;padding:5px 7px 0 0}
+</style>
+</helmet>
+<div style="width: 840px; height: 1188px; box-sizing: border-box; padding: 34px 40px 26px; background: #c8ff3d; color: #121212; font-family: 'DM Sans', system-ui, sans-serif; display: flex; flex-direction: column; gap: 18px">
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; border-bottom: 1px solid #121212; padding-bottom: 10px">
+<span>The house</span><span>The network</span><span>13</span>
+</div>
+
+<h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 104px; line-height: .8; letter-spacing: -.035em">Neighbours, <span style="font-style: italic">not noise</span></h1>
+
+<figure style="margin: 0; display: flex; flex-direction: column; gap: 6px">
+<svg viewBox="0 0 760 400" width="760" height="400" style="display: block" aria-hidden="true">
+<sc-for list="{{links}}" as="l" hint-placeholder-count="14">
+<line x1="{{l.x1}}" y1="{{l.y1}}" x2="{{l.x2}}" y2="{{l.y2}}" stroke="#121212" stroke-width="1.4" stroke-dasharray="{{l.dash}}"></line>
+</sc-for>
+<sc-for list="{{nodes}}" as="n" hint-placeholder-count="8">
+<circle cx="{{n.x}}" cy="{{n.y}}" r="{{n.r}}" fill="{{n.fill}}" stroke="#121212" stroke-width="1.4"></circle>
+<text x="{{n.x}}" y="{{n.ty}}" text-anchor="middle" font-family="DM Sans, sans-serif" font-size="11" font-weight="700" fill="{{n.ink}}">{{n.label}}</text>
+</sc-for>
+</svg>
+<figcaption style="font-size: 10px">Solid lines: a host recommends a neighbour on its screen. Dashed: a visitor collects a passport stamp and walks on.</figcaption>
+</figure>
+
+<div class="cols" style="column-count: 3; column-gap: 20px; column-rule: 1px solid rgba(18,18,18,.25); font-size: 12.6px; line-height: 1.6; text-align: justify; hyphens: auto">
+<p class="first">A café’s guests are a gallery’s next visitors. A coworking space’s members are a bookshop’s best customers. Barcelona’s small places have always sent people to each other by word of mouth; the network makes that a habit.</p>
+<p>Every host can invite neighbours onto its screen, and appear on theirs. Only places that both say yes are paired, and only for as long as they want. Nobody buys their way onto another host’s wall.</p>
+<p>The magazine does the same on paper: each issue has a page for the street, and the places on it are chosen by an editor, not an auction.</p>
+<p>For visitors, the city at sotabosc.world keeps a passport. Each place they visit adds a stamp from its kingdom, which is a small reason to walk one street further.</p>
+<p>The more hosts there are in a neighbourhood, the richer each screen becomes: more local stories, more events, more reasons for a guest to stay a little longer and come back.</p>
+</div>
+
+<p style="margin: auto 0 0; background: #121212; color: #c8ff3d; padding: 22px 26px; font-family: 'Instrument Serif', Georgia, serif; font-size: 40px; line-height: 1.02">A café’s guests are a gallery’s next visitors. <span style="font-style: italic; color: #fafaf8">The network just makes it a habit.</span></p>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; border-top: 2px solid #121212">
+<sc-for list="{{rules}}" as="r" hint-placeholder-count="3">
+<div style="padding: 10px 14px 0 0; display: flex; flex-direction: column; gap: 3px">
+<span style="font-size: 13px; font-weight: 700">{{r.t}}</span>
+<span style="font-size: 11.5px; line-height: 1.4">{{r.d}}</span>
+</div>
+</sc-for>
+</div>
+
+<div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .14em; text-transform: uppercase">
+<span>Sotabosc · Barcelona Edition · No. 0</span><span>13</span>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":840,"height":1188}}'>
+class Component extends DCLogic {
+  renderVals() {
+    var N = [
+      ['Café', 100, 100, 1], ['Gallery', 300, 60, 0], ['Studio', 500, 120, 0], ['Coworking', 670, 80, 1],
+      ['Bookshop', 170, 310, 0], ['Venue', 380, 250, 1], ['Workshop', 580, 330, 0], ['Shop', 710, 260, 0]
+    ];
+    var nodes = N.map(function (n) {
+      var host = n[3] === 1, r = host ? 46 : 38;
+      return { label: n[0], x: n[1], y: n[2], r: r, ty: n[2] + 4, fill: host ? '#121212' : '#fafaf8', ink: host ? '#c8ff3d' : '#121212' };
+    });
+    var E = [[0,1,0],[0,4,0],[1,5,0],[3,2,0],[3,6,0],[5,6,0],[5,4,0],[2,5,1],[1,2,1],[6,7,1],[3,7,0],[0,5,1]];
+    var links = E.map(function (e) {
+      var a = N[e[0]], b = N[e[1]];
+      return { x1: a[1], y1: a[2], x2: b[1], y2: b[2], dash: e[2] ? '5 6' : 'none' };
+    });
+    return {
+      nodes: nodes, links: links,
+      rules: [
+        { t: 'Both say yes', d: 'Neighbours appear only when both places opt in.' },
+        { t: 'Labelled, always', d: 'Recommendations are marked as such on screen and on paper.' },
+        { t: 'Leave any time', d: 'A place can step out, and its content goes with it.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

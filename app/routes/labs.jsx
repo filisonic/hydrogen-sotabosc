@@ -476,7 +476,7 @@ export default function Labs() {
           align-items: center;
           justify-content: space-between;
           padding: 10px 28px;
-          background: rgba(255,229,0,0.85);
+          background: rgba(250,250,248,0.92);
           backdrop-filter: blur(16px);
           -webkit-backdrop-filter: blur(16px);
           border-top: 1px solid rgba(0,0,0,0.06);
