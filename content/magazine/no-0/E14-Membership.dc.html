@@ -22,10 +22,10 @@ a{color:#121212}a:hover{color:#3a3a3a}
 
 <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; align-items: end">
 <h1 style="grid-column: span 7; margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: 96px; line-height: .8; letter-spacing: -.03em">You pay for <span style="font-style: italic">the channel</span></h1>
-<p style="grid-column: span 5; margin: 0 0 6px; font-size: 13px; line-height: 1.5">Not for minutes of your logo. A setup fee covers the screen kit; a monthly membership covers the programme, the curation and the network.</p>
+<p style="grid-column: span 5; margin: 0 0 6px; font-size: 13px; line-height: 1.5">Not for minutes of your logo. A one-off setup covers installation and the player; a monthly membership covers the programme, the curation and the network. Screens are priced on their own.</p>
 </div>
 
-<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px">
 <sc-for list="{{tiers}}" as="t" hint-placeholder-count="3">
 <div style="{{t.style}}">
 <span style="font-size: 10px; font-weight: 700; letter-spacing: .2em; text-transform: uppercase">{{t.name}}</span>
@@ -33,6 +33,7 @@ a{color:#121212}a:hover{color:#3a3a3a}
 <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 66px; line-height: .9; letter-spacing: -.02em">{{t.price}}</span>
 <span style="font-size: 12px">/ month</span>
 </div>
+<span style="font-size: 11.5px; line-height: 1.4">{{t.list}}</span>
 <span style="font-size: 11.5px; line-height: 1.4; font-weight: 600">{{t.setup}}</span>
 <div style="display: flex; flex-direction: column; gap: 6px; border-top: 1px solid currentColor; padding-top: 10px">
 <sc-for list="{{t.items}}" as="i" hint-placeholder-count="4"><span style="font-size: 12px; line-height: 1.4">{{i}}</span></sc-for>
@@ -43,7 +44,7 @@ a{color:#121212}a:hover{color:#3a3a3a}
 
 <div style="display: flex; flex-direction: column; border-top: 2px solid #121212">
 <sc-for list="{{extras}}" as="e" hint-placeholder-count="3">
-<div style="display: grid; grid-template-columns: 220px minmax(0, 1fr) 170px; gap: 16px; border-bottom: 1px solid rgba(18,18,18,.18); padding: 18px 0; align-items: baseline">
+<div style="display: grid; grid-template-columns: 220px minmax(0, 1fr) 170px; gap: 16px; border-bottom: 1px solid rgba(18,18,18,.18); padding: 13px 0; align-items: baseline">
 <span style="font-size: 14px; font-weight: 700">{{e.t}}</span>
 <span style="font-size: 12px; line-height: 1.45; color: #3a3a3a">{{e.d}}</span>
 <span style="font-family: 'Instrument Serif', Georgia, serif; font-size: 22px; text-align: right">{{e.p}}</span>
@@ -57,7 +58,7 @@ a{color:#121212}a:hover{color:#3a3a3a}
 </div>
 
 <div style="display: flex; justify-content: space-between; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: #3a3a3a">
-<span>Pilot terms, Barcelona 2026</span><span>Sotabosc · Barcelona Edition · No. 0</span>
+<span>Founding terms, Barcelona 2026</span><span>Sotabosc · Barcelona Edition · No. 0</span>
 </div>
 </div>
 </x-dc>
@@ -67,16 +68,16 @@ class Component extends DCLogic {
     var base = 'display: flex; flex-direction: column; gap: 12px; padding: 22px 20px 26px; ';
     return {
       tiers: [
-        { name: 'Pilot · first 8 venues', price: '€79', setup: 'Setup €250–350, or waived with 12 months prepaid', style: base + 'background: #c8ff3d; color: #121212;',
-          items: ['The channel and its core formats', 'Your house, lightly', 'A say in how the formats evolve', '6 to 12 months'] },
-        { name: 'Channel', price: '€129', setup: 'Setup €250–350', style: base + 'background: #121212; color: #fafaf8;',
-          items: ['Every format and category', 'The Local Edit for your street', 'Neighbour exchange, opt-in', 'Generated art and imagery included'] },
-        { name: 'Curated', price: '€189', setup: 'Setup €250–400', style: base + 'border: 1px solid #121212; color: #121212;',
-          items: ['A programme tuned to your taste', 'More of your house, still balanced', 'Priority support', 'Everything in Channel'] }
+        { name: 'Channel · founding member', price: '€129', list: 'First 10 venues, 12 months · then €199 list', setup: 'Setup €250 · screens separate', style: base + 'background: #121212; color: #fafaf8;',
+          items: ['Up to 2 screens', 'The channel and every format', 'Your house slots and the Local Edit for your street', 'A monthly programme report'] },
+        { name: 'Curated · founding member', price: '€229', list: 'First 10 venues, 12 months · then €399 list', setup: 'Setup €400 · screens separate', style: base + 'background: #c8ff3d; color: #121212;',
+          items: ['Up to 8 screens', 'Your own monthly magazine, 16 pages, web edition', 'A fully customisable programme menu', 'Everything in Channel'] }
       ],
       extras: [
+        { t: 'Screens', d: 'Professional 27-inch indoor, or high-brightness for outdoor. Bring your own to our spec, buy through us, or lease it into the monthly fee.', p: 'from €400 / €650' },
+        { t: 'More screens', d: 'Beyond 2 on Channel or 8 on Curated.', p: 'Ask us' },
+        { t: 'Printed issues', d: 'Your monthly magazine on paper, for tables, rooms and counters.', p: 'Per run' },
         { t: 'Feature', d: 'A defined feature for a launch, exhibition or event, for one or two weeks. It buys a placement, not the editor.', p: '€75–150' },
-        { t: 'Your monthly magazine', d: 'A 16-page issue with your name on the cover, made with the first hosts in the pilot.', p: 'Ask us' },
         { t: 'Network campaign', d: 'A cultural partner across many screens, once the network passes ten.', p: 'Later' }
       ]
     };
