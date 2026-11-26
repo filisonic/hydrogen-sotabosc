@@ -516,7 +516,7 @@ export function EditionHome({edition, journalArticles = [], magazine = null}) {
                 <div>
                   <h3>Screens</h3>
                   <p>Sotabosc screens in hotels, galleries and cafés: culture as atmosphere.</p>
-                  <Link to="/screens">See the screens</Link>
+                  <Link to="/tv">About Sotabosc TV</Link>
                 </div>
                 <div>
                   <h3>Digital</h3>
@@ -540,7 +540,7 @@ export function EditionHome({edition, journalArticles = [], magazine = null}) {
           <Link to="/city">Directory</Link>
           <Link to="/city/events">Events</Link>
           <Link to="/city/creators">Creators</Link>
-          <Link to="/screens">Screens</Link>
+          <Link to="/tv">Sotabosc TV</Link>
           <Link to="/magazine/no-0">Magazine</Link>
           <Link to="/how-it-works">About</Link>
           <Link to="/map">Living map</Link>

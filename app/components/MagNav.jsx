@@ -65,7 +65,7 @@ export function MagNav({cart, isLoggedIn, header}) {
         <Link to="/city/creators">Creators</Link>
         <Link to="/magazine/no-0">Magazine</Link>
         <Link to="/map">Map</Link>
-        <Link to="/screens">Screens</Link>
+        <Link to="/tv">Sotabosc TV</Link>
         <Link to="/how-it-works">About</Link>
         <Link to="/collections">Store</Link>
         {MEMBERSHIP_PUBLIC ? (

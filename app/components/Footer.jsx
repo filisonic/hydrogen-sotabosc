@@ -39,7 +39,8 @@ export function Footer({footer: footerPromise, header, publicStoreDomain, direct
                 </div>
                 <div className="site-footer-col">
                   <h3>Channel</h3>
-                  <Link to="/screens">Screens</Link>
+                  <Link to="/tv">Sotabosc TV</Link>
+                  <Link to="/screens">Live screen</Link>
                   <Link to="/how-it-works">About</Link>
                   <Link to="/map">Living map</Link>
                   {MEMBERSHIP_PUBLIC ? (
