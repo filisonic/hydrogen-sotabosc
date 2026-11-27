@@ -280,6 +280,7 @@ export const VENUE_GOOGLE_ATTRIBUTIONS: Partial<
   'mob-caterina-coworking-and-office-space': [{"displayName":"MOB Caterina - Coworking and Office Space","uri":"https://maps.google.com/maps/contrib/100099591946524063807"}],
   'monday-diagonal-coworking-en-barcelona': [{"displayName":"Monday Diagonal | Coworking en Barcelona","uri":"https://maps.google.com/maps/contrib/102779978195550863605"}],
   'monday-pau-claris-coworking-a-barcelona': [{"displayName":"Monday Pau Claris | Coworking en Barcelona","uri":"https://maps.google.com/maps/contrib/109213927954969481376"}],
+  'mont-bcn': [{"displayName":"Mont","uri":"https://www.google.com/maps/place/?q=place_id:ChIJz3owBFKjpBIRT7CEPvM0vyE"}],
   'movimiento-factory': [{"displayName":"Movimiento Factory","uri":"https://maps.google.com/maps/contrib/106491845704595145207"}],
   'muchafibra-escola-taller-coworking-i-acad-mia-tall-confecci': [{"displayName":"Muchafibra Escuela de patronaje y costura. Academia de corte confección, coworking. cosewing","uri":"https://maps.google.com/maps/contrib/109383325111556098994"}],
   'murkhasya-art-gallery': [{"displayName":"Murkhasya Art Gallery","uri":"https://maps.google.com/maps/contrib/103130122491202159039"}],

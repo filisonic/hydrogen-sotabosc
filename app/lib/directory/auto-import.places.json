@@ -8953,5 +8953,35 @@
     "telephone": "934 32 24 77",
     "latitude": 41.371783799999996,
     "longitude": 2.1407222
+  },
+  {
+    "id": "p_gmap_d9702928623c",
+    "slug": "mont-bcn",
+    "name": "Mont",
+    "summary": "An intimate cultural space and community hub in the Gothic Quarter, up a green staircase on Carrer d'En Bot. Exhibitions and concerts, embroidery and dance workshops, a book club, photography afterworks with 08mm, new and full moon circles, shared dinners and mindful walks in the Montseny. Open Tuesday to Sunday evenings, with a bar and a plant-filled patio.",
+    "address": "Carrer d'En Bot, 5, Ciutat Vella, 08002 Barcelona",
+    "neighborhood": "Ciutat Vella",
+    "city": "Barcelona",
+    "categories": [
+      "art-gallery",
+      "workshop",
+      "music-venue"
+    ],
+    "primaryDomain": "plants",
+    "tags": [
+      "google-places",
+      "verified-import",
+      "gplace:ChIJz3owBFKjpBIRT7CEPvM0vyE",
+      "rating:5",
+      "community",
+      "exhibitions",
+      "workshops",
+      "wellness",
+      "photography",
+      "gothic-quarter"
+    ],
+    "website": "https://luma.com/mont.calendario",
+    "latitude": 41.3837896,
+    "longitude": 2.1721479
   }
 ]

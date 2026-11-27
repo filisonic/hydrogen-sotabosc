@@ -277,6 +277,7 @@ export const VENUE_GOOGLE_IMAGE_BY_SLUG: Partial<Record<string, string>> = {
   'mob-caterina-coworking-and-office-space': '/images/venues/google/mob-caterina-coworking-and-office-space.jpg',
   'monday-diagonal-coworking-en-barcelona': '/images/venues/google/monday-diagonal-coworking-en-barcelona.jpg',
   'monday-pau-claris-coworking-a-barcelona': '/images/venues/google/monday-pau-claris-coworking-a-barcelona.png',
+  'mont-bcn': '/images/venues/google/mont-bcn.jpg',
   'movimiento-factory': '/images/venues/google/movimiento-factory.jpg',
   'muchafibra-escola-taller-coworking-i-acad-mia-tall-confecci': '/images/venues/google/muchafibra-escola-taller-coworking-i-acad-mia-tall-confecci.jpg',
   'murkhasya-art-gallery': '/images/venues/google/murkhasya-art-gallery.jpg',
